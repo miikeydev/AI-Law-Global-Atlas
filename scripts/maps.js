@@ -1,8 +1,6 @@
 import {
   countryData,
   continentBounds,
-  continentColorMap,
-  continentHoverColorMap,
   continentIdByLabel,
   manualCountryContinents,
   geoNameToCountryId
@@ -49,10 +47,6 @@ export function drawWorldMap(onContinentSelect) {
     .attr('class', 'land')
     .attr('d', path)
     .attr('data-continent', feature => getContinentForFeature(feature) || '')
-    .attr('fill', feature => {
-      const continentId = getContinentForFeature(feature);
-      return continentId ? continentColorMap[continentId] : 'rgba(255,255,255,0.12)';
-    })
     .style('cursor', feature => (getContinentForFeature(feature) ? 'pointer' : 'default'));
 
   paths
@@ -156,12 +150,8 @@ function highlightWorldContinent(continentId, entering) {
     return;
   }
   const svg = d3.select('#worldMap');
-  const fillColor = entering
-    ? (continentHoverColorMap[continentId] || continentColorMap[continentId] || 'rgba(255,255,255,0.3)')
-    : (continentColorMap[continentId] || 'rgba(255,255,255,0.2)');
   svg.selectAll(`path.land[data-continent="${continentId}"]`)
-    .classed('continent-focus', !!entering)
-    .attr('fill', fillColor);
+    .classed('continent-focus', !!entering);
 }
 
 function getGeoNamesForContinent(continentId) {

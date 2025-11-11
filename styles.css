@@ -475,6 +475,13 @@ opacity:.9;
 .land[data-continent] {
 opacity:.65;
 }
+.land[data-continent="americas"] {fill:rgba(131,133,255,.4);}
+.land[data-continent="europe"] {fill:rgba(156,214,255,.42);}
+.land[data-continent="africa"] {fill:rgba(255,111,125,.45);}
+.land[data-continent="asia"] {fill:rgba(255,205,140,.42);}
+.land[data-continent="oceania"] {fill:rgba(126,236,205,.45);}
+.land[data-continent=""],
+.land:not([data-continent]) {fill:rgba(255,255,255,.12);}
 .land.inactive {
 fill:rgba(255,255,255,.07);
 stroke:rgba(255,255,255,.06);
@@ -493,11 +500,11 @@ filter:drop-shadow(0 0 6px rgba(0,0,0,.25));
 .land.continent-focus {
 opacity:.95 !important;
 stroke:var(--map-hover) !important;
+fill:var(--map-hover) !important;
 filter:drop-shadow(0 0 16px rgba(255,255,255,.35));
 }
 
 body[data-theme="dark"] .land {
-fill:#7c7fe6;
 stroke:rgba(5,5,10,.9);
 opacity:.95;
 }
