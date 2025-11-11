@@ -36,7 +36,7 @@ init();
 
 function init() {
   bindEvents();
-  initGlobe(state.theme);
+  initGlobe(state.theme).catch(error => console.warn('Globe init failed', error));
   loadWorldGeometry().then(() => {
     drawWorldMap(goToContinent);
     refreshMaps();
@@ -366,7 +366,7 @@ function applyTheme(theme = state.theme) {
   currentThemeApplied = theme;
   document.body.setAttribute('data-theme', theme);
   persistTheme(theme);
-  updateGlobeTheme(theme);
+  Promise.resolve(updateGlobeTheme(theme)).catch(error => console.warn('Globe theme update skipped', error));
 }
 
 function persistTheme(theme) {
