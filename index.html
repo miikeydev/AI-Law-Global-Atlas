@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI X IP Global Explorer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app-shell">
+<aside class="brand-panel">
+<div class="logo-wrapper">
+<img src="res/Logo_Panthéon-Assas.svg.png" alt="Logo Panthéon-Assas Université" class="logo-img">
+</div>
+</aside>
+<main>
+<section id="landingView" class="view active" aria-label="Accueil">
+<div class="landing-header">
+<button id="landingThemeToggle" class="ghost theme-toggle" aria-label="Basculer le thème">
+Mode sombre
+</button>
+</div>
+<div class="landing-grid">
+<div class="landing-copy">
+<p class="eyebrow">AI Governance & IP Law</p>
+<h1>
+<span class="hero-line">AI X IP</span>
+<span class="hero-line">GLOBAL EXPLORER</span>
+</h1>
+<p class="lead">A global map of AI regulations and legal news.</p>
+<p class="lead">Une cartographie mondiale des régulations de l'IA et de l'actualité juridique.</p>
+<div class="cta-row">
+<button class="primary" data-start="en">Start in English</button>
+<button class="primary" data-start="fr">Start in French</button>
+</div>
+</div>
+<div class="landing-visual">
+<div class="globe-shell" aria-hidden="true">
+<div id="globeContainer" class="globe-container"></div>
+</div>
+</div>
+</div>
+</section>
+<header id="appHeader" class="global-header hidden">
+<div class="header-left">
+<h2>AI X IP Global Explorer</h2>
+<button id="backButton" class="back-button" aria-label="Retour">&#8592;</button>
+</div>
+<div class="header-right">
+<button id="themeToggle" class="ghost theme-toggle" aria-label="Basculer le thème">Mode sombre</button>
+<button id="infoButton" class="ghost" data-modal="world">+ info</button>
+<div class="language-toggle" role="group" aria-label="Switch language">
+<button data-lang="fr">FR</button>
+<button data-lang="en" class="active">EN</button>
+</div>
+</div>
+</header>
+<section id="worldView" class="view" aria-label="Vue Monde">
+<div class="world-layout">
+<div class="world-text">
+<h3 data-i18n="world.title"></h3>
+<p data-i18n="world.description"></p>
+</div>
+<div class="world-map" role="region" aria-label="Carte du monde">
+<div class="map-illustration">
+<svg id="worldMap" class="map-svg" role="img" aria-label="World map"></svg>
+</div>
+</div>
+</div>
+</section>
+<section id="continentView" class="view" aria-label="Vue Continent">
+<div class="continent-layout">
+<div class="continent-map" role="region">
+<div class="continent-illustration">
+<svg id="continentMap" class="map-svg" role="img" aria-label="Carte du continent"></svg>
+</div>
+</div>
+<div class="continent-info">
+<div class="continent-heading">
+<h3 id="continentName"></h3>
+<p class="subtitle" data-i18n="continent.subtitle"></p>
+</div>
+<div class="availability">
+<p class="label" data-i18n="continent.available"></p>
+<ul id="countryList"></ul>
+</div>
+<div class="progress-panel">
+<div class="donut" id="donut" aria-label="Progression"><span id="progressValue"></span></div>
+<p id="progressNote"></p>
+</div>
+<button class="ghost" data-modal="continent">+ info</button>
+</div>
+</div>
+</section>
+<section id="countryView" class="view" aria-label="Vue Pays">
+<div class="country-layout">
+<div class="country-map-panel">
+<button id="newsToggle" class="primary slim"></button>
+<div class="country-map" role="img">
+<svg id="countryMapSvg" class="map-svg" aria-label="Carte du pays"></svg>
+</div>
+<div id="newsPanel" class="news-panel hidden">
+<h4 data-i18n="country.newsTitle"></h4>
+<ul id="newsList"></ul>
+</div>
+</div>
+<div class="country-details">
+<div class="country-heading">
+<p class="pill" id="continentBadge"></p>
+<h3 id="countryName"></h3>
+<p class="subtitle" data-i18n="country.subtitle"></p>
+</div>
+<div id="legalSections" class="accordion"></div>
+</div>
+</div>
+</section>
+<footer>
+<p>AI X IP Global Explorer — 2024</p>
+<p>Projet universitaire – Panthéon-Assas Université</p>
+<a href="#" aria-label="Contact">Contact</a>
+</footer>
+</main>
+</div>
+<div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+<div class="modal-content">
+<button class="close-modal" aria-label="Fermer">×</button>
+<h4 id="modalTitle"></h4>
+<p id="modalBody"></p>
+</div>
+</div>
+<script src="https://unpkg.com/d3@7"></script>
+<script src="https://unpkg.com/topojson-client@3"></script>
+<script src="https://unpkg.com/globe.gl@2.31.0/dist/globe.gl.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
