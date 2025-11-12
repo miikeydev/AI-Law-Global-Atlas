@@ -100,8 +100,18 @@ Mode sombre
 </section>
 <section id="countryView" class="view" aria-label="Vue Pays">
 <div class="country-layout">
+<div class="country-hero">
+<div class="country-details">
+<div class="country-heading">
+<p class="pill" id="continentBadge"></p>
+<h3 id="countryName"></h3>
+<p class="subtitle" data-i18n="country.subtitle"></p>
+</div>
+</div>
 <div class="country-map-panel">
+<div class="country-map-header">
 <button id="newsToggle" class="primary slim"></button>
+</div>
 <div class="country-map" role="img">
 <svg id="countryMapSvg" class="map-svg" aria-label="Carte du pays"></svg>
 </div>
@@ -110,12 +120,8 @@ Mode sombre
 <ul id="newsList"></ul>
 </div>
 </div>
-<div class="country-details">
-<div class="country-heading">
-<p class="pill" id="continentBadge"></p>
-<h3 id="countryName"></h3>
-<p class="subtitle" data-i18n="country.subtitle"></p>
 </div>
+<div class="country-legal-panel">
 <div id="legalSections" class="accordion"></div>
 </div>
 </div>
