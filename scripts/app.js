@@ -14,6 +14,10 @@ const state = {
 };
 
 let currentThemeApplied = null;
+const THEME_TOGGLE_MIN_WIDTH = 180;
+const THEME_TOGGLE_MAX_WIDTH = 300;
+const THEME_TOGGLE_PADDING = 48;
+const THEME_TOGGLE_KNOB_SPACE = 52;
 
 const views = {
   landing: document.getElementById('landingView'),
@@ -178,7 +182,39 @@ function updateThemeButtons() {
     button.dataset.theme = state.theme;
     button.classList.toggle('is-dark', state.theme === 'dark');
     button.classList.toggle('is-light', state.theme === 'light');
+    syncThemeToggleWidth(button, labelEl);
   });
+}
+
+function syncThemeToggleWidth(button, labelEl) {
+  if (!button || !labelEl) {
+    return;
+  }
+  const measuredTextWidth = measureLabelWidth(labelEl);
+  const desiredWidth = clampWidth(Math.ceil(measuredTextWidth + THEME_TOGGLE_PADDING + THEME_TOGGLE_KNOB_SPACE));
+  button.style.setProperty('--theme-toggle-width', `${desiredWidth}px`);
+}
+
+function measureLabelWidth(labelEl) {
+  const clone = labelEl.cloneNode(true);
+  clone.style.position = 'absolute';
+  clone.style.visibility = 'hidden';
+  clone.style.opacity = '0';
+  clone.style.whiteSpace = 'nowrap';
+  clone.style.width = 'auto';
+  clone.style.flex = '0 0 auto';
+  clone.style.pointerEvents = 'none';
+  labelEl.parentNode.appendChild(clone);
+  const width = clone.scrollWidth;
+  clone.remove();
+  return width;
+}
+
+function clampWidth(value) {
+  if (!Number.isFinite(value)) {
+    return THEME_TOGGLE_MIN_WIDTH;
+  }
+  return Math.max(THEME_TOGGLE_MIN_WIDTH, Math.min(THEME_TOGGLE_MAX_WIDTH, value));
 }
 
 function getThemeCopy() {

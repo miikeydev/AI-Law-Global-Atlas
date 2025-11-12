@@ -202,9 +202,11 @@ transition:background .35s ease, border-color .35s ease, color .35s ease, box-sh
  font-weight:600;
  padding:10px 18px 10px 20px;
  box-shadow:0 10px 20px rgba(15,23,58,.1);
- transition:background .4s ease, border-color .4s ease, color .4s ease, box-shadow .4s ease;
+ transition:background .4s ease, border-color .4s ease, color .4s ease, box-shadow .4s ease, inline-size .4s ease;
  white-space:nowrap;
  --theme-thumb-offset:0px;
+ inline-size:var(--theme-toggle-width, auto);
+ width:var(--theme-toggle-width, auto);
 }
 .theme-toggle .theme-label {
  flex:1;
