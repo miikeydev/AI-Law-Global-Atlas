@@ -3,12 +3,21 @@ import {
   continentBounds,
   continentIdByLabel,
   manualCountryContinents,
-  geoNameToCountryId
+  geoNameToCountryId,
+  countryNameAliases
 } from './data.js';
 
 let worldFeatures = [];
 let worldReady = false;
 let countryContinentLookup = {};
+
+const fallbackRegions = [
+  { id: 'americas', bounds: [[-170, -60], [-15, 80]] },
+  { id: 'europe', bounds: [[-30, 34], [65, 75]] },
+  { id: 'africa', bounds: [[-25, -40], [60, 38]] },
+  { id: 'asia', bounds: [[20, -10], [180, 85]] },
+  { id: 'oceania', bounds: [[95, -50], [-110, 35]] }
+];
 
 export function loadWorldGeometry() {
   if (typeof d3 === 'undefined' || typeof topojson === 'undefined') {
@@ -21,7 +30,7 @@ export function loadWorldGeometry() {
   ])
     .then(([worldData, continentList]) => {
       worldFeatures = topojson.feature(worldData, worldData.objects.countries).features;
-      countryContinentLookup = buildCountryContinentLookup(Array.isArray(continentList) ? continentList : []);
+      countryContinentLookup = buildCountryContinentLookup(Array.isArray(continentList) ? continentList : [], worldFeatures);
       worldReady = true;
       drawWorldMap();
       return worldFeatures;
@@ -175,7 +184,14 @@ function getContinentForFeature(feature) {
     return null;
   }
   const normalized = normalizeCountryName(getFeatureName(feature));
-  return countryContinentLookup[normalized] || null;
+  if (normalized && countryContinentLookup[normalized]) {
+    return countryContinentLookup[normalized];
+  }
+  const inferred = inferContinentFromFeature(feature);
+  if (inferred && normalized) {
+    countryContinentLookup[normalized] = inferred;
+  }
+  return inferred;
 }
 
 function getFeatureName(feature) {
@@ -205,7 +221,7 @@ function boundsToFeature(bounds) {
   };
 }
 
-function buildCountryContinentLookup(list) {
+function buildCountryContinentLookup(list = [], features = []) {
   const lookup = {};
   list.forEach(item => {
     const continentId = continentIdByLabel[item.continent];
@@ -217,10 +233,75 @@ function buildCountryContinentLookup(list) {
       lookup[normalized] = continentId;
     }
   });
+  Object.entries(countryNameAliases).forEach(([alias, canonical]) => {
+    if (!lookup[alias] && lookup[canonical]) {
+      lookup[alias] = lookup[canonical];
+    }
+  });
   Object.entries(manualCountryContinents).forEach(([name, continentId]) => {
     lookup[name] = continentId;
   });
+  if (Array.isArray(features)) {
+    features.forEach(feature => {
+      const normalized = normalizeCountryName(getFeatureName(feature));
+      if (!normalized || lookup[normalized]) {
+        return;
+      }
+      const fallbackId = inferContinentFromFeature(feature);
+      if (fallbackId) {
+        lookup[normalized] = fallbackId;
+      }
+    });
+  }
   return lookup;
+}
+
+function inferContinentFromFeature(feature) {
+  const centroid = getFeatureCentroid(feature);
+  if (!centroid) {
+    return null;
+  }
+  const [lon, lat] = centroid;
+  for (const region of fallbackRegions) {
+    if (pointInBounds(lon, lat, region.bounds)) {
+      return region.id;
+    }
+  }
+  return null;
+}
+
+function getFeatureCentroid(feature) {
+  if (typeof d3 === 'undefined' || !feature) {
+    return null;
+  }
+  try {
+    const centroid = d3.geoCentroid(feature);
+    if (
+      !centroid ||
+      centroid.length !== 2 ||
+      !Number.isFinite(centroid[0]) ||
+      !Number.isFinite(centroid[1])
+    ) {
+      return null;
+    }
+    return centroid;
+  } catch (error) {
+    return null;
+  }
+}
+
+function pointInBounds(lon, lat, bounds) {
+  if (!Array.isArray(bounds) || bounds.length !== 2) {
+    return false;
+  }
+  const [[minLon, minLat], [maxLon, maxLat]] = bounds;
+  if (lat < minLat || lat > maxLat) {
+    return false;
+  }
+  if (minLon <= maxLon) {
+    return lon >= minLon && lon <= maxLon;
+  }
+  return lon >= minLon || lon <= maxLon;
 }
 
 function normalizeCountryName(value) {

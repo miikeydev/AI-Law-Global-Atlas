@@ -399,3 +399,20 @@ export const manualCountryContinents = {
   puertorico: 'americas',
   falklandislands: 'americas'
 };
+
+export const countryNameAliases = {
+  fiji: 'fijiislands',
+  wsahara: 'westernsahara',
+  demrepcongo: 'thedemocraticrepublicofcongo',
+  dominicanrep: 'dominicanrepublic',
+  falklandis: 'falklandislands',
+  frsantarcticlands: 'frenchsouthernterritories',
+  centralafricanrep: 'centralafricanrepublic',
+  eqguinea: 'equatorialguinea',
+  solomonis: 'solomonislands',
+  ncyprus: 'cyprus',
+  somaliland: 'somalia',
+  bosniaandherz: 'bosniaandherzegovina',
+  macedonia: 'northmacedonia',
+  ssudan: 'southsudan'
+};
