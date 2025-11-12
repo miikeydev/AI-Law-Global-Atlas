@@ -2,6 +2,7 @@ import {
   countryData,
   continentBounds,
   continentIdByLabel,
+  continentData,
   manualCountryContinents,
   geoNameToCountryId,
   countryNameAliases
@@ -81,27 +82,35 @@ export function renderContinentMap(continentId, onCountrySelect) {
     svg.selectAll('*').remove();
     return;
   }
-  const focusNames = new Set(getGeoNamesForContinent(continentId));
+  const continent = continentData[continentId] || {};
+  const availableIds = Array.isArray(continent.availableCountries) ? continent.availableCountries : [];
+  const focusNames = buildFocusNameSet(continentId, availableIds);
+  const focusFeatures = worldFeatures.filter(feature => focusNames.has(getFeatureName(feature)));
+  const fallbackFeatures = focusFeatures.length
+    ? focusFeatures
+    : worldFeatures.filter(feature => getContinentForFeature(feature) === continentId);
+  const renderFeatures = fallbackFeatures.length ? fallbackFeatures : worldFeatures;
   const bounds = continentBounds[continentId] || [[-180, -90], [180, 90]];
-  const fitFeature = boundsToFeature(bounds);
+  const fitTarget = renderFeatures.length
+    ? { type: 'FeatureCollection', features: renderFeatures }
+    : boundsToFeature(bounds);
   const { width, height } = getSvgSize(svg);
+  const padding = 24;
   svg.attr('viewBox', `0 0 ${width} ${height}`).attr('preserveAspectRatio', 'xMidYMid meet');
-  const projection = d3.geoMercator().fitExtent([[20, 20], [width - 20, height - 20]], fitFeature);
+  const projection = d3.geoMercator().fitExtent([[padding, padding], [width - padding, height - padding]], fitTarget);
   const path = d3.geoPath(projection);
+  const interactiveNames = new Set(renderFeatures.map(feature => getFeatureName(feature)).filter(name => focusNames.has(name)));
   svg.selectAll('path.land')
-    .data(worldFeatures)
+    .data(renderFeatures, feature => getFeatureName(feature))
     .join('path')
-    .attr('class', d => {
-      const name = getFeatureName(d);
-      return focusNames.size ? (focusNames.has(name) ? 'land active' : 'land inactive') : 'land inactive';
-    })
+    .attr('class', feature => (focusNames.has(getFeatureName(feature)) ? 'land active' : 'land inactive'))
     .attr('d', path)
-    .style('pointer-events', d => (focusNames.has(getFeatureName(d)) ? 'auto' : 'none'))
-    .style('cursor', d => (focusNames.has(getFeatureName(d)) ? 'pointer' : 'default'))
+    .style('pointer-events', feature => (interactiveNames.has(getFeatureName(feature)) ? 'auto' : 'none'))
+    .style('cursor', feature => (interactiveNames.has(getFeatureName(feature)) ? 'pointer' : 'default'))
     .on('click', (event, feature) => {
       const featureName = getFeatureName(feature);
       const countryId = geoNameToCountryId[featureName];
-      if (countryId && focusNames.has(featureName) && typeof onCountrySelect === 'function') {
+      if (countryId && interactiveNames.has(featureName) && typeof onCountrySelect === 'function') {
         onCountrySelect(countryId);
       }
     });
@@ -167,6 +176,18 @@ function getGeoNamesForContinent(continentId) {
   return Object.values(countryData)
     .filter(country => country.continentId === continentId)
     .map(country => country.geoName);
+}
+
+function buildFocusNameSet(continentId, availableIds = []) {
+  if (Array.isArray(availableIds) && availableIds.length) {
+    const names = availableIds
+      .map(id => (countryData[id] ? countryData[id].geoName : null))
+      .filter(Boolean);
+    if (names.length) {
+      return new Set(names);
+    }
+  }
+  return new Set(getGeoNamesForContinent(continentId));
 }
 
 function getSvgSize(selection) {

@@ -31,6 +31,7 @@ const modalEl = document.getElementById('modal');
 const modalTitle = document.getElementById('modalTitle');
 const modalBody = document.getElementById('modalBody');
 const brandHomeBtn = document.getElementById('brandHome');
+const languageToggleControl = document.getElementById('languageToggle');
 
 init();
 
@@ -49,10 +50,6 @@ function bindEvents() {
     button.addEventListener('click', () => {
       setState({ lang: button.dataset.start, level: 'world', continentId: null, countryId: null });
     });
-  });
-
-  Array.from(document.querySelectorAll('.language-toggle button')).forEach(button => {
-    button.addEventListener('click', () => setState({ lang: button.dataset.lang }));
   });
 
   Array.from(document.querySelectorAll('.theme-toggle')).forEach(button => {
@@ -83,6 +80,15 @@ function bindEvents() {
       setState({ level: 'landing', continentId: null, countryId: null });
     });
   }
+  if (languageToggleControl) {
+    languageToggleControl.addEventListener('click', toggleLanguage);
+    languageToggleControl.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        toggleLanguage();
+      }
+    });
+  }
 
   window.addEventListener('resize', () => {
     resizeGlobe();
@@ -98,6 +104,11 @@ function setState(partial) {
 function toggleTheme() {
   const nextTheme = state.theme === 'light' ? 'dark' : 'light';
   setState({ theme: nextTheme });
+}
+
+function toggleLanguage() {
+  const nextLang = state.lang === 'fr' ? 'en' : 'fr';
+  setState({ lang: nextLang });
 }
 
 function goToContinent(id) {
@@ -157,8 +168,16 @@ function updateThemeButtons() {
   const themeCopy = getThemeCopy();
   const buttons = document.querySelectorAll('.theme-toggle');
   buttons.forEach(button => {
-    button.textContent = themeCopy.label;
+    let labelEl = button.querySelector('.theme-label');
+    if (!labelEl) {
+      button.innerHTML = '<span class="theme-label"></span><span class="theme-thumb" aria-hidden="true"></span>';
+      labelEl = button.querySelector('.theme-label');
+    }
+    labelEl.textContent = themeCopy.label;
     button.setAttribute('aria-label', themeCopy.aria);
+    button.dataset.theme = state.theme;
+    button.classList.toggle('is-dark', state.theme === 'dark');
+    button.classList.toggle('is-light', state.theme === 'light');
   });
 }
 
@@ -183,8 +202,16 @@ function updateInfoButton() {
 }
 
 function updateLanguageControls() {
-  Array.from(document.querySelectorAll('.language-toggle button')).forEach(button => {
-    button.classList.toggle('active', button.dataset.lang === state.lang);
+  if (!languageToggleControl) {
+    return;
+  }
+  const isEnglish = state.lang === 'en';
+  languageToggleControl.setAttribute('aria-checked', isEnglish ? 'true' : 'false');
+  languageToggleControl.dataset.lang = state.lang;
+  const options = languageToggleControl.querySelectorAll('.lang-option');
+  options.forEach((option, index) => {
+    const active = (index === 0 && !isEnglish) || (index === 1 && isEnglish);
+    option.classList.toggle('active', active);
   });
 }
 
