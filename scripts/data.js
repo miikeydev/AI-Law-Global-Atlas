@@ -14,7 +14,9 @@ country: {
 subtitle: 'Sélectionnez le sujet qui vous intéresse :',
 newsToggle: 'Actualité juridique',
 newsToggleClose: 'Fermer les actualités',
-newsTitle: 'Dernières actualités juridiques'
+newsTitle: 'Dernières actualités juridiques',
+newsLabel: 'Actualité juridique',
+newsEmpty: 'Les actualités arrivent bientôt.'
 },
 modal: {
 world: {
@@ -49,7 +51,9 @@ country: {
 subtitle: 'Select the topic you are interested in:',
 newsToggle: 'Legal news',
 newsToggleClose: 'Hide legal news',
-newsTitle: 'Latest legal updates'
+newsTitle: 'Latest legal updates',
+newsLabel: 'Legal news',
+newsEmpty: 'Legal updates are coming soon.'
 },
 modal: {
 world: {

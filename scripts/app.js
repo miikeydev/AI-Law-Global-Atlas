@@ -29,8 +29,8 @@ const views = {
 const header = document.getElementById('appHeader');
 const infoButton = document.getElementById('infoButton');
 const backButton = document.getElementById('backButton');
-const newsToggle = document.getElementById('newsToggle');
 const newsPanel = document.getElementById('newsPanel');
+const newsListEl = document.getElementById('newsList');
 const modalEl = document.getElementById('modal');
 const modalTitle = document.getElementById('modalTitle');
 const modalBody = document.getElementById('modalBody');
@@ -65,7 +65,6 @@ function bindEvents() {
   });
 
   backButton.addEventListener('click', handleBack);
-  newsToggle.addEventListener('click', toggleNews);
   modalEl.querySelector('.close-modal').addEventListener('click', closeModal);
   modalEl.addEventListener('click', event => {
     if (event.target === modalEl) {
@@ -325,8 +324,7 @@ function renderCountryView() {
     newsTitle.textContent = t.country.newsTitle;
   }
   if (!state.countryId) {
-    newsToggle.textContent = t.country.newsToggle;
-    newsPanel.classList.add('hidden');
+    updateNewsSection(null);
     renderCountryMap(null);
     return;
   }
@@ -334,21 +332,34 @@ function renderCountryView() {
   document.getElementById('countryName').textContent = country.name[state.lang];
   const continent = continentData[country.continentId];
   document.getElementById('continentBadge').textContent = continent.names[state.lang];
-  newsPanel.classList.add('hidden');
-  newsToggle.textContent = t.country.newsToggle;
-  buildNewsList(country);
+  updateNewsSection(country);
   buildLegalSections(country);
   renderCountryMap(state.countryId);
 }
 
-function buildNewsList(country) {
-  const list = document.getElementById('newsList');
-  list.innerHTML = '';
+function updateNewsSection(country) {
+  if (!newsPanel || !newsListEl) {
+    return;
+  }
+  newsListEl.innerHTML = '';
+  if (!country) {
+    newsPanel.classList.add('hidden');
+    return;
+  }
+  newsPanel.classList.remove('hidden');
   const linkLabel = state.lang === 'fr' ? 'Consulter' : 'Open';
-  country.news.forEach(item => {
+  const newsItems = Array.isArray(country.news) ? country.news : [];
+  if (!newsItems.length) {
     const li = document.createElement('li');
-    li.innerHTML = `<strong>${item.title[state.lang]}</strong><span>${item.source} — ${item.date}</span><a href="${item.link}">${linkLabel}</a>`;
-    list.appendChild(li);
+    li.className = 'news-empty';
+    li.textContent = translations[state.lang].country.newsEmpty || '';
+    newsListEl.appendChild(li);
+    return;
+  }
+  newsItems.forEach(item => {
+    const li = document.createElement('li');
+    li.innerHTML = `<strong>${item.title[state.lang]}</strong><span>${item.source} — ${item.date}</span><a href="${item.link}" target="_blank" rel="noopener">${linkLabel}</a>`;
+    newsListEl.appendChild(li);
   });
 }
 
@@ -384,15 +395,6 @@ function buildLegalSections(country) {
     });
     wrapper.appendChild(group);
   });
-}
-
-function toggleNews() {
-  if (!state.countryId) {
-    return;
-  }
-  const t = translations[state.lang];
-  const hidden = newsPanel.classList.toggle('hidden');
-  newsToggle.textContent = hidden ? t.country.newsToggle : t.country.newsToggleClose;
 }
 
 function openModal(type) {

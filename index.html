@@ -108,19 +108,19 @@ Mode sombre
 <p class="subtitle" data-i18n="country.subtitle"></p>
 </div>
 </div>
-<div class="country-map-panel">
-<div class="country-map-header">
-<button id="newsToggle" class="primary slim"></button>
-</div>
+<div id="countryMapPanel" class="country-map-panel">
 <div class="country-map" role="img">
 <svg id="countryMapSvg" class="map-svg" aria-label="Carte du pays"></svg>
 </div>
-<div id="newsPanel" class="news-panel hidden">
+</div>
+</div>
+<section id="newsPanel" class="country-news-panel">
+<div class="news-header">
+<p class="pill ghost" data-i18n="country.newsLabel">Actualité juridique</p>
 <h4 data-i18n="country.newsTitle"></h4>
-<ul id="newsList"></ul>
 </div>
-</div>
-</div>
+<ul id="newsList" class="news-list"></ul>
+</section>
 <div class="country-legal-panel">
 <div id="legalSections" class="accordion"></div>
 </div>
