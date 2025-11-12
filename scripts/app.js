@@ -323,6 +323,10 @@ function renderCountryView() {
   if (newsTitle) {
     newsTitle.textContent = t.country.newsTitle;
   }
+  const newsLabel = document.querySelector('[data-i18n="country.newsLabel"]');
+  if (newsLabel) {
+    newsLabel.textContent = t.country.newsLabel;
+  }
   if (!state.countryId) {
     updateNewsSection(null);
     renderCountryMap(null);

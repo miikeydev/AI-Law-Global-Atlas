@@ -506,8 +506,34 @@ max-height:140px;
 }
 
 @media (max-width:1024px) {
+  .country-layout {
+    padding:24px;
+    border-radius:32px;
+  }
   .country-hero {
     grid-template-columns:1fr;
+  }
+  .country-details,
+  .country-map-panel {
+    min-height:auto;
+    height:auto;
+  }
+  .country-map {
+    min-height:220px;
+  }
+}
+
+@media (max-width:640px) {
+  .country-layout {
+    padding:20px 16px;
+    border-radius:28px;
+    gap:24px;
+  }
+  .country-news-panel,
+  .country-details,
+  .country-map-panel {
+    border-radius:24px;
+    padding:20px;
   }
 }
 
@@ -718,40 +744,49 @@ transform:translate(-50%,-50%);
 .country-layout {
 display:flex;
 flex-direction:column;
-gap:24px;
-padding:0 8px;
+gap:32px;
+padding:32px;
+border-radius:40px;
+background:linear-gradient(150deg, rgba(255,255,255,.95), rgba(244,246,255,.92));
+border:1px solid rgba(153,161,198,.2);
+box-shadow:0 35px 90px rgba(148,156,190,.25);
+}
+body[data-theme="dark"] .country-layout {
+background:linear-gradient(150deg, rgba(15,15,23,.95), rgba(5,5,11,.92));
+border:1px solid rgba(255,255,255,.05);
+box-shadow:0 35px 90px rgba(0,0,0,.55);
 }
 .country-hero {
 display:grid;
-grid-template-columns:minmax(0,1.5fr) minmax(240px,0.5fr);
-align-items:start;
-gap:24px;
+grid-template-columns:minmax(0,1.2fr) minmax(280px,0.8fr);
+align-items:stretch;
+gap:32px;
+grid-auto-rows:1fr;
 }
 .country-map-panel {
 padding:24px;
 display:flex;
 flex-direction:column;
-gap:12px;
-min-height:auto;
-max-height:none;
+gap:16px;
+min-height:360px;
+height:100%;
 }
 .country-map {
 flex:1;
 display:flex;
 align-items:center;
 justify-content:center;
-max-height:140px;
+min-height:280px;
 }
 .country-news-panel {
 background:linear-gradient(135deg,#ffffff,#f4f6ff);
-border-radius:28px;
+border-radius:32px;
 padding:28px;
 border:1px solid rgba(153,161,198,.25);
 box-shadow:0 25px 70px rgba(148,156,190,.25);
 display:flex;
 flex-direction:column;
 gap:16px;
-margin:0 8px;
 }
 body[data-theme="dark"] .country-news-panel {
 background:linear-gradient(135deg, rgba(23,23,32,.96), rgba(9,9,15,.94));
@@ -827,10 +862,12 @@ box-shadow:0 20px 60px rgba(148,156,190,.25);
 display:flex;
 flex-direction:column;
 gap:12px;
+min-height:360px;
+height:100%;
 }
 .country-legal-panel {
 padding:0;
-margin:0 8px;
+margin:0;
 }
 body[data-theme="dark"] .country-details,
 body[data-theme="dark"] .country-legal-panel {
