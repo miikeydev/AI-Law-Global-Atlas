@@ -33,7 +33,6 @@ export function loadWorldGeometry() {
       worldFeatures = topojson.feature(worldData, worldData.objects.countries).features;
       countryContinentLookup = buildCountryContinentLookup(Array.isArray(continentList) ? continentList : [], worldFeatures);
       worldReady = true;
-      drawWorldMap();
       return worldFeatures;
     })
     .catch(error => console.error('Unable to load world data', error));

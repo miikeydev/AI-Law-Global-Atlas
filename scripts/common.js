@@ -29,8 +29,9 @@ export function buildPageUrl(path, params = {}) {
       url.searchParams.set(key, value);
     }
   });
-  return url.pathname + url.search + url.hash;
+  return url.toString();
 }
+
 
 function setupThemeButtons(onThemeChange) {
   const buttons = document.querySelectorAll('.theme-toggle');
@@ -96,8 +97,9 @@ function setupLanguageToggle(lang) {
 function updateLang(lang) {
   const url = new URL(window.location.href);
   url.searchParams.set('lang', lang);
-  window.location.href = url.pathname + url.search + url.hash;
+  window.location.href = url.toString();
 }
+
 
 function setupBrandHome() {
   const brand = document.getElementById('brandHome');
