@@ -891,9 +891,9 @@ flex-direction:column;
 body[data-theme="dark"] .country-details,
 body[data-theme="dark"] .country-legal-panel,
 body[data-theme="dark"] #countryMapPanel {
-background:linear-gradient(135deg, rgba(23,23,32,.96), rgba(9,9,15,.94));
-border:1px solid rgba(255,255,255,.04);
-box-shadow:0 20px 60px rgba(0,0,0,.35);
+  background:transparent;
+  border:none;
+  box-shadow:none;
 }
 .pill {
 background:rgba(255,111,125,.18);

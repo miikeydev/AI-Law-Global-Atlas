@@ -1,10 +1,16 @@
-import { initCommon, navigateTo } from './common.js';
+import { initCommon, navigateTo, consumeNavigationState } from './common.js';
 import { translations, continentData, countryData } from './data.js';
 import { loadWorldGeometry, renderContinentMap } from './maps.js';
 
+const navState = getContinentNavState();
+applyFallbackParams(navState);
+
 const { lang } = initCommon();
 const params = new URLSearchParams(window.location.search);
-const continentId = params.get('continent');
+let continentId = params.get('continent');
+if (!continentId && navState?.params?.continent) {
+  continentId = navState.params.continent;
+}
 if (!continentId) {
   navigateTo('world.html', { lang });
 }
@@ -89,4 +95,33 @@ function handleCountrySelect(countryId) {
 function formatPercent(value) {
   const locale = lang === 'fr' ? 'fr-FR' : 'en-US';
   return new Intl.NumberFormat(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(value);
+}
+
+function getContinentNavState() {
+  const state = consumeNavigationState();
+  if (!state || !state.path) {
+    return state;
+  }
+  return state.path.includes('continent') ? state : null;
+}
+
+function applyFallbackParams(state) {
+  if (!state || !state.params) {
+    return;
+  }
+  try {
+    const url = new URL(window.location.href);
+    let updated = false;
+    ['lang', 'continent'].forEach(key => {
+      if (!url.searchParams.get(key) && state.params[key]) {
+        url.searchParams.set(key, state.params[key]);
+        updated = true;
+      }
+    });
+    if (updated) {
+      window.history.replaceState({}, '', url);
+    }
+  } catch (error) {
+    // ignore inability to update history
+  }
 }

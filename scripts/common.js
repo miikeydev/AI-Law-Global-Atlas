@@ -1,23 +1,26 @@
 const THEME_KEY = 'aixip-theme';
+const NAV_STATE_KEY = 'aixip-nav-state';
+const LANG_KEY = 'aixip-lang';
 let currentTheme = getStoredTheme();
+let currentLang = determineInitialLang();
 
 export function initCommon(options = {}) {
-  const lang = getLangParam();
+  const lang = currentLang;
   document.documentElement.lang = lang === 'fr' ? 'fr' : 'en';
   applyTheme(currentTheme);
   setupThemeButtons(options.onThemeChange);
-  setupLanguageToggle(lang);
+  setupLanguageToggle();
   setupBrandHome();
   setupBackButton();
   return { lang, theme: currentTheme };
 }
 
 export function getLangParam() {
-  const value = new URLSearchParams(window.location.search).get('lang');
-  return value === 'en' ? 'en' : 'fr';
+  return currentLang;
 }
 
 export function navigateTo(path, params = {}) {
+  storeNavigationState(path, params);
   const url = buildPageUrl(path, params);
   window.location.href = url;
 }
@@ -32,6 +35,27 @@ export function buildPageUrl(path, params = {}) {
   return url.toString();
 }
 
+export function consumeNavigationState() {
+  try {
+    const raw = sessionStorage.getItem(NAV_STATE_KEY);
+    sessionStorage.removeItem(NAV_STATE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (error) {
+    return null;
+  }
+}
+
+function storeNavigationState(path, params = {}) {
+  try {
+    sessionStorage.setItem(NAV_STATE_KEY, JSON.stringify({
+      path,
+      params,
+      timestamp: Date.now()
+    }));
+  } catch (error) {
+    // ignore storage errors
+  }
+}
 
 function setupThemeButtons(onThemeChange) {
   const buttons = document.querySelectorAll('.theme-toggle');
@@ -76,7 +100,7 @@ function getThemeAria() {
   return isDark ? 'Activer le mode clair' : 'Activer le mode sombre';
 }
 
-function setupLanguageToggle(lang) {
+function setupLanguageToggle() {
   const toggle = document.getElementById('languageToggle');
   if (!toggle) {
     return;
@@ -84,9 +108,9 @@ function setupLanguageToggle(lang) {
   const buttons = toggle.querySelectorAll('[data-lang]');
   buttons.forEach(button => {
     const targetLang = button.dataset.lang;
-    button.classList.toggle('active', targetLang === lang);
+    button.classList.toggle('active', targetLang === currentLang);
     button.addEventListener('click', () => {
-      if (targetLang === lang) {
+      if (!targetLang || targetLang === currentLang) {
         return;
       }
       updateLang(targetLang);
@@ -95,8 +119,11 @@ function setupLanguageToggle(lang) {
 }
 
 function updateLang(lang) {
+  const normalized = lang === 'en' ? 'en' : 'fr';
+  currentLang = normalized;
+  storeLangPreference(normalized);
   const url = new URL(window.location.href);
-  url.searchParams.set('lang', lang);
+  url.searchParams.set('lang', normalized);
   window.location.href = url.toString();
 }
 
@@ -140,4 +167,60 @@ function getStoredTheme() {
   } catch (error) {
     return 'light';
   }
+}
+
+function determineInitialLang() {
+  const fromUrl = readLangFromUrl();
+  if (fromUrl) {
+    storeLangPreference(fromUrl);
+    return fromUrl;
+  }
+  const stored = getStoredLangPreference();
+  if (stored) {
+    applyLangToUrl(stored);
+    return stored;
+  }
+  applyLangToUrl('fr');
+  return 'fr';
+}
+
+function readLangFromUrl() {
+  const value = new URLSearchParams(window.location.search).get('lang');
+  if (value === 'en' || value === 'fr') {
+    return value;
+  }
+  return null;
+}
+
+function applyLangToUrl(lang) {
+  try {
+    const url = new URL(window.location.href);
+    if (url.searchParams.get('lang') === lang) {
+      return;
+    }
+    url.searchParams.set('lang', lang);
+    window.history.replaceState({}, '', url);
+  } catch (error) {
+    // ignore inability to update URL
+  }
+}
+
+function storeLangPreference(lang) {
+  try {
+    localStorage.setItem(LANG_KEY, lang);
+  } catch (error) {
+    // ignore
+  }
+}
+
+function getStoredLangPreference() {
+  try {
+    const stored = localStorage.getItem(LANG_KEY);
+    if (stored === 'en' || stored === 'fr') {
+      return stored;
+    }
+  } catch (error) {
+    return null;
+  }
+  return null;
 }
