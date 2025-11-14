@@ -14,6 +14,8 @@ const state = {
 };
 
 let currentThemeApplied = null;
+let countryContent = {};
+let countryContentReady = false;
 const THEME_TOGGLE_MIN_WIDTH = 180;
 const THEME_TOGGLE_MAX_WIDTH = 300;
 const THEME_TOGGLE_PADDING = 48;
@@ -41,6 +43,7 @@ init();
 
 function init() {
   bindEvents();
+  loadCountryContent();
   initGlobe(state.theme).catch(error => console.warn('Globe init failed', error));
   loadWorldGeometry().then(() => {
     drawWorldMap(goToContinent);
@@ -337,7 +340,7 @@ function renderCountryView() {
   const continent = continentData[country.continentId];
   document.getElementById('continentBadge').textContent = continent.names[state.lang];
   updateNewsSection(country);
-  buildLegalSections(country);
+  renderCountryText(country);
   renderCountryMap(state.countryId);
 }
 
@@ -367,38 +370,32 @@ function updateNewsSection(country) {
   });
 }
 
-function buildLegalSections(country) {
-  const wrapper = document.getElementById('legalSections');
-  wrapper.innerHTML = '';
-  country.sections.forEach((section, index) => {
-    const group = document.createElement('div');
-    group.className = 'accordion-group';
-    const heading = document.createElement('h4');
-    heading.textContent = `${index + 1}. ${section.title[state.lang]}`;
-    group.appendChild(heading);
-    section.items.forEach(item => {
-      const itemEl = document.createElement('div');
-      itemEl.className = 'accordion-item';
-      const trigger = document.createElement('button');
-      trigger.className = 'accordion-trigger';
-      trigger.innerHTML = `<span class="badge">${item.badge}</span><span class="title">${item.title[state.lang]}</span>`;
-      const icon = document.createElement('span');
-      icon.textContent = '+';
-      trigger.appendChild(icon);
-      const content = document.createElement('div');
-      content.className = 'accordion-content';
-      content.textContent = item.content[state.lang];
-      trigger.addEventListener('click', () => {
-        const isOpen = itemEl.classList.toggle('open');
-        icon.textContent = isOpen ? '–' : '+';
-        content.classList.toggle('active', isOpen);
-      });
-      itemEl.appendChild(trigger);
-      itemEl.appendChild(content);
-      group.appendChild(itemEl);
+function renderCountryText(country) {
+  const container = document.getElementById('countryText');
+  if (!container) {
+    return;
+  }
+  if (!country) {
+    container.textContent = '';
+    return;
+  }
+  const fallback = translations[state.lang].country.textFallback || '';
+  const writeContent = text => {
+    container.textContent = text || fallback;
+  };
+  if (!countryContentReady) {
+    writeContent(fallback);
+    loadCountryContent().then(() => {
+      if (state.countryId !== country.id) {
+        return;
+      }
+      const entry = countryContent[country.id];
+      writeContent(entry && entry[state.lang] ? entry[state.lang] : fallback);
     });
-    wrapper.appendChild(group);
-  });
+    return;
+  }
+  const entry = countryContent[country.id];
+  writeContent(entry && entry[state.lang] ? entry[state.lang] : fallback);
 }
 
 function openModal(type) {
@@ -458,4 +455,23 @@ function getStoredTheme() {
 function refreshMaps() {
   renderContinentMap(state.continentId, goToCountry);
   renderCountryMap(state.countryId);
+}
+
+function loadCountryContent() {
+  if (countryContentReady) {
+    return Promise.resolve(countryContent);
+  }
+  return fetch('country-content.json')
+    .then(response => response.json())
+    .then(data => {
+      countryContent = data || {};
+      countryContentReady = true;
+      return countryContent;
+    })
+    .catch(error => {
+      console.warn('Unable to load country content', error);
+      countryContentReady = false;
+      countryContent = {};
+      return countryContent;
+    });
 }

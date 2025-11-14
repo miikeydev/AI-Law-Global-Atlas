@@ -1,0 +1,26 @@
+{
+  "usa": {
+    "fr": "Les États-Unis combinent initiatives fédérales et plans sectoriels pour encadrer l'IA. Le NIST, la FTC et la Copyright Office publient régulièrement des lignes directrices.\n\nPoints clés :\n- Déploiement du AI Risk Management Framework.\n- Renforcement des exigences de divulgation pour les contenus générés.\n- Propositions de loi visant un registre national des jeux de données.",
+    "en": "The United States mixes federal guidance and sector specific plans to govern AI. Agencies such as NIST, the FTC and the Copyright Office issue frequent guidance.\n\nHighlights:\n- Deployment of the AI Risk Management Framework.\n- Enhanced disclosure duties for AI generated material.\n- Draft bills exploring a national registry of training datasets."
+  },
+  "canada": {
+    "fr": "Le Canada prépare la Loi sur l'IA et les données (AIDA) pour articuler innovation et confiance. Le pays s'appuie encore sur la LPRPDE mais teste des sandboxes conjoints fédéraux-provinciaux.\n\nEn pratique, Ottawa publie des directives de transparence, finance un réseau national d'évaluation et modernise le projet de loi C-27 pour y intégrer des obligations IA.",
+    "en": "Canada is finalising the Artificial Intelligence and Data Act (AIDA) while continuing to rely on PIPEDA. Joint federal-provincial sandboxes test evaluation methods and bill C-27 now embeds AI duties, transparency guidance and new funding for evaluation hubs." 
+  },
+  "brazil": {
+    "fr": "Le Brésil discute d'un cadre IA inspiré des principes de transparence, de responsabilité et d'innovation ouverte. Les autorités examinent un projet de loi national et plusieurs états fédérés expérimentent des chartes éthiques.",
+    "en": "Brazil is debating a national AI bill focused on transparency, accountability and open innovation. Federal states run pilot ethics charters while Congress studies a unified framework." 
+  },
+  "chile": {
+    "fr": "Le Chili veut lier stratégie IA et transformation productive. Une feuille de route 2023-2030 prévoit des mesures pour la propriété intellectuelle, l'open data et la supervision algorithmique."
+    ,"en": "Chile links its AI roadmap with the broader productivity agenda. The 2023-2030 plan reinforces IP offices, open data policies and algorithmic supervision." 
+  },
+  "france": {
+    "fr": "La France transpose l'AI Act tout en modernisant la propriété intellectuelle. Le CNIL et l'INPI publient des guides pour les modèles génératifs et les projets d'innovation publique.",
+    "en": "France is preparing for the AI Act while modernising intellectual property. CNIL and INPI share guidance for generative models and public innovation programmes." 
+  },
+  "southAfrica": {
+    "fr": "L'Afrique du Sud intègre l'IA dans sa politique d'industrialisation. Le Département des Communications prépare un code de conduite pour les données sensibles et le CIPCO teste un guichet unique pour les inventions assistées par IA.",
+    "en": "South Africa ties AI policy to industrial goals. The Department of Communications is drafting a sensitive-data code of conduct and the CIPC is piloting a single window for AI-assisted inventions." 
+  }
+}

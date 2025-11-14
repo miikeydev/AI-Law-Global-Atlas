@@ -16,7 +16,8 @@ newsToggle: 'Actualité juridique',
 newsToggleClose: 'Fermer les actualités',
 newsTitle: 'Dernières actualités juridiques',
 newsLabel: 'Actualité juridique',
-newsEmpty: 'Les actualités arrivent bientôt.'
+newsEmpty: 'Les actualités arrivent bientôt.',
+textFallback: 'Contenu à venir pour ce pays.'
 },
 modal: {
 world: {
@@ -53,7 +54,8 @@ newsToggle: 'Legal news',
 newsToggleClose: 'Hide legal news',
 newsTitle: 'Latest legal updates',
 newsLabel: 'Legal news',
-newsEmpty: 'Legal updates are coming soon.'
+newsEmpty: 'Legal updates are coming soon.',
+textFallback: 'Content coming soon for this country.'
 },
 modal: {
 world: {
