@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI X IP Global Explorer — Continent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="brand-panel">
+    <div class="logo-wrapper">
+      <button id="brandHome" class="logo-link" type="button" aria-label="Revenir à l'accueil">
+        <img src="res/Logo_Panthéon-Assas.svg.png" alt="Logo Panthéon-Assas Université" class="logo-img" loading="lazy" decoding="async">
+      </button>
+    </div>
+  </aside>
+  <main>
+    <header class="global-header">
+      <div class="header-left">
+        <h2>AI X IP Global Explorer</h2>
+        <button id="backButton" class="back-button" aria-label="Retour">&#8592;</button>
+      </div>
+      <div class="header-right">
+        <button id="themeToggle" class="ghost theme-toggle" aria-label="Basculer le thème">Mode sombre</button>
+        <div id="languageToggle" class="language-toggle" role="group" aria-label="Switch language">
+          <button type="button" data-lang="fr">FR</button>
+          <button type="button" data-lang="en">EN</button>
+        </div>
+      </div>
+    </header>
+    <section class="continent-layout" aria-label="Vue Continent">
+      <div class="continent-map" role="region">
+        <div class="continent-illustration">
+          <svg id="continentMap" class="map-svg" role="img" aria-label="Carte du continent"></svg>
+        </div>
+      </div>
+      <div class="continent-info">
+        <div class="continent-heading">
+          <h3 id="continentName"></h3>
+          <p class="subtitle" data-i18n="continent.subtitle"></p>
+        </div>
+        <div class="availability">
+          <p class="label" data-i18n="continent.available"></p>
+          <ul id="countryList"></ul>
+        </div>
+        <div class="progress-panel">
+          <div class="donut" id="donut" aria-label="Progression"><span id="progressValue"></span></div>
+          <p id="progressNote"></p>
+        </div>
+      </div>
+    </section>
+    <footer>
+      <p>AI X IP Global Explorer — 2024</p>
+      <p>Projet universitaire – Panthéon-Assas Université</p>
+      <a href="#" aria-label="Contact">Contact</a>
+    </footer>
+  </main>
+</div>
+<script defer src="https://unpkg.com/d3@7"></script>
+<script defer src="https://unpkg.com/topojson-client@3"></script>
+<script type="module" src="scripts/continent-page.js"></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI X IP Global Explorer — World</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="brand-panel">
+    <div class="logo-wrapper">
+      <button id="brandHome" class="logo-link" type="button" aria-label="Revenir à l'accueil">
+        <img src="res/Logo_Panthéon-Assas.svg.png" alt="Logo Panthéon-Assas Université" class="logo-img" loading="lazy" decoding="async">
+      </button>
+    </div>
+  </aside>
+  <main>
+    <header class="global-header">
+      <div class="header-left">
+        <h2>AI X IP Global Explorer</h2>
+      </div>
+      <div class="header-right">
+        <button id="themeToggle" class="ghost theme-toggle" aria-label="Basculer le thème">Mode sombre</button>
+        <div id="languageToggle" class="language-toggle" role="group" aria-label="Switch language">
+          <button type="button" data-lang="fr">FR</button>
+          <button type="button" data-lang="en">EN</button>
+        </div>
+      </div>
+    </header>
+    <section class="world-layout" aria-label="Vue Monde">
+      <div class="world-text">
+        <h3 data-i18n="world.title"></h3>
+        <p data-i18n="world.description"></p>
+      </div>
+      <div class="world-map" role="region" aria-label="Carte du monde">
+        <div class="map-illustration">
+          <svg id="worldMap" class="map-svg" role="img" aria-label="World map"></svg>
+        </div>
+      </div>
+    </section>
+    <footer>
+      <p>AI X IP Global Explorer — 2024</p>
+      <p>Projet universitaire – Panthéon-Assas Université</p>
+      <a href="#" aria-label="Contact">Contact</a>
+    </footer>
+  </main>
+</div>
+<script defer src="https://unpkg.com/d3@7"></script>
+<script defer src="https://unpkg.com/topojson-client@3"></script>
+<script defer src="https://unpkg.com/globe.gl@2.31.0/dist/globe.gl.min.js"></script>
+<script type="module" src="scripts/world-page.js"></script>
+</body>
+</html>
