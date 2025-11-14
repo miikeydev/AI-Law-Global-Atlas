@@ -28,7 +28,6 @@ export async function initGlobe(theme = 'light') {
 
     applyPolygonAppearance(theme, palette);
 
-    configureRenderer();
     const controls = globeInstance.controls();
     controls.enableZoom = false;
     controls.enablePan = false;
@@ -128,16 +127,6 @@ function getTopojson() {
     return window.topojson;
   }
   return null;
-}
-
-function configureRenderer() {
-  if (!globeInstance || typeof globeInstance.renderer !== 'function') {
-    return;
-  }
-  const renderer = globeInstance.renderer();
-  if (renderer && 'useLegacyLights' in renderer) {
-    renderer.useLegacyLights = false;
-  }
 }
 
 function ensureLighting(theme) {

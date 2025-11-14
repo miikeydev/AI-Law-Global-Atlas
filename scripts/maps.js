@@ -94,12 +94,16 @@ export function renderContinentMap(continentId, onCountrySelect) {
     ? { type: 'FeatureCollection', features: renderFeatures }
     : boundsToFeature(bounds);
   const { width, height } = getSvgSize(svg);
-  const padding = 24;
+  const padding = width < 560 ? 14 : 24;
   svg.attr('viewBox', `0 0 ${width} ${height}`).attr('preserveAspectRatio', 'xMidYMid meet');
   const projection = d3.geoMercator().fitExtent([[padding, padding], [width - padding, height - padding]], fitTarget);
   const path = d3.geoPath(projection);
   const interactiveNames = new Set(renderFeatures.map(feature => getFeatureName(feature)).filter(name => focusNames.has(name)));
-  svg.selectAll('path.land')
+  let layer = svg.select('g.map-layer');
+  if (layer.empty()) {
+    layer = svg.append('g').attr('class', 'map-layer');
+  }
+  layer.selectAll('path.land')
     .data(renderFeatures, feature => getFeatureName(feature))
     .join('path')
     .attr('class', feature => (focusNames.has(getFeatureName(feature)) ? 'land active' : 'land inactive'))
@@ -113,6 +117,7 @@ export function renderContinentMap(continentId, onCountrySelect) {
         onCountrySelect(countryId);
       }
     });
+  applyMobilePan(svg, layer, width, height);
 }
 
 export function renderCountryMap(countryId) {
@@ -160,6 +165,28 @@ export function handleMapResize(continentId, countryId, onContinentSelect, onCou
 function handleWorldHover(feature, entering) {
   const continentId = getContinentForFeature(feature);
   highlightWorldContinent(continentId, entering);
+}
+
+function applyMobilePan(svg, layer, width, height) {
+  if (typeof d3 === 'undefined' || typeof d3.zoom === 'undefined') {
+    return;
+  }
+  const enablePan = window.matchMedia ? window.matchMedia('(max-width: 768px)').matches : false;
+  svg.classed('draggable', !!enablePan);
+  if (!enablePan) {
+    svg.on('.zoom', null);
+    layer.attr('transform', null);
+    return;
+  }
+  const zoom = d3.zoom()
+    .scaleExtent([1, 4])
+    .translateExtent([[0, 0], [width, height]])
+    .on('zoom', event => {
+      layer.attr('transform', event.transform);
+    });
+  svg.on('.zoom', null);
+  svg.call(zoom);
+  svg.call(zoom.transform, d3.zoomIdentity);
 }
 
 function highlightWorldContinent(continentId, entering) {
