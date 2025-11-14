@@ -27,6 +27,12 @@ function renderFallback() {
   if (nameEl) {
     nameEl.textContent = lang === 'fr' ? 'Pays introuvable' : 'Country not found';
   }
+  const textEl = document.getElementById('countryText');
+  if (textEl) {
+    textEl.innerHTML = getFallbackCopy()
+      .map(paragraph => `<p>${paragraph}</p>`)
+      .join('');
+  }
 }
 
 function renderCountryHeader(country) {
@@ -55,4 +61,17 @@ async function loadCountryContent(country) {
     console.warn('Unable to load country content', error);
   }
   return lang === 'fr' ? 'Contenu à venir pour ce pays.' : 'Content coming soon for this country.';
+}
+
+function getFallbackCopy() {
+  if (lang === 'fr') {
+    return [
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quis nisl posuere, interdum nunc ac, fermentum lorem. Vestibulum ut mattis arcu, vel sodales nisl.',
+      'Suspendisse potenti. Mauris aliquam, neque et accumsan consequat, nisl neque placerat erat, sit amet cursus lacus elit non urna. Donec finibus magna et orci laoreet suscipit.'
+    ];
+  }
+  return [
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quis nisl posuere, interdum nunc ac, fermentum lorem. Vestibulum ut mattis arcu, vel sodales nisl.',
+    'Suspendisse potenti. Mauris aliquam, neque et accumsan consequat, nisl neque placerat erat, sit amet cursus lacus elit non urna. Donec finibus magna et orci laoreet suscipit.'
+  ];
 }

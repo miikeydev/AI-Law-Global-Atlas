@@ -127,7 +127,7 @@ function updateLang(lang) {
   storeLangPreference(normalized);
   const url = new URL(window.location.href);
   url.searchParams.set('lang', normalized);
-  window.location.href = url.toString();
+  window.location.replace(url.toString());
 }
 
 function updateLanguageToggleButtons(toggle) {
