@@ -34,6 +34,11 @@ common: {
       darkLabel: 'Mode sombre',
       ariaToDark: 'Activer le mode sombre',
       ariaToLight: 'Activer le mode clair'
+    },
+    footer: {
+      tagline: 'AI X IP Global Explorer — 2024',
+      subline: 'Projet universitaire – Panthéon-Assas Université',
+      contact: 'Contact'
     }
   }
 },
@@ -72,6 +77,11 @@ common: {
       darkLabel: 'Dark mode',
       ariaToDark: 'Switch to dark mode',
       ariaToLight: 'Switch to light mode'
+    },
+    footer: {
+      tagline: 'AI X IP Global Explorer — 2024',
+      subline: 'University project – Panthéon-Assas University',
+      contact: 'Contact'
     }
   }
 }

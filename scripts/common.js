@@ -1,3 +1,5 @@
+import { translations } from './data.js';
+
 const THEME_KEY = 'aixip-theme';
 const NAV_STATE_KEY = 'aixip-nav-state';
 const LANG_KEY = 'aixip-lang';
@@ -11,7 +13,7 @@ export function initCommon(options = {}) {
   setupThemeButtons(options.onThemeChange);
   setupLanguageToggle();
   setupBrandHome();
-  setupBackButton();
+  updateFooterCopy();
   return { lang, theme: currentTheme };
 }
 
@@ -105,16 +107,17 @@ function setupLanguageToggle() {
   if (!toggle) {
     return;
   }
-  const buttons = toggle.querySelectorAll('[data-lang]');
-  buttons.forEach(button => {
-    const targetLang = button.dataset.lang;
-    button.classList.toggle('active', targetLang === currentLang);
-    button.addEventListener('click', () => {
-      if (!targetLang || targetLang === currentLang) {
-        return;
-      }
-      updateLang(targetLang);
-    });
+  updateLanguageToggleButtons(toggle);
+  toggle.addEventListener('click', event => {
+    event.preventDefault();
+    const button = event.target.closest('[data-lang]');
+    const requested = button?.dataset.lang;
+    if (requested && requested !== currentLang) {
+      updateLang(requested);
+      return;
+    }
+    const fallbackLang = currentLang === 'fr' ? 'en' : 'fr';
+    updateLang(fallbackLang);
   });
 }
 
@@ -127,6 +130,14 @@ function updateLang(lang) {
   window.location.href = url.toString();
 }
 
+function updateLanguageToggleButtons(toggle) {
+  const buttons = toggle.querySelectorAll('[data-lang]');
+  buttons.forEach(button => {
+    const targetLang = button.dataset.lang;
+    button.classList.toggle('active', targetLang === currentLang);
+  });
+}
+
 
 function setupBrandHome() {
   const brand = document.getElementById('brandHome');
@@ -135,20 +146,6 @@ function setupBrandHome() {
       window.location.href = 'index.html';
     });
   }
-}
-
-function setupBackButton() {
-  const backButton = document.getElementById('backButton');
-  if (!backButton) {
-    return;
-  }
-  backButton.addEventListener('click', () => {
-    if (window.history.length > 1) {
-      window.history.back();
-    } else {
-      window.location.href = 'index.html';
-    }
-  });
 }
 
 function applyTheme(theme) {
@@ -166,6 +163,29 @@ function getStoredTheme() {
     return stored === 'dark' ? 'dark' : 'light';
   } catch (error) {
     return 'light';
+  }
+}
+
+function updateFooterCopy() {
+  const footer = document.querySelector('footer');
+  if (!footer) {
+    return;
+  }
+  const footerCopy = translations[currentLang]?.common?.footer;
+  if (!footerCopy) {
+    return;
+  }
+  const tagline = footer.querySelector('[data-i18n="footer.tagline"]');
+  if (tagline) {
+    tagline.textContent = footerCopy.tagline;
+  }
+  const subline = footer.querySelector('[data-i18n="footer.subline"]');
+  if (subline) {
+    subline.textContent = footerCopy.subline;
+  }
+  const contact = footer.querySelector('[data-i18n="footer.contact"]');
+  if (contact) {
+    contact.textContent = footerCopy.contact;
   }
 }
 
