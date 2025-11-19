@@ -198,7 +198,7 @@
     position: relative;
     background: transparent;
     border-radius: 24px;
-    height: 420px;
+    height: 600px;
     overflow: hidden;
     border: none;
     box-shadow: none;
@@ -385,7 +385,7 @@ body[data-theme="dark"] .country-map::after {
 }
 
 .continent-illustration {
-    height: 420px;
+    height: 600px;
 }
 
 #continentView .continent-illustration {
@@ -580,7 +580,7 @@ body[data-theme="dark"] .country-text-block {
     }
 
     #worldView .map-illustration {
-        min-height: 420px;
+        min-height: 500px;
         height: auto;
     }
 

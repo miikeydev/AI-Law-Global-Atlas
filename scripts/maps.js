@@ -171,7 +171,7 @@ function applyMobilePan(svg, layer, width, height) {
   if (typeof d3 === 'undefined' || typeof d3.zoom === 'undefined') {
     return;
   }
-  const enablePan = window.matchMedia ? window.matchMedia('(max-width: 768px)').matches : false;
+  const enablePan = window.matchMedia ? window.matchMedia('(max-width: 1100px)').matches : false;
   svg.classed('draggable', !!enablePan);
   if (!enablePan) {
     svg.on('.zoom', null);
