@@ -92,11 +92,13 @@ export function renderContinentMap(continentId, onCountrySelect) {
   const continent = continentData[continentId] || {};
   const availableIds = Array.isArray(continent.availableCountries) ? continent.availableCountries : [];
   const focusNames = buildFocusNameSet(continentId, availableIds);
-  const focusFeatures = worldFeatures.filter(feature => focusNames.has(getFeatureName(feature)));
-  const fallbackFeatures = focusFeatures.length
-    ? focusFeatures
-    : worldFeatures.filter(feature => getContinentForFeature(feature) === continentId);
-  const renderFeatures = fallbackFeatures.length ? fallbackFeatures : worldFeatures;
+  // Get ALL countries that belong to this continent, not just available ones
+  const renderFeatures = worldFeatures.filter(feature => getContinentForFeature(feature) === continentId);
+  // If no continent countries found, fall back to world features
+  if (!renderFeatures.length) {
+    const focusFeatures = worldFeatures.filter(feature => focusNames.has(getFeatureName(feature)));
+    renderFeatures.push(...(focusFeatures.length ? focusFeatures : worldFeatures));
+  }
   const bounds = continentBounds[continentId] || [[-180, -90], [180, 90]];
   const fitTarget = renderFeatures.length
     ? { type: 'FeatureCollection', features: renderFeatures }
@@ -221,7 +223,8 @@ function buildFocusNameSet(continentId, availableIds = []) {
       return new Set(names);
     }
   }
-  return new Set(getGeoNamesForContinent(continentId));
+  // If no available countries specified, return empty set (all countries will be inactive)
+  return new Set();
 }
 
 function getSvgSize(selection) {
