@@ -50,7 +50,13 @@ export function drawWorldMap(onContinentSelect) {
   svg.attr('viewBox', `0 0 ${width} ${height}`).attr('preserveAspectRatio', 'xMidYMid meet');
   const projection = d3.geoNaturalEarth1().fitExtent([[26, 26], [width - 26, height - 26]], { type: 'Sphere' });
   const path = d3.geoPath(projection);
-  const paths = svg.selectAll('path.land')
+
+  let layer = svg.select('g.map-layer');
+  if (layer.empty()) {
+    layer = svg.append('g').attr('class', 'map-layer');
+  }
+
+  const paths = layer.selectAll('path.land')
     .data(worldFeatures)
     .join('path')
     .attr('class', 'land')
@@ -67,6 +73,8 @@ export function drawWorldMap(onContinentSelect) {
         onContinentSelect(continentId);
       }
     });
+
+  applyMobilePan(svg, layer, width, height);
 }
 
 export function renderContinentMap(continentId, onCountrySelect) {
