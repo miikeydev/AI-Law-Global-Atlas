@@ -1,0 +1,14 @@
+:root {
+    --bg: #f4f6fb;
+    --panel: #ffffff;
+    --text: #0f1424;
+    --muted: #5d6074;
+    --accent: #6b6dff;
+    --accent-2: #ff6f7d;
+    --surface: #ffffff;
+    --border: #dde0f0;
+    --success: #4cc18d;
+    --warning: #f6b85f;
+    --map-hover: #2a2d4a;
+    font-family: 'Inter', sans-serif;
+}
