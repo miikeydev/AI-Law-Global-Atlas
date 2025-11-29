@@ -516,8 +516,6 @@ body[data-theme="dark"] .continent-info {
     overflow: hidden;
 }
 
-.country-details,
-.country-legal-panel,
 .country-heading .pill {
     display: none;
 }
@@ -540,8 +538,10 @@ body[data-theme="dark"] .continent-info {
 }
 
 .country-legal-panel {
-    max-height: 320px;
-    overflow: hidden;
+    display: block;
+    max-height: none;
+    overflow: visible;
+    padding: 12px 0 0;
 }
 
 #countryMapPanel {

@@ -2,23 +2,32 @@ import { initCommon, consumeNavigationState } from './common.js';
 import { translations, countryData, continentData } from './data.js';
 import { loadWorldGeometry, renderCountryMap, renderContinentMap } from './maps.js';
 
-const { lang } = initCommon();
-const navState = consumeNavigationState();
+const navState = getCountryNavState();
+applyFallbackParams(navState);
 
+const { lang: initialLang } = initCommon();
 const params = new URLSearchParams(window.location.search);
-let countryId = params.get('country');
+const urlLang = params.get('lang');
+const lang = urlLang === 'en' || urlLang === 'fr' ? urlLang : initialLang || 'fr';
 
+let countryId = params.get('country');
 if (!countryId && navState?.params?.country) {
   countryId = navState.params.country;
 }
-
 const country = countryId ? countryData[countryId] : null;
+
+const CONTENT_PATH = {
+  fr: new URL('../content/country-fr.json', import.meta.url).href,
+  en: new URL('../content/country-en.json', import.meta.url).href
+};
+
+const contentCache = {};
 
 if (!country) {
   renderFallback();
 } else {
   renderCountryHeader(country);
-  loadCountryContent(country);
+  loadCountryContent(lang, countryId);
   loadWorldGeometry().then(() => {
     if (countryId === 'ue') {
       renderContinentMap('europe');
@@ -28,6 +37,15 @@ if (!country) {
   });
 }
 
+function getFallbackText(currentLang) {
+  return (
+    translations[currentLang]?.country?.textFallback ||
+    (currentLang === 'fr'
+      ? 'Contenu à venir pour ce pays.'
+      : 'Content coming soon for this country.')
+  );
+}
+
 function renderFallback() {
   const nameEl = document.getElementById('countryName');
   if (nameEl) {
@@ -35,11 +53,7 @@ function renderFallback() {
   }
   const textEl = document.getElementById('countryText');
   if (textEl) {
-    textEl.innerHTML =
-      translations[lang]?.country?.textFallback ||
-      (lang === 'fr'
-        ? 'Contenu à venir pour ce pays.'
-        : 'Content coming soon for this country.');
+    textEl.innerHTML = `<p>${getFallbackText(lang)}</p>`;
   }
 }
 
@@ -54,22 +68,31 @@ function renderCountryHeader(country) {
     nameEl.textContent = heading;
   }
   const subtitle = document.querySelector('[data-i18n="country.subtitle"]');
-  if (subtitle) {
+  if (subtitle && translations[lang]?.country) {
     subtitle.textContent = translations[lang].country.subtitle;
   }
 }
 
-async function loadCountryContent(country) {
+async function loadCountryContent(currentLang, id) {
+  const container = document.getElementById('countryText');
+  if (!container) {
+    return;
+  }
+
   let text = '';
 
   try {
-    const response = await fetch('country-content.json');
-    if (!response.ok) {
-      throw new Error('HTTP ' + response.status);
+    const targetLang = CONTENT_PATH[currentLang] ? currentLang : 'fr';
+    const path = CONTENT_PATH[targetLang];
+    if (!contentCache[targetLang]) {
+      const response = await fetch(path, { cache: 'no-store' });
+      if (!response.ok) {
+        throw new Error('HTTP ' + response.status);
+      }
+      contentCache[targetLang] = await response.json();
     }
-    const data = await response.json();
-    const entry = data[country.id];
-    const candidate = entry && entry[lang];
+    const data = contentCache[targetLang];
+    const candidate = data[id];
     if (candidate && typeof candidate === 'string') {
       text = candidate;
     }
@@ -78,15 +101,8 @@ async function loadCountryContent(country) {
   }
 
   if (!text) {
-    text =
-      translations[lang].country.textFallback ||
-      (lang === 'fr'
-        ? 'Contenu à venir pour ce pays.'
-        : 'Content coming soon for this country.');
+    text = getFallbackText(currentLang);
   }
-
-  const container = document.getElementById('countryText');
-  if (!container) return;
 
   const blocks = text
     .split('\n\n')
@@ -109,4 +125,33 @@ async function loadCountryContent(country) {
     .join('');
 
   container.innerHTML = html;
+}
+
+function getCountryNavState() {
+  const state = consumeNavigationState();
+  if (!state || !state.path) {
+    return state;
+  }
+  return state.path.includes('country') ? state : null;
+}
+
+function applyFallbackParams(state) {
+  if (!state || !state.params) {
+    return;
+  }
+  try {
+    const url = new URL(window.location.href);
+    let updated = false;
+    ['lang', 'continent', 'country'].forEach(key => {
+      if (!url.searchParams.get(key) && state.params[key]) {
+        url.searchParams.set(key, state.params[key]);
+        updated = true;
+      }
+    });
+    if (updated) {
+      window.history.replaceState({}, '', url);
+    }
+  } catch (error) {
+    // ignore inability to update history
+  }
 }

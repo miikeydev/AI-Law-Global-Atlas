@@ -1,0 +1,13 @@
+{
+  "usa": "The United States mixes federal guidance and sector specific plans to govern AI. Agencies such as NIST, the FTC and the Copyright Office issue frequent guidance.\n\nHighlights:\n- Deployment of the AI Risk Management Framework.\n- Enhanced disclosure duties for AI generated material.\n- Draft bills exploring a national registry of training datasets.",
+  "canada": "Canada is finalising the Artificial Intelligence and Data Act (AIDA) while continuing to rely on PIPEDA. Joint federal-provincial sandboxes test evaluation methods and bill C-27 now embeds AI duties, transparency guidance and new funding for evaluation hubs.",
+  "brazil": "Brazil is debating a national AI bill focused on transparency, accountability and open innovation. Federal states run pilot ethics charters while Congress studies a unified framework.",
+  "chile": "Chile links its AI roadmap with the broader productivity agenda. The 2023-2030 plan reinforces IP offices, open data policies and algorithmic supervision.",
+  "france": "France is preparing for the AI Act while modernising intellectual property. CNIL and INPI share guidance for generative models and public innovation programmes.",
+  "southAfrica": "South Africa ties AI policy to industrial goals. The Department of Communications is drafting a sensitive-data code of conduct and the CIPC is piloting a single window for AI-assisted inventions.",
+  "spain": "Spain is preparing a national AI strategy aligned with the European framework. The government is working on guidelines for responsible innovation and data protection.",
+  "germany": "Germany combines industrial excellence with federal AI regulation. The country invests heavily in AI research while strengthening ethical safeguards.",
+  "uk": "The UK adopts a pragmatic post-Brexit regulatory approach to AI. The government prioritizes innovation while maintaining high protection standards.",
+  "italy": "Italy aligns its AI regulation with European directives. The country is developing national initiatives to support responsible AI adoption.",
+  "ue": "The European Union made global legislative history by adopting the AI Act, the first comprehensive regulation governing artificial intelligence. This text imposes strict obligations for high-risk systems and bans certain practices deemed unacceptable (social scoring, real-time mass facial recognition in public spaces, etc.).\n\nIn parallel, the EU continues to strengthen its digital ecosystem with the Data Act and the Digital Services Act, creating a single market for data conducive to responsible innovation."
+}
