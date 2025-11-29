@@ -1,22 +1,24 @@
-import { initCommon } from './common.js';
+import { initCommon, consumeNavigationState } from './common.js';
 import { translations, countryData, continentData } from './data.js';
 import { loadWorldGeometry, renderCountryMap, renderContinentMap } from './maps.js';
 
 const { lang } = initCommon();
+const navState = consumeNavigationState();
+
 const params = new URLSearchParams(window.location.search);
-const countryId = params.get('country');
-const country = countryData[countryId];
+let countryId = params.get('country');
+
+if (!countryId && navState?.params?.country) {
+  countryId = navState.params.country;
+}
+
+const country = countryId ? countryData[countryId] : null;
 
 if (!country) {
   renderFallback();
 } else {
   renderCountryHeader(country);
-  loadCountryContent(country).then(text => {
-    const container = document.getElementById('countryText');
-    if (container) {
-      container.textContent = text;
-    }
-  });
+  loadCountryContent(country);
   loadWorldGeometry().then(() => {
     if (countryId === 'ue') {
       renderContinentMap('europe');
@@ -33,15 +35,20 @@ function renderFallback() {
   }
   const textEl = document.getElementById('countryText');
   if (textEl) {
-    textEl.innerHTML = getFallbackCopy()
-      .map(paragraph => `<p>${paragraph}</p>`)
-      .join('');
+    textEl.innerHTML =
+      translations[lang]?.country?.textFallback ||
+      (lang === 'fr'
+        ? 'Contenu à venir pour ce pays.'
+        : 'Content coming soon for this country.');
   }
 }
 
 function renderCountryHeader(country) {
   const continent = continentData[country.continentId];
-  const heading = continent ? `${continent.names[lang]} : ${country.name[lang]}` : country.name[lang];
+  const heading = continent
+    ? `${continent.names[lang]} : ${country.name[lang]}`
+    : country.name[lang];
+
   const nameEl = document.getElementById('countryName');
   if (nameEl) {
     nameEl.textContent = heading;
@@ -53,29 +60,53 @@ function renderCountryHeader(country) {
 }
 
 async function loadCountryContent(country) {
+  let text = '';
+
   try {
     const response = await fetch('country-content.json');
+    if (!response.ok) {
+      throw new Error('HTTP ' + response.status);
+    }
     const data = await response.json();
     const entry = data[country.id];
-    const text = entry && entry[lang];
-    if (text) {
-      return text;
+    const candidate = entry && entry[lang];
+    if (candidate && typeof candidate === 'string') {
+      text = candidate;
     }
   } catch (error) {
     console.warn('Unable to load country content', error);
   }
-  return lang === 'fr' ? 'Contenu à venir pour ce pays.' : 'Content coming soon for this country.';
-}
 
-function getFallbackCopy() {
-  if (lang === 'fr') {
-    return [
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quis nisl posuere, interdum nunc ac, fermentum lorem. Vestibulum ut mattis arcu, vel sodales nisl.',
-      'Suspendisse potenti. Mauris aliquam, neque et accumsan consequat, nisl neque placerat erat, sit amet cursus lacus elit non urna. Donec finibus magna et orci laoreet suscipit.'
-    ];
+  if (!text) {
+    text =
+      translations[lang].country.textFallback ||
+      (lang === 'fr'
+        ? 'Contenu à venir pour ce pays.'
+        : 'Content coming soon for this country.');
   }
-  return [
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quis nisl posuere, interdum nunc ac, fermentum lorem. Vestibulum ut mattis arcu, vel sodales nisl.',
-    'Suspendisse potenti. Mauris aliquam, neque et accumsan consequat, nisl neque placerat erat, sit amet cursus lacus elit non urna. Donec finibus magna et orci laoreet suscipit.'
-  ];
+
+  const container = document.getElementById('countryText');
+  if (!container) return;
+
+  const blocks = text
+    .split('\n\n')
+    .map(b => b.trim())
+    .filter(Boolean);
+
+  const html = blocks
+    .map(block => {
+      if (block.startsWith('- ')) {
+        const items = block
+          .split('\n')
+          .map(l => l.trim())
+          .filter(l => l.startsWith('- '))
+          .map(l => `<li>${l.slice(2)}</li>`)
+          .join('');
+        return `<ul>${items}</ul>`;
+      }
+      return `<p>${block}</p>`;
+    })
+    .join('');
+
+  container.innerHTML = html;
 }
