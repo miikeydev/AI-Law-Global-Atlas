@@ -16,9 +16,9 @@ if (!countryId && navState?.params?.country) {
 }
 const country = countryId ? countryData[countryId] : null;
 
-const CONTENT_PATH = {
-  fr: new URL('../content/country-fr.json', import.meta.url).href,
-  en: new URL('../content/country-en.json', import.meta.url).href
+const CONTENT_ROOT = {
+  fr: '../content/fr/',
+  en: '../content/en/'
 };
 
 const contentCache = {};
@@ -79,50 +79,29 @@ async function loadCountryContent(currentLang, id) {
     return;
   }
 
-  let text = '';
+  const langToUse = CONTENT_ROOT[currentLang] ? currentLang : 'fr';
+  const cacheKey = `${langToUse}:${id}`;
+  let html = '';
 
   try {
-    const targetLang = CONTENT_PATH[currentLang] ? currentLang : 'fr';
-    const path = CONTENT_PATH[targetLang];
-    if (!contentCache[targetLang]) {
-      const response = await fetch(path, { cache: 'no-store' });
+    if (contentCache[cacheKey]) {
+      html = contentCache[cacheKey];
+    } else {
+      const url = new URL(`${CONTENT_ROOT[langToUse]}${id}.html`, import.meta.url);
+      const response = await fetch(url, { cache: 'no-store' });
       if (!response.ok) {
         throw new Error('HTTP ' + response.status);
       }
-      contentCache[targetLang] = await response.json();
-    }
-    const data = contentCache[targetLang];
-    const candidate = data[id];
-    if (candidate && typeof candidate === 'string') {
-      text = candidate;
+      html = await response.text();
+      contentCache[cacheKey] = html;
     }
   } catch (error) {
     console.warn('Unable to load country content', error);
   }
 
-  if (!text) {
-    text = getFallbackText(currentLang);
+  if (!html || !html.trim()) {
+    html = `<p>${getFallbackText(langToUse)}</p>`;
   }
-
-  const blocks = text
-    .split('\n\n')
-    .map(b => b.trim())
-    .filter(Boolean);
-
-  const html = blocks
-    .map(block => {
-      if (block.startsWith('- ')) {
-        const items = block
-          .split('\n')
-          .map(l => l.trim())
-          .filter(l => l.startsWith('- '))
-          .map(l => `<li>${l.slice(2)}</li>`)
-          .join('');
-        return `<ul>${items}</ul>`;
-      }
-      return `<p>${block}</p>`;
-    })
-    .join('');
 
   container.innerHTML = html;
 }

@@ -108,7 +108,7 @@ export const continentData = {
     id: 'europe',
     names: { fr: 'Europe', en: 'Europe' },
     progress: 75.0,
-    availableCountries: ['ue'],
+    availableCountries: ['ue', 'france', 'spain', 'germany', 'uk', 'italy', 'estonia'],
     markers: [
       { countryId: 'ue', x: 48, y: 58 }
     ],
@@ -121,7 +121,7 @@ export const continentData = {
     id: 'africa',
     names: { fr: 'Afrique', en: 'Africa' },
     progress: 3.7,
-    availableCountries: ['southAfrica'],
+    availableCountries: ['southAfrica', 'nigeria'],
     markers: [
       { countryId: 'southAfrica', x: 58, y: 78 }
     ],
@@ -134,7 +134,7 @@ export const continentData = {
     id: 'asia',
     names: { fr: 'Asie', en: 'Asia' },
     progress: 8.2,
-    availableCountries: [],
+    availableCountries: ['china', 'india', 'japan', 'singapore', 'uae'],
     markers: [],
     info: {
       fr: 'L\'Asie combine stratégies nationales ambitieuses, zones franches numériques et coalitions régionales.',
@@ -145,7 +145,7 @@ export const continentData = {
     id: 'oceania',
     names: { fr: 'Océanie', en: 'Oceania' },
     progress: 12.4,
-    availableCountries: [],
+    availableCountries: ['australia'],
     markers: [],
     info: {
       fr: 'En Océanie, la réglementation IA accompagne les politiques de confiance numérique et de données.',
@@ -185,6 +185,12 @@ export const countryData = {
     name: { fr: 'France', en: 'France' },
     geoName: 'France'
   },
+  estonia: {
+    id: 'estonia',
+    continentId: 'europe',
+    name: { fr: 'Estonie', en: 'Estonia' },
+    geoName: 'Estonia'
+  },
   spain: {
     id: 'spain',
     continentId: 'europe',
@@ -209,11 +215,53 @@ export const countryData = {
     name: { fr: 'Italie', en: 'Italy' },
     geoName: 'Italy'
   },
+  china: {
+    id: 'china',
+    continentId: 'asia',
+    name: { fr: 'Chine', en: 'China' },
+    geoName: 'China'
+  },
+  india: {
+    id: 'india',
+    continentId: 'asia',
+    name: { fr: 'Inde', en: 'India' },
+    geoName: 'India'
+  },
+  japan: {
+    id: 'japan',
+    continentId: 'asia',
+    name: { fr: 'Japon', en: 'Japan' },
+    geoName: 'Japan'
+  },
+  singapore: {
+    id: 'singapore',
+    continentId: 'asia',
+    name: { fr: 'Singapour', en: 'Singapore' },
+    geoName: 'Singapore'
+  },
+  uae: {
+    id: 'uae',
+    continentId: 'asia',
+    name: { fr: 'Émirats arabes unis', en: 'United Arab Emirates' },
+    geoName: 'United Arab Emirates'
+  },
+  nigeria: {
+    id: 'nigeria',
+    continentId: 'africa',
+    name: { fr: 'Nigeria', en: 'Nigeria' },
+    geoName: 'Nigeria'
+  },
   southAfrica: {
     id: 'southAfrica',
     continentId: 'africa',
     name: { fr: 'Afrique du Sud', en: 'South Africa' },
     geoName: 'South Africa'
+  },
+  australia: {
+    id: 'australia',
+    continentId: 'oceania',
+    name: { fr: 'Australie', en: 'Australia' },
+    geoName: 'Australia'
   },
   ue: {
     id: 'ue',
