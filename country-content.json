@@ -38,5 +38,9 @@
   "italy": {
     "fr": "L'Italie harmonise sa réglementation IA avec les directives européennes. Le pays développe des initiatives nationales pour soutenir l'adoption responsable de l'IA.",
     "en": "Italy aligns its AI regulation with European directives. The country is developing national initiatives to support responsible AI adoption."
+  },
+  "ue": {
+    "fr": "L'Union Européenne a marqué l'histoire législative mondiale en adoptant l'AI Act, le premier règlement complet encadrant l'intelligence artificielle. Ce texte impose des obligations strictes pour les systèmes à haut risque et interdit certaines pratiques jugées inacceptables (notation sociale, reconnaissance faciale de masse en temps réel dans l'espace public, etc.).\n\nEn parallèle, l'UE continue de renforcer son écosystème numérique avec le Data Act et le Digital Services Act, créant un marché unique de la donnée propice à l'innovation responsable.",
+    "en": "The European Union made global legislative history by adopting the AI Act, the first comprehensive regulation governing artificial intelligence. This text imposes strict obligations for high-risk systems and bans certain practices deemed unacceptable (social scoring, real-time mass facial recognition in public spaces, etc.).\n\nIn parallel, the EU continues to strengthen its digital ecosystem with the Data Act and the Digital Services Act, creating a single market for data conducive to responsible innovation."
   }
 }

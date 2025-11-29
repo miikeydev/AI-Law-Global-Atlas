@@ -1,6 +1,6 @@
 import { initCommon } from './common.js';
 import { translations, countryData, continentData } from './data.js';
-import { loadWorldGeometry, renderCountryMap } from './maps.js';
+import { loadWorldGeometry, renderCountryMap, renderContinentMap } from './maps.js';
 
 const { lang } = initCommon();
 const params = new URLSearchParams(window.location.search);
@@ -18,7 +18,11 @@ if (!country) {
     }
   });
   loadWorldGeometry().then(() => {
-    renderCountryMap(countryId);
+    if (countryId === 'ue') {
+      renderContinentMap('europe');
+    } else {
+      renderCountryMap(countryId);
+    }
   });
 }
 

@@ -108,13 +108,9 @@ export const continentData = {
     id: 'europe',
     names: { fr: 'Europe', en: 'Europe' },
     progress: 75.0,
-    availableCountries: ['france', 'spain', 'germany', 'uk', 'italy'],
+    availableCountries: ['ue'],
     markers: [
-      { countryId: 'france', x: 48, y: 58 },
-      { countryId: 'spain', x: 42, y: 65 },
-      { countryId: 'germany', x: 52, y: 50 },
-      { countryId: 'uk', x: 45, y: 48 },
-      { countryId: 'italy', x: 54, y: 62 }
+      { countryId: 'ue', x: 48, y: 58 }
     ],
     info: {
       fr: 'L\'Europe articule règlements européens et adaptations nationales pour encadrer l\'IA.',
@@ -381,6 +377,35 @@ export const countryData = {
         items: [
           { badge: 'A', title: { fr: 'Stratégie nationale IA', en: 'National AI strategy' }, content: { fr: 'Un projet de loi-cadre est à l\'étude pour reconnaître des labels de confiance et soutenir l\'open data.', en: 'A draft framework bill would recognise trust labels while supporting open data.' } },
           { badge: 'B', title: { fr: 'Écosystème IP', en: 'IP ecosystem' }, content: { fr: 'Le CIPC teste un guichet unique pour les dépôts liés aux inventions générées par IA.', en: 'The CIPC is piloting a single window for filings covering AI-assisted inventions.' } }
+        ]
+      }
+    ]
+  },
+  ue: {
+    id: 'ue',
+    continentId: 'europe',
+    name: { fr: 'Union Européenne', en: 'European Union' },
+    geoName: 'Europe',
+    overview: {
+      fr: "L'Union Européenne est pionnière dans la régulation de l'IA avec l'AI Act, établissant un cadre complet basé sur les risques.",
+      en: "The European Union is a pioneer in AI regulation with the AI Act, establishing a comprehensive risk-based framework."
+    },
+    news: [
+      { title: { fr: "Adoption finale de l'AI Act.", en: "Final adoption of the AI Act." }, source: "Parlement Européen", date: "Mai 2024", link: "#" },
+      { title: { fr: "Mise en place du bureau de l'IA.", en: "Establishment of the AI Office." }, source: "Commission Européenne", date: "Février 2024", link: "#" }
+    ],
+    sections: [
+      {
+        title: { fr: "Cadre juridique en vigueur", en: "Existing legal framework" },
+        items: [
+          { badge: "A", title: { fr: "AI Act", en: "AI Act" }, content: { fr: "Règlement européen classifiant les systèmes d'IA selon leur niveau de risque.", en: "European regulation classifying AI systems according to their risk level." } },
+          { badge: "B", title: { fr: "RGPD", en: "GDPR" }, content: { fr: "Protection des données personnelles appliquée aux systèmes d'IA.", en: "Personal data protection applied to AI systems." } }
+        ]
+      },
+      {
+        title: { fr: "Réformes et perspectives", en: "Reforms and outlook" },
+        items: [
+          { badge: "A", title: { fr: "Responsabilité IA", en: "AI Liability" }, content: { fr: "Directive sur la responsabilité en matière d'IA en cours de discussion.", en: "AI Liability Directive currently under discussion." } }
         ]
       }
     ]
