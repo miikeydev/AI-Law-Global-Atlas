@@ -24,7 +24,19 @@
     "en": "South Africa ties AI policy to industrial goals. The Department of Communications is drafting a sensitive-data code of conduct and the CIPC is piloting a single window for AI-assisted inventions."
   },
   "spain": {
-    "fr": "L'Espagne prépare une Loi sur l'IA et les données (AIDA) pour articuler innovation et confiance. Le pays s'appuie sur la LPRPDE mais teste des sandboxes conjoints fédéraux-provinciaux.",
-    "en": "Spain is finalising the Artificial Intelligence and Data Act (AIDA) while continuing to rely on PIPEDA. Joint federal-provincial sandboxes test evaluation methods and bill C-27 now embeds AI duties, transparency guidance and new funding for evaluation hubs."
+    "fr": "L'Espagne prépare une stratégie IA nationale alignée sur le cadre européen. Le gouvernement travaille sur des lignes directrices pour l'innovation responsable et la protection des données.",
+    "en": "Spain is preparing a national AI strategy aligned with the European framework. The government is working on guidelines for responsible innovation and data protection."
+  },
+  "germany": {
+    "fr": "L'Allemagne combine excellence industrielle avec une régulation IA au niveau fédéral. Le pays investit massivement dans la recherche en IA tout en renforçant les garde-fous éthiques.",
+    "en": "Germany combines industrial excellence with federal AI regulation. The country invests heavily in AI research while strengthening ethical safeguards."
+  },
+  "uk": {
+    "fr": "Le Royaume-Uni adopte une approche réglementaire pragmatique post-Brexit pour l'IA. Le gouvernement privilégie l'innovation tout en maintenant des standards élevés de protection.",
+    "en": "The UK adopts a pragmatic post-Brexit regulatory approach to AI. The government prioritizes innovation while maintaining high protection standards."
+  },
+  "italy": {
+    "fr": "L'Italie harmonise sa réglementation IA avec les directives européennes. Le pays développe des initiatives nationales pour soutenir l'adoption responsable de l'IA.",
+    "en": "Italy aligns its AI regulation with European directives. The country is developing national initiatives to support responsible AI adoption."
   }
 }

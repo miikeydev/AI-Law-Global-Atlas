@@ -286,9 +286,9 @@
 }
 
 .land.inactive {
-    fill: rgba(255, 255, 255, .07);
-    stroke: rgba(255, 255, 255, .06);
-    opacity: .4;
+    fill: rgba(200, 200, 220, .45);
+    stroke: rgba(150, 150, 180, .35);
+    opacity: .7;
 }
 
 .land.active {
@@ -320,9 +320,9 @@ body[data-theme="dark"] .land[data-continent] {
 }
 
 body[data-theme="dark"] .land.inactive {
-    fill: rgba(255, 255, 255, .08);
-    stroke: rgba(255, 255, 255, .06);
-    opacity: .45;
+    fill: rgba(100, 100, 130, .25);
+    stroke: rgba(80, 80, 110, .2);
+    opacity: .55;
 }
 
 body[data-theme="dark"] .land.active {
