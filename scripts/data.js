@@ -159,256 +159,67 @@ export const countryData = {
     id: 'usa',
     continentId: 'americas',
     name: { fr: 'États-Unis d\'Amérique', en: 'United States of America' },
-    geoName: 'United States of America',
-    overview: {
-      fr: 'Les États-Unis combinent lignes directrices fédérales et plans sectoriels pour encadrer l\'IA responsable.',
-      en: 'The United States blends federal guidance with sector-specific plans to govern responsible AI.'
-    },
-    news: [
-      { title: { fr: 'La Copyright Office précise la déclaration des contenus générés.', en: 'US Copyright Office clarifies disclosure of AI-generated content.' }, source: 'US Copyright Office', date: 'Mai 2024', link: '#' },
-      { title: { fr: 'Le NIST publie une nouvelle feuille de route IA & sécurité.', en: 'NIST releases a joint AI and safety roadmap.' }, source: 'NIST', date: 'Mars 2024', link: '#' },
-      { title: { fr: 'Projet de loi AI Research Resource Act relancé au Sénat.', en: 'AI Research Resource Act reintroduced in the Senate.' }, source: 'U.S. Senate', date: 'Février 2024', link: '#' }
-    ],
-    sections: [
-      {
-        title: { fr: 'Cadre juridique en vigueur', en: 'Existing legal framework' },
-        items: [
-          { badge: 'A', title: { fr: 'Œuvres et inventions générées par IA', en: 'AI-generated works and inventions' }, content: { fr: 'Le Copyright Office impose une divulgation exacte des portions générées tandis que l\'USPTO exige une supervision humaine pour les brevets.', en: 'The Copyright Office requires clear disclosure of generated portions while the USPTO stresses human oversight for inventive claims.' } },
-          { badge: 'B', title: { fr: 'Bases de données et algorithmes', en: 'Databases and algorithms' }, content: { fr: 'Le AI Risk Management Framework du NIST structure l\'audit des jeux de données, complété par les directives de la FTC sur l\'usage loyal des données.', en: 'The NIST AI Risk Management Framework structures dataset audits, reinforced by FTC guidance on fair data practices.' } }
-        ]
-      },
-      {
-        title: { fr: 'Réformes et perspectives législatives', en: 'Reforms and legislative outlook' },
-        items: [
-          { badge: 'A', title: { fr: 'Créations issues de l\'IA', en: 'AI-driven creations' }, content: { fr: 'Plusieurs propositions de loi explorent un registre national des ensembles de données utilisés pour former des modèles génératifs.', en: 'Draft bills explore a national registry for datasets used to train generative models.' } },
-          { badge: 'B', title: { fr: 'Données et algorithmes', en: 'Data and algorithms' }, content: { fr: 'La White House AI Bill of Rights inspire de nouvelles obligations de transparence pour les systèmes critiques.', en: 'The White House AI Bill of Rights informs new transparency duties for critical systems.' } }
-        ]
-      }
-    ]
+    geoName: 'United States of America'
   },
   canada: {
     id: 'canada',
     continentId: 'americas',
     name: { fr: 'Canada', en: 'Canada' },
-    geoName: 'Canada',
-    overview: {
-      fr: 'Le Canada prépare la Loi sur l\'IA et les données afin d\'harmoniser innovation et confiance.',
-      en: 'Canada is shaping the Artificial Intelligence and Data Act to balance innovation and trust.'
-    },
-    news: [
-      { title: { fr: 'Mise à jour du projet de loi C-27 avec obligations IA.', en: 'Bill C-27 updated with new AI duties.' }, source: 'Parlement du Canada', date: 'Avril 2024', link: '#' },
-      { title: { fr: 'Publication des directives de transparence d\'Ottawa.', en: 'Ottawa shares transparency guidance for automated systems.' }, source: 'Gouvernement du Canada', date: 'Janvier 2024', link: '#' },
-      { title: { fr: 'Investissements pour un réseau national d\'évaluation IA.', en: 'New funding for a national AI evaluation network.' }, source: 'ISED', date: 'Décembre 2023', link: '#' }
-    ],
-    sections: [
-      {
-        title: { fr: 'Cadre juridique en vigueur', en: 'Existing legal framework' },
-        items: [
-          { badge: 'A', title: { fr: 'Créations protégées', en: 'Protected creations' }, content: { fr: 'Le droit d\'auteur canadien reconnaît l\'intervention humaine substantielle comme critère clé et s\'appuie sur des lignes directrices sectorielles.', en: 'Canadian copyright law keeps substantial human involvement as a key criterion and leans on sector guidance.' } },
-          { badge: 'B', title: { fr: 'Traitement des données', en: 'Data handling' }, content: { fr: 'La LPRPDE reste la référence avec des exigences renforcées de consentement explicite pour l\'apprentissage automatique.', en: 'PIPEDA remains the backbone, reinforcing explicit consent standards for machine learning.' } }
-        ]
-      },
-      {
-        title: { fr: 'Réformes et perspectives législatives', en: 'Reforms and legislative outlook' },
-        items: [
-          { badge: 'A', title: { fr: 'AIDA et innovation', en: 'AIDA and innovation' }, content: { fr: 'La future Loi sur l\'IA imposerait des évaluations de risques proportionnées à la sensibilité des systèmes.', en: 'The forthcoming AIDA would require risk assessments proportional to system sensitivity.' } },
-          { badge: 'B', title: { fr: 'Supervision des algorithmes', en: 'Algorithmic supervision' }, content: { fr: 'Des sandboxes réglementaires fédérales-provinciales testent l\'auditabilité des modèles.', en: 'Joint federal-provincial sandboxes are testing model auditability.' } }
-        ]
-      }
-    ]
+    geoName: 'Canada'
   },
   brazil: {
     id: 'brazil',
     continentId: 'americas',
     name: { fr: 'Brésil', en: 'Brazil' },
-    geoName: 'Brazil',
-    overview: {
-      fr: 'Le Brésil avance sur un cadre progressif qui combine innovation ouverte et devoirs de diligence.',
-      en: 'Brazil is advancing a graduated framework mixing open innovation with duties of care.'
-    },
-    news: [
-      { title: { fr: 'Le Sénat finalise le rapport sur le PL 2338.', en: 'Senate delivers report on Bill 2338.' }, source: 'Sénat fédéral', date: 'Mai 2024', link: '#' },
-      { title: { fr: 'Brasilia lance un observatoire d\'impact IA.', en: 'Brasilia launches an AI impact observatory.' }, source: 'MCTI', date: 'Mars 2024', link: '#' },
-      { title: { fr: 'Consultation sur les droits fondamentaux et l\'IA.', en: 'Consultation on AI and fundamental rights.' }, source: 'Chambre des députés', date: 'Janvier 2024', link: '#' }
-    ],
-    sections: [
-      {
-        title: { fr: 'Cadre juridique en vigueur', en: 'Existing legal framework' },
-        items: [
-          { badge: 'A', title: { fr: 'Créations et brevets', en: 'Creations and patents' }, content: { fr: 'L\'INPI confirme que l\'inventeur doit rester humain mais encourage la divulgation des outils utilisés.', en: 'INPI confirms inventorship stays human yet encourages disclosure of supporting tools.' } },
-          { badge: 'B', title: { fr: 'Bases de données', en: 'Databases' }, content: { fr: 'La LGPD encadre la collecte pour l\'entraînement avec des obligations fortes sur les données sensibles.', en: 'LGPD frames training data collection with strict duties on sensitive information.' } }
-        ]
-      },
-      {
-        title: { fr: 'Réformes et perspectives législatives', en: 'Reforms and legislative outlook' },
-        items: [
-          { badge: 'A', title: { fr: 'Labellisation des systèmes', en: 'System labeling' }, content: { fr: 'Le projet de loi introduit une classification par niveau de risque avec obligations graduées.', en: 'The bill introduces risk tiers with proportionate duties.' } },
-          { badge: 'B', title: { fr: 'Autorité de supervision', en: 'Supervisory authority' }, content: { fr: 'Un comité interinstitutionnel serait chargé de la cohérence réglementaire et des audits.', en: 'An interinstitutional committee would secure regulatory coherence and audits.' } }
-        ]
-      }
-    ]
+    geoName: 'Brazil'
   },
   chile: {
     id: 'chile',
     continentId: 'americas',
     name: { fr: 'Chili', en: 'Chile' },
-    geoName: 'Chile',
-    overview: {
-      fr: 'Le Chili positionne l\'IA comme priorité industrielle et juridique via un plan national.',
-      en: 'Chile treats AI as both an industrial and legal priority through its national plan.'
-    },
-    news: [
-      { title: { fr: 'Décret créant le Comité d\'IA responsable.', en: 'Decree creates the Responsible AI Committee.' }, source: 'Gouvernement du Chili', date: 'Avril 2024', link: '#' },
-      { title: { fr: 'Publication des principes éthiques révisés.', en: 'Updated national ethical principles released.' }, source: 'Ministère des Sciences', date: 'Février 2024', link: '#' },
-      { title: { fr: 'Consultation sur la propriété intellectuelle des modèles.', en: 'Consultation on IP for AI models.' }, source: 'INAPI', date: 'Novembre 2023', link: '#' }
-    ],
-    sections: [
-      {
-        title: { fr: 'Cadre juridique en vigueur', en: 'Existing legal framework' },
-        items: [
-          { badge: 'A', title: { fr: 'Propriété intellectuelle', en: 'Intellectual property' }, content: { fr: 'Les lignes directrices d\'INAPI recommandent de documenter la contribution humaine dans les dossiers de brevets assistés par IA.', en: 'INAPI guidance urges applicants to document human input in AI-assisted filings.' } },
-          { badge: 'B', title: { fr: 'Protection des données', en: 'Data protection' }, content: { fr: 'La loi 19.628 impose des obligations élevées pour le traitement automatisé, renforcées par le plan national IA.', en: 'Law 19.628 sets high duties for automated processing, reinforced by the national AI plan.' } }
-        ]
-      },
-      {
-        title: { fr: 'Réformes et perspectives législatives', en: 'Reforms and legislative outlook' },
-        items: [
-          { badge: 'A', title: { fr: 'Auditabilité', en: 'Auditability' }, content: { fr: 'Une proposition parlementaire introduit des audits périodiques pour les modèles utilisés par l\'État.', en: 'A parliamentary bill would require periodic audits for models used by the State.' } },
-          { badge: 'B', title: { fr: 'Innovation ouverte', en: 'Open innovation' }, content: { fr: 'Des partenariats public-privé financent un registre partagé des données d\'entraînement.', en: 'Public-private partnerships fund a shared registry of training datasets.' } }
-        ]
-      }
-    ]
+    geoName: 'Chile'
   },
   france: {
     id: 'france',
     continentId: 'europe',
     name: { fr: 'France', en: 'France' },
-    geoName: 'France',
-    overview: {
-      fr: 'La France articule droit européen et initiatives nationales autour du numérique responsable.',
-      en: 'France aligns EU law with national initiatives on responsible digital technology.'
-    },
-    news: [
-      { title: { fr: 'Adoption de la loi SREN et obligations IA.', en: 'SREN law enforces new AI duties.' }, source: 'Assemblée nationale', date: 'Avril 2024', link: '#' },
-      { title: { fr: 'CNIL publie un guide d\'audit des modèles.', en: 'CNIL releases a model auditing guide.' }, source: 'CNIL', date: 'Mars 2024', link: '#' },
-      { title: { fr: 'France 2030 finance une task-force PI & IA.', en: 'France 2030 funds an IP and AI task force.' }, source: 'France 2030', date: 'Décembre 2023', link: '#' }
-    ],
-    sections: [
-      {
-        title: { fr: 'Cadre juridique en vigueur', en: 'Existing legal framework' },
-        items: [
-          { badge: 'A', title: { fr: 'Œuvres générées', en: 'Generated works' }, content: { fr: 'Le Code de la propriété intellectuelle retient la création humaine, mais les chartes sectorielles promeuvent les mentions d\'IA.', en: 'The Intellectual Property Code still requires human creation while sector charters promote AI disclosures.' } },
-          { badge: 'B', title: { fr: 'Bases de données', en: 'Databases' }, content: { fr: 'Les producteurs peuvent s\'appuyer sur le droit sui generis pour contrôler l\'extraction des données d\'entraînement.', en: 'Producers rely on the sui generis right to control extraction for training data.' } }
-        ]
-      },
-      {
-        title: { fr: 'Réformes et perspectives législatives', en: 'Reforms and legislative outlook' },
-        items: [
-          { badge: 'A', title: { fr: 'Transposition de l\'AI Act', en: 'AI Act implementation' }, content: { fr: 'Un plan interministériel prépare l\'application de l\'AI Act avec un guichet unique.', en: 'An interministerial plan prepares AI Act enforcement through a single contact point.' } },
-          { badge: 'B', title: { fr: 'Soutien à la création', en: 'Creative sector support' }, content: { fr: 'Création de contrats-types pour encadrer l\'entraînement sur les catalogues audiovisuels.', en: 'Template contracts are being drafted to govern training on audiovisual catalogues.' } }
-        ]
-      }
-    ]
+    geoName: 'France'
   },
   spain: {
     id: 'spain',
     continentId: 'europe',
     name: { fr: 'Espagne', en: 'Spain' },
-    geoName: 'Spain',
-    overview: {
-      fr: "L'Espagne développe une stratégie IA nationale alignée sur le cadre européen.",
-      en: 'Spain is developing a national AI strategy aligned with the European framework.'
-    }
+    geoName: 'Spain'
   },
   germany: {
     id: 'germany',
     continentId: 'europe',
     name: { fr: 'Allemagne', en: 'Germany' },
-    geoName: 'Germany',
-    overview: {
-      fr: "L'Allemagne combine excellence industrielle et régulation de l'IA au niveau fédéral.",
-      en: 'Germany combines industrial excellence with federal AI regulation.'
-    }
+    geoName: 'Germany'
   },
   uk: {
     id: 'uk',
     continentId: 'europe',
     name: { fr: 'Royaume-Uni', en: 'United Kingdom' },
-    geoName: 'United Kingdom',
-    overview: {
-      fr: 'Le Royaume-Uni adopte une approche réglementaire pragmatique post-Brexit.',
-      en: 'The UK adopts a pragmatic post-Brexit regulatory approach.'
-    }
+    geoName: 'United Kingdom'
   },
   italy: {
     id: 'italy',
     continentId: 'europe',
     name: { fr: 'Italie', en: 'Italy' },
-    geoName: 'Italy',
-    overview: {
-      fr: "L'Italie harmonise saréglementation IA avec les directives européennes.",
-      en: 'Italy aligns its AI regulation with European directives.'
-    }
+    geoName: 'Italy'
   },
   southAfrica: {
     id: 'southAfrica',
     continentId: 'africa',
     name: { fr: 'Afrique du Sud', en: 'South Africa' },
-    geoName: 'South Africa',
-    overview: {
-      fr: 'L\'Afrique du Sud déploie une stratégie IA liée aux objectifs d\'industrialisation et de propriété intellectuelle.',
-      en: 'South Africa deploys an AI strategy tied to industrial and intellectual property goals.'
-    },
-    news: [
-      { title: { fr: 'Livre blanc IA publié pour consultation.', en: 'AI white paper released for consultation.' }, source: 'DTPSA', date: 'Mai 2024', link: '#' },
-      { title: { fr: 'Création d\'un hub PI et innovation responsable.', en: 'Launch of an IP and responsible innovation hub.' }, source: 'CIPC', date: 'Février 2024', link: '#' },
-      { title: { fr: 'Programme de régulation expérimentale pour la santé.', en: 'Regulatory sandbox for health AI announced.' }, source: 'Department of Health', date: 'Décembre 2023', link: '#' }
-    ],
-    sections: [
-      {
-        title: { fr: 'Cadre juridique en vigueur', en: 'Existing legal framework' },
-        items: [
-          { badge: 'A', title: { fr: 'Droit d\'auteur et brevets', en: 'Copyright and patents' }, content: { fr: 'La loi sur le droit d\'auteur privilégie la création humaine mais encourage des licences collectives pour l\'usage d\'archives.', en: 'Copyright rules still require human authorship while encouraging collective licences for archive training.' } },
-          { badge: 'B', title: { fr: 'Protection des données', en: 'Data protection' }, content: { fr: 'La POPIA impose des évaluations d\'impact lorsque des données sensibles alimentent des systèmes prédictifs.', en: 'POPIA mandates impact assessments when sensitive data fuels predictive systems.' } }
-        ]
-      },
-      {
-        title: { fr: 'Réformes et perspectives législatives', en: 'Reforms and legislative outlook' },
-        items: [
-          { badge: 'A', title: { fr: 'Stratégie nationale IA', en: 'National AI strategy' }, content: { fr: 'Un projet de loi-cadre est à l\'étude pour reconnaître des labels de confiance et soutenir l\'open data.', en: 'A draft framework bill would recognise trust labels while supporting open data.' } },
-          { badge: 'B', title: { fr: 'Écosystème IP', en: 'IP ecosystem' }, content: { fr: 'Le CIPC teste un guichet unique pour les dépôts liés aux inventions générées par IA.', en: 'The CIPC is piloting a single window for filings covering AI-assisted inventions.' } }
-        ]
-      }
-    ]
+    geoName: 'South Africa'
   },
   ue: {
     id: 'ue',
     continentId: 'europe',
     name: { fr: 'Union Européenne', en: 'European Union' },
-    geoName: 'Europe',
-    overview: {
-      fr: "L'Union Européenne est pionnière dans la régulation de l'IA avec l'AI Act, établissant un cadre complet basé sur les risques.",
-      en: "The European Union is a pioneer in AI regulation with the AI Act, establishing a comprehensive risk-based framework."
-    },
-    news: [
-      { title: { fr: "Adoption finale de l'AI Act.", en: "Final adoption of the AI Act." }, source: "Parlement Européen", date: "Mai 2024", link: "#" },
-      { title: { fr: "Mise en place du bureau de l'IA.", en: "Establishment of the AI Office." }, source: "Commission Européenne", date: "Février 2024", link: "#" }
-    ],
-    sections: [
-      {
-        title: { fr: "Cadre juridique en vigueur", en: "Existing legal framework" },
-        items: [
-          { badge: "A", title: { fr: "AI Act", en: "AI Act" }, content: { fr: "Règlement européen classifiant les systèmes d'IA selon leur niveau de risque.", en: "European regulation classifying AI systems according to their risk level." } },
-          { badge: "B", title: { fr: "RGPD", en: "GDPR" }, content: { fr: "Protection des données personnelles appliquée aux systèmes d'IA.", en: "Personal data protection applied to AI systems." } }
-        ]
-      },
-      {
-        title: { fr: "Réformes et perspectives", en: "Reforms and outlook" },
-        items: [
-          { badge: "A", title: { fr: "Responsabilité IA", en: "AI Liability" }, content: { fr: "Directive sur la responsabilité en matière d'IA en cours de discussion.", en: "AI Liability Directive currently under discussion." } }
-        ]
-      }
-    ]
+    geoName: 'Europe'
   }
 };
 
