@@ -11,7 +11,7 @@ export const translations = {
       info: 'Voir les actualités du continent'
     },
     country: {
-      subtitle: 'Sélectionnez le sujet qui vous intéresse :',
+      subtitle: '',
       newsToggle: 'Actualité juridique',
       newsToggleClose: 'Fermer les actualités',
       newsTitle: 'Dernières actualités juridiques',
@@ -54,7 +54,7 @@ export const translations = {
       info: 'See continent updates'
     },
     country: {
-      subtitle: 'Select the topic you are interested in:',
+      subtitle: '',
       newsToggle: 'Legal news',
       newsToggleClose: 'Hide legal news',
       newsTitle: 'Latest legal updates',
