@@ -44,6 +44,10 @@ function renderContinentInfo() {
   if (subtitle) {
     subtitle.textContent = t.continent.subtitle;
   }
+  const descEl = document.getElementById('continentDescription');
+  if (descEl && continent.info) {
+    descEl.textContent = continent.info[lang];
+  }
   const availableLabel = document.querySelector('[data-i18n="continent.available"]');
   if (availableLabel) {
     availableLabel.textContent = t.continent.available;
