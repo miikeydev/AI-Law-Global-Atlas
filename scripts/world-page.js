@@ -28,9 +28,6 @@ function handleContinentSelect(continentId) {
   if (!continentId) {
     return;
   }
-  if (continentId === 'europe') {
-    navigateTo('country.html', { country: 'ue', lang });
-    return;
-  }
+
   navigateTo('continent.html', { continent: continentId, lang });
 }

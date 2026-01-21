@@ -316,7 +316,7 @@ export const manualCountryContinents = {
   unitedstatesofamerica: 'americas',
   unitedstates: 'americas',
   usa: 'americas',
-  russianfederation: 'europe',
+  russianfederation: 'asia',
   republicofthecongo: 'africa',
   democraticrepublicofthecongo: 'africa',
   ivorycoast: 'africa',
