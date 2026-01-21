@@ -173,6 +173,7 @@
     line-height: 1.4;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -561,7 +562,7 @@ body[data-theme="dark"] #countryMapPanel {
     font-size: .95rem;
     line-height: 1.6;
     color: var(--muted);
-    white-space: pre-wrap;
+    white-space: normal;
 }
 
 body[data-theme="dark"] .country-text-block {
@@ -704,4 +705,74 @@ body[data-theme="dark"] .country-text-block {
     .cta-row {
         padding-bottom: 12px;
     }
+}
+
+/* Country Content Global Styles */
+.country-content {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    text-align: justify;
+    line-height: 1.4;
+    font-size: 1rem;
+    color: var(--text);
+}
+
+.country-content h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    color: var(--accent);
+    line-height: 1.1;
+    text-align: left;
+}
+
+.country-content h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.3rem;
+    margin-top: 1.2rem;
+    margin-bottom: 0.4rem;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.2rem;
+    text-align: left;
+}
+
+.country-content h4 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.1rem;
+    margin-top: 0.8rem;
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+    color: var(--accent-2);
+    text-align: left;
+}
+
+.country-content p {
+    margin-bottom: 0.6rem;
+}
+
+.country-content ul {
+    padding-left: 1.2rem;
+    margin-bottom: 0.6rem;
+}
+
+.country-content li {
+    margin-bottom: 0.2rem;
+}
+
+.country-content strong {
+    font-weight: 700;
+    color: var(--text);
+}
+
+.abstract-box {
+    background: rgba(123, 124, 255, 0.08);
+    border-left: 4px solid var(--accent);
+    padding: 0.8rem 1rem;
+    margin-bottom: 1.2rem;
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+}
+
+body[data-theme="dark"] .abstract-box {
+    background: rgba(123, 124, 255, 0.15);
 }
