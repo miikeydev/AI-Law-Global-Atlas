@@ -29,11 +29,7 @@ if (!country) {
   renderCountryHeader(country);
   loadCountryContent(lang, countryId);
   loadWorldGeometry().then(() => {
-    if (countryId === 'ue') {
-      renderContinentMap('europe');
-    } else {
-      renderCountryMap(countryId);
-    }
+    renderCountryMap(countryId);
   });
 }
 

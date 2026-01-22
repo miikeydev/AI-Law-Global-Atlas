@@ -108,7 +108,7 @@ export const continentData = {
     id: 'europe',
     names: { fr: 'Europe', en: 'Europe' },
     progress: 75.0,
-    availableCountries: ['ue', 'france', 'spain', 'germany', 'uk', 'italy', 'estonia'],
+    availableCountries: ['ue', 'estonia', 'uk'],
     markers: [
       { countryId: 'ue', x: 48, y: 58 }
     ],
@@ -179,41 +179,17 @@ export const countryData = {
     name: { fr: 'Chili', en: 'Chile' },
     geoName: 'Chile'
   },
-  france: {
-    id: 'france',
-    continentId: 'europe',
-    name: { fr: 'France', en: 'France' },
-    geoName: 'France'
-  },
   estonia: {
     id: 'estonia',
     continentId: 'europe',
     name: { fr: 'Estonie', en: 'Estonia' },
     geoName: 'Estonia'
   },
-  spain: {
-    id: 'spain',
-    continentId: 'europe',
-    name: { fr: 'Espagne', en: 'Spain' },
-    geoName: 'Spain'
-  },
-  germany: {
-    id: 'germany',
-    continentId: 'europe',
-    name: { fr: 'Allemagne', en: 'Germany' },
-    geoName: 'Germany'
-  },
   uk: {
     id: 'uk',
     continentId: 'europe',
     name: { fr: 'Royaume-Uni', en: 'United Kingdom' },
     geoName: 'United Kingdom'
-  },
-  italy: {
-    id: 'italy',
-    continentId: 'europe',
-    name: { fr: 'Italie', en: 'Italy' },
-    geoName: 'Italy'
   },
   china: {
     id: 'china',
@@ -267,12 +243,18 @@ export const countryData = {
     id: 'ue',
     continentId: 'europe',
     name: { fr: 'Union Européenne', en: 'European Union' },
-    geoName: 'Europe'
+    geoNames: ['France', 'Spain', 'Germany', 'Italy', 'Netherlands', 'Belgium', 'Portugal', 'Sweden', 'Poland', 'Austria', 'Hungary', 'Czechia', 'Greece', 'Finland', 'Denmark', 'Ireland', 'Romania', 'Bulgaria', 'Slovakia', 'Croatia', 'Lithuania', 'Latvia', 'Slovenia', 'Luxembourg', 'Cyprus', 'Malta']
   }
 };
 
 export const geoNameToCountryId = Object.values(countryData).reduce((acc, country) => {
-  acc[country.geoName] = country.id;
+  if (Array.isArray(country.geoNames)) {
+    country.geoNames.forEach(name => {
+      acc[name] = country.id;
+    });
+  } else if (country.geoName) {
+    acc[country.geoName] = country.id;
+  }
   return acc;
 }, {});
 
@@ -316,6 +298,7 @@ export const manualCountryContinents = {
   unitedstatesofamerica: 'americas',
   unitedstates: 'americas',
   usa: 'americas',
+  russia: 'asia',
   russianfederation: 'asia',
   republicofthecongo: 'africa',
   democraticrepublicofthecongo: 'africa',

@@ -126,6 +126,17 @@ export function renderContinentMap(continentId, onCountrySelect) {
       if (countryId && interactiveNames.has(featureName) && typeof onCountrySelect === 'function') {
         onCountrySelect(countryId);
       }
+    })
+    .on('mouseenter', (event, feature) => {
+      const featureName = getFeatureName(feature);
+      const countryId = geoNameToCountryId[featureName];
+      if (countryId && interactiveNames.has(featureName)) {
+        layer.selectAll('path.land')
+          .classed('group-hover', f => geoNameToCountryId[getFeatureName(f)] === countryId);
+      }
+    })
+    .on('mouseleave', () => {
+      layer.selectAll('path.land').classed('group-hover', false);
     });
   applyMobilePan(svg, layer, width, height);
 }
@@ -147,17 +158,30 @@ export function renderCountryMap(countryId) {
     svg.selectAll('*').remove();
     return;
   }
-  const feature = worldFeatures.find(item => getFeatureName(item) === country.geoName);
-  if (!feature) {
+
+  let features = [];
+  if (Array.isArray(country.geoNames)) {
+    // Multi-country case (e.g. UE)
+    features = worldFeatures.filter(item => country.geoNames.includes(getFeatureName(item)));
+  } else {
+    // Single country case
+    const feature = worldFeatures.find(item => getFeatureName(item) === country.geoName);
+    if (feature) features.push(feature);
+  }
+
+  if (!features.length) {
     svg.selectAll('*').remove();
     return;
   }
+
   const { width, height } = getSvgSize(svg);
   svg.attr('viewBox', `0 0 ${width} ${height}`).attr('preserveAspectRatio', 'xMidYMid meet');
-  const projection = d3.geoMercator().fitExtent([[20, 20], [width - 20, height - 20]], { type: 'FeatureCollection', features: [feature] });
+
+  const projection = d3.geoMercator().fitExtent([[20, 20], [width - 20, height - 20]], { type: 'FeatureCollection', features: features });
   const path = d3.geoPath(projection);
+
   svg.selectAll('path.land')
-    .data([feature])
+    .data(features)
     .join('path')
     .attr('class', 'land active')
     .attr('d', path);
@@ -216,12 +240,18 @@ function getGeoNamesForContinent(continentId) {
 
 function buildFocusNameSet(continentId, availableIds = []) {
   if (Array.isArray(availableIds) && availableIds.length) {
-    const names = availableIds
-      .map(id => (countryData[id] ? countryData[id].geoName : null))
-      .filter(Boolean);
-    if (names.length) {
-      return new Set(names);
-    }
+    const names = new Set();
+    availableIds.forEach(id => {
+      const c = countryData[id];
+      if (c) {
+        if (Array.isArray(c.geoNames)) {
+          c.geoNames.forEach(name => names.add(name));
+        } else if (c.geoName) {
+          names.add(c.geoName);
+        }
+      }
+    });
+    return names;
   }
   // If no available countries specified, return empty set (all countries will be inactive)
   return new Set();
