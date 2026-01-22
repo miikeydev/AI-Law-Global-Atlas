@@ -186,6 +186,9 @@ function updateFooterCopy() {
   const contact = footer.querySelector('[data-i18n="footer.contact"]');
   if (contact) {
     contact.textContent = footerCopy.contact;
+    contact.href = 'https://www.linkedin.com/in/emilie-letouz%C3%A9-57928a27b/';
+    contact.target = '_blank';
+    contact.rel = 'noopener noreferrer';
   }
 }
 
