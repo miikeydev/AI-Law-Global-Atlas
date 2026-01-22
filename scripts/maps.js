@@ -74,7 +74,7 @@ export function drawWorldMap(onContinentSelect) {
       }
     });
 
-  applyMobilePan(svg, layer, width, height);
+  applyMobilePan(svg, layer, width, height, true);
 }
 
 export function renderContinentMap(continentId, onCountrySelect) {
@@ -201,7 +201,7 @@ function handleWorldHover(feature, entering) {
   highlightWorldContinent(continentId, entering);
 }
 
-function applyMobilePan(svg, layer, width, height) {
+function applyMobilePan(svg, layer, width, height, enableInitialZoom = false) {
   if (typeof d3 === 'undefined' || typeof d3.zoom === 'undefined') {
     return;
   }
@@ -220,7 +220,18 @@ function applyMobilePan(svg, layer, width, height) {
     });
   svg.on('.zoom', null);
   svg.call(zoom);
-  svg.call(zoom.transform, d3.zoomIdentity);
+
+  // Initial Auto-Zoom for mobile
+  if (enableInitialZoom && width < 640) {
+    // Zoom 2.5x by default to fill the screen better
+    const initialTransform = d3.zoomIdentity
+      .translate(width / 2, height / 2)
+      .scale(2.5)
+      .translate(-width / 2, -height / 2);
+    svg.call(zoom.transform, initialTransform);
+  } else {
+    svg.call(zoom.transform, d3.zoomIdentity);
+  }
 }
 
 function highlightWorldContinent(continentId, entering) {
