@@ -743,7 +743,59 @@ body[data-theme="dark"] .country-text-block {
     }
 }
 
-@media (max-width:640px) {
+@media (max-width: 640px) {
+
+    /* Reorder: Info first (Title + Buttons), Map second */
+    .continent-layout {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 16px;
+    }
+
+    .continent-info {
+        order: 1 !important;
+        padding: 16px;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        backdrop-filter: none;
+        gap: 16px;
+        text-align: center;
+        align-items: center;
+    }
+
+    .continent-map {
+        order: 2 !important;
+    }
+
+    .continent-illustration {
+        display: block;
+        height: 50vh;
+        min-height: 300px;
+    }
+
+    /* Hide non-essentials */
+    .continent-info .subtitle,
+    .continent-info .description,
+    .continent-info .progress-panel {
+        display: none !important;
+    }
+
+    .continent-heading {
+        border: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .continent-heading h3 {
+        font-size: 2.8rem;
+        margin: 0;
+    }
+
+    #countryList {
+        justify-content: center;
+    }
+
     .cta-row {
         flex-wrap: wrap;
         justify-content: center;
