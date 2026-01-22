@@ -311,6 +311,13 @@
     filter: drop-shadow(0 0 16px rgba(255, 255, 255, .35));
 }
 
+.land.group-hover {
+    fill: var(--map-hover) !important;
+    stroke: var(--map-hover) !important;
+    filter: drop-shadow(0 0 6px rgba(0, 0, 0, .25));
+    opacity: 1 !important;
+}
+
 body[data-theme="dark"] .land {
     stroke: rgba(5, 5, 10, .9);
     opacity: .95;
