@@ -480,6 +480,13 @@ body[data-theme="dark"] .info-button:hover {
     }
 }
 
+@media (max-width: 640px) {
+    .header-info-btn {
+        font-size: .8rem;
+        padding: 8px 12px;
+    }
+}
+
 /* Glassmorphism & Blocks */
 .info-block {
     background: rgba(255, 255, 255, 0.7);
