@@ -108,7 +108,7 @@ export const continentData = {
     id: 'europe',
     names: { fr: 'Europe', en: 'Europe' },
     progress: 75.0,
-    availableCountries: ['ue', 'estonia', 'uk'],
+    availableCountries: ['ue', 'estonia', 'uk', 'turkey'],
     markers: [
       { countryId: 'ue', x: 48, y: 58 }
     ],
@@ -121,7 +121,7 @@ export const continentData = {
     id: 'africa',
     names: { fr: 'Afrique', en: 'Africa' },
     progress: 3.7,
-    availableCountries: ['southAfrica', 'nigeria'],
+    availableCountries: ['southAfrica', 'nigeria', 'kenya'],
     markers: [
       { countryId: 'southAfrica', x: 58, y: 78 }
     ],
@@ -134,7 +134,7 @@ export const continentData = {
     id: 'asia',
     names: { fr: 'Asie', en: 'Asia' },
     progress: 8.2,
-    availableCountries: ['china', 'india', 'japan', 'singapore', 'uae'],
+    availableCountries: ['china', 'india', 'japan', 'singapore', 'uae', 'southKorea', 'saudiArabia', 'russia'],
     markers: [],
     info: {
       fr: 'L\'Asie combine stratégies nationales ambitieuses, zones franches numériques et coalitions régionales.',
@@ -244,6 +244,36 @@ export const countryData = {
     continentId: 'europe',
     name: { fr: 'Union Européenne', en: 'European Union' },
     geoNames: ['France', 'Spain', 'Germany', 'Italy', 'Netherlands', 'Belgium', 'Portugal', 'Sweden', 'Poland', 'Austria', 'Hungary', 'Czechia', 'Greece', 'Finland', 'Denmark', 'Ireland', 'Romania', 'Bulgaria', 'Slovakia', 'Croatia', 'Lithuania', 'Latvia', 'Slovenia', 'Luxembourg', 'Cyprus', 'Malta']
+  },
+  southKorea: {
+    id: 'southKorea',
+    continentId: 'asia',
+    name: { fr: 'Corée du Sud', en: 'South Korea' },
+    geoName: 'South Korea'
+  },
+  saudiArabia: {
+    id: 'saudiArabia',
+    continentId: 'asia',
+    name: { fr: 'Arabie Saoudite', en: 'Saudi Arabia' },
+    geoName: 'Saudi Arabia'
+  },
+  turkey: {
+    id: 'turkey',
+    continentId: 'europe',
+    name: { fr: 'Turquie', en: 'Turkey' },
+    geoName: 'Turkey'
+  },
+  russia: {
+    id: 'russia',
+    continentId: 'asia',
+    name: { fr: 'Russie', en: 'Russia' },
+    geoName: 'Russia'
+  },
+  kenya: {
+    id: 'kenya',
+    continentId: 'africa',
+    name: { fr: 'Kenya', en: 'Kenya' },
+    geoName: 'Kenya'
   }
 };
 
