@@ -42,8 +42,8 @@ export const translations = {
         ariaToLight: 'Activer le mode clair'
       },
       footer: {
-        tagline: 'AI X IP Global Explorer — 2024',
-        subline: 'Projet universitaire – Panthéon-Assas Université',
+        tagline: 'AI X IP Global Explorer — 2025 - 2026',
+        subline: 'Projet universitaire – Student of Panthéon-Assas Université',
         contact: 'Contact'
       }
     }
@@ -91,8 +91,8 @@ export const translations = {
         ariaToLight: 'Switch to light mode'
       },
       footer: {
-        tagline: 'AI X IP Global Explorer — 2024',
-        subline: 'University project – Panthéon-Assas University',
+        tagline: 'AI X IP Global Explorer — 2025 - 2026',
+        subline: 'University project – Student of Panthéon-Assas Université',
         contact: 'Contact'
       }
     }

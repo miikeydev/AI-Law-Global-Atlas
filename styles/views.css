@@ -658,6 +658,11 @@ body[data-theme="dark"] .legend-swatch {
     border-color: rgba(255, 255, 255, .28);
 }
 
+body[data-theme="dark"] .legend-item--unrated .legend-swatch {
+    background: #9aa4b9 !important;
+    border-color: rgba(255, 255, 255, .22);
+}
+
 #continentView .continent-layout {
     grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
     align-items: stretch;

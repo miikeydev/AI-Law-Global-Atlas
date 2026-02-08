@@ -99,7 +99,7 @@ export function initCriterionPanel({ lang, redraw }) {
     criterion.buckets.forEach(bucket => {
       legendGrid.appendChild(buildLegendItem(bucket.color, bucket.label));
     });
-    legendGrid.appendChild(buildLegendItem(criterion.unratedColor, criterion.unratedLabel));
+    legendGrid.appendChild(buildLegendItem(criterion.unratedColor, criterion.unratedLabel, 'legend-item--unrated'));
 
     updateControlButtons();
   }
@@ -125,9 +125,9 @@ export function initCriterionPanel({ lang, redraw }) {
   }
 }
 
-function buildLegendItem(color, labelText) {
+function buildLegendItem(color, labelText, extraClass = '') {
   const item = document.createElement('span');
-  item.className = 'legend-item';
+  item.className = extraClass ? `legend-item ${extraClass}` : 'legend-item';
 
   const swatch = document.createElement('i');
   swatch.className = 'legend-swatch';
