@@ -50,6 +50,23 @@
             <svg id="worldMap" class="map-svg" role="img" aria-label="World map"></svg>
           </div>
         </div>
+        <div class="world-map-controls">
+          <button id="criterionDetailsToggle" class="world-control-btn" type="button"
+            aria-controls="worldCriterionPanel" aria-expanded="false"
+            data-i18n="world.detailsShow">Voir le critère actif</button>
+          <button id="legendSwitchBtn" class="world-control-btn" type="button"
+            data-i18n="world.switchToC1">Activer la légende C1</button>
+        </div>
+        <section id="worldCriterionPanel" class="world-criterion-panel" aria-label="Critère de cartographie" hidden>
+          <h4 id="worldCriterionTitle"></h4>
+          <div id="worldCriterionLead"></div>
+          <p class="world-criterion-label" id="worldCriterionListTitle"></p>
+          <ul class="world-criterion-list" id="worldCriterionList"></ul>
+          <div class="world-criterion-legend" aria-label="Légende active">
+            <p class="world-criterion-label" id="worldLegendTitle"></p>
+            <div class="legend-grid" id="worldLegendGrid"></div>
+          </div>
+        </section>
       </section>
       <footer>
         <p data-i18n="footer.tagline">AI X IP Global Explorer — 2024</p>

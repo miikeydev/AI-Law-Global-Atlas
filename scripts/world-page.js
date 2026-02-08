@@ -1,27 +1,34 @@
-import { initCommon, navigateTo } from './common.js';
+import { initCommon, navigateTo, setupResizeRedraw } from './common.js';
 import { translations } from './data.js';
-import { initGlobe, resizeGlobe, updateGlobeTheme } from './globe.js';
+import { initGlobe, updateGlobeTheme } from './globe.js';
 import { loadWorldGeometry, drawWorldMap } from './maps.js';
+import { initCriterionPanel } from './criterion-panel.js';
 
 const { lang, theme } = initCommon({ onThemeChange: updateGlobeTheme });
 initGlobe(theme);
 
-const textTitle = document.querySelector('[data-i18n="world.title"]');
-const textDescription = document.querySelector('[data-i18n="world.description"]');
 updateWorldText();
+const criterionPanel = initCriterionPanel({
+  lang,
+  redraw: () => drawWorldMap(handleContinentSelect)
+});
 
 function updateWorldText() {
   const copy = translations[lang].world;
-  if (textTitle) {
-    textTitle.textContent = copy.title;
-  }
-  if (textDescription) {
-    textDescription.textContent = copy.description;
-  }
+  const worldTextNodes = document.querySelectorAll('[data-i18n="world.title"], [data-i18n="world.description"]');
+  worldTextNodes.forEach(node => {
+    const key = node.getAttribute('data-i18n')?.replace('world.', '');
+    if (!key || !(key in copy)) {
+      return;
+    }
+    node.textContent = copy[key];
+  });
 }
 
 loadWorldGeometry().then(() => {
   drawWorldMap(handleContinentSelect);
+  criterionPanel.render();
+  setupResizeRedraw(() => drawWorldMap(handleContinentSelect));
 });
 
 function handleContinentSelect(continentId) {

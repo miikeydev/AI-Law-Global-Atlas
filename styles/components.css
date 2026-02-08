@@ -462,6 +462,24 @@ body[data-theme="dark"] .info-button:hover {
     -webkit-text-fill-color: transparent;
 }
 
+/* Header Info Button (Mobile) */
+.header-info-btn {
+    display: none;
+    /* Hidden on desktop */
+    width: auto;
+    margin: 0;
+    padding: 10px 16px;
+    font-size: 0.9rem;
+    height: 44px;
+    /* Match typical header button height */
+}
+
+@media (max-width: 900px) {
+    .header-info-btn {
+        display: flex;
+    }
+}
+
 /* Glassmorphism & Blocks */
 .info-block {
     background: rgba(255, 255, 255, 0.7);

@@ -1,4 +1,4 @@
-import { initCommon, navigateTo, consumeNavigationState } from './common.js';
+import { initCommon, navigateTo, consumeNavigationState, setupResizeRedraw } from './common.js';
 import { translations, continentData, countryData } from './data.js';
 import { loadWorldGeometry, renderContinentMap } from './maps.js';
 
@@ -22,6 +22,7 @@ if (!continent) {
   renderContinentInfo();
   loadWorldGeometry().then(() => {
     renderContinentMap(continentId, handleCountrySelect);
+    setupResizeRedraw(() => renderContinentMap(continentId, handleCountrySelect));
   });
 }
 
