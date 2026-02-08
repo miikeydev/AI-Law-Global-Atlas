@@ -25,6 +25,7 @@ const fallbackRegions = [
 const unratedWorldCriterionColor = '#DADDE6';
 const worldCriterionIds = Object.keys(worldCriteriaDefinitions);
 let activeWorldCriterion = null;
+let worldMobileFocusedContinentId = null;
 const worldCriterionScoreLookupById = buildWorldCriterionScoreLookups();
 
 export function loadWorldGeometry() {
@@ -37,7 +38,8 @@ export function loadWorldGeometry() {
     fetch('res/country-continent.json').then(response => response.json()).catch(() => [])
   ])
     .then(([worldData, continentList]) => {
-      worldFeatures = topojson.feature(worldData, worldData.objects.countries).features;
+      const allWorldFeatures = topojson.feature(worldData, worldData.objects.countries).features;
+      worldFeatures = allWorldFeatures.filter(feature => !isAntarcticaFeature(feature));
       countryContinentLookup = buildCountryContinentLookup(Array.isArray(continentList) ? continentList : [], worldFeatures);
       worldReady = true;
       return worldFeatures;
@@ -54,8 +56,16 @@ export function drawWorldMap(onContinentSelect) {
     return;
   }
   const { width, height } = getSvgSize(svg);
+  const isMobileWorld = isWorldMobileMode();
+  if (!isMobileWorld) {
+    worldMobileFocusedContinentId = null;
+  }
   svg.attr('viewBox', `0 0 ${width} ${height}`).attr('preserveAspectRatio', 'xMidYMid meet');
-  const projection = d3.geoNaturalEarth1().fitExtent([[26, 26], [width - 26, height - 26]], { type: 'Sphere' });
+  const fitFeatures = getWorldFeaturesForMobileFit();
+  const fitTarget = fitFeatures.length
+    ? { type: 'FeatureCollection', features: fitFeatures }
+    : { type: 'Sphere' };
+  const projection = d3.geoNaturalEarth1().fitExtent([[26, 26], [width - 26, height - 26]], fitTarget);
   const path = d3.geoPath(projection);
 
   let layer = svg.select('g.map-layer');
@@ -77,15 +87,45 @@ export function drawWorldMap(onContinentSelect) {
   paths.selectAll('title').remove();
   paths.append('title').text(feature => (hasCriterion ? getWorldFeatureTooltip(feature) : getFeatureName(feature)));
 
-  paths
-    .on('mouseenter', (event, feature) => handleWorldHover(feature, true))
-    .on('mouseleave', (event, feature) => handleWorldHover(feature, false))
-    .on('click', (event, feature) => {
-      const continentId = getContinentForFeature(feature);
-      if (continentId && typeof onContinentSelect === 'function') {
-        onContinentSelect(continentId);
+  if (isMobileWorld) {
+    paths
+      .on('mouseenter', null)
+      .on('mouseleave', null);
+    applyWorldMobileFocus(svg, worldMobileFocusedContinentId);
+    updateWorldMobileHint(worldMobileFocusedContinentId, true);
+  } else {
+    applyWorldMobileFocus(svg, null);
+    paths
+      .on('mouseenter', (event, feature) => handleWorldHover(feature, true))
+      .on('mouseleave', (event, feature) => handleWorldHover(feature, false));
+    updateWorldMobileHint(null, false);
+  }
+
+  paths.on('click', (event, feature) => {
+    const continentId = getContinentForFeature(feature);
+    if (!continentId || typeof onContinentSelect !== 'function') {
+      if (isMobileWorld) {
+        worldMobileFocusedContinentId = null;
+        applyWorldMobileFocus(svg, null);
+        updateWorldMobileHint(null, true);
       }
-    });
+      return;
+    }
+    if (!isMobileWorld) {
+      onContinentSelect(continentId);
+      return;
+    }
+    if (worldMobileFocusedContinentId === continentId) {
+      worldMobileFocusedContinentId = null;
+      applyWorldMobileFocus(svg, null);
+      updateWorldMobileHint(null, true);
+      onContinentSelect(continentId);
+      return;
+    }
+    worldMobileFocusedContinentId = continentId;
+    applyWorldMobileFocus(svg, continentId);
+    updateWorldMobileHint(continentId, true);
+  });
 
   applyMobilePan(svg, layer, width, height, true);
 }
@@ -278,6 +318,39 @@ function handleWorldHover(feature, entering) {
     .classed('continent-focus', item => getContinentForFeature(item) === continentId);
 }
 
+function applyWorldMobileFocus(svg, continentId) {
+  if (!svg || svg.empty()) {
+    return;
+  }
+  svg.selectAll('path.land')
+    .classed('continent-mobile-focus', item => !!continentId && getContinentForFeature(item) === continentId);
+}
+
+function updateWorldMobileHint(continentId, enabled) {
+  const hint = document.getElementById('worldMobileHint');
+  if (!hint) {
+    return;
+  }
+  if (!enabled) {
+    hint.textContent = '';
+    hint.classList.remove('active');
+    return;
+  }
+  if (!continentId) {
+    hint.textContent = getDocumentLang() === 'en'
+      ? 'Tap a continent to select it.'
+      : 'Touchez un continent pour le sélectionner.';
+    hint.classList.remove('active');
+    return;
+  }
+  const lang = getDocumentLang();
+  const continentName = continentData[continentId]?.names?.[lang] || continentId;
+  hint.textContent = lang === 'en'
+    ? `${continentName} selected. Tap again to open.`
+    : `${continentName} sélectionné. Touchez encore pour ouvrir.`;
+  hint.classList.add('active');
+}
+
 function applyMobilePan(svg, layer, width, height, enableInitialZoom = false) {
   if (typeof d3 === 'undefined' || typeof d3.zoom === 'undefined') {
     return;
@@ -289,8 +362,9 @@ function applyMobilePan(svg, layer, width, height, enableInitialZoom = false) {
     layer.attr('transform', null);
     return;
   }
+  const maxScale = enableInitialZoom ? 2.6 : 3;
   const zoom = d3.zoom()
-    .scaleExtent([1, 4])
+    .scaleExtent([1, maxScale])
     .translateExtent([[0, 0], [width, height]])
     .on('zoom', event => {
       layer.attr('transform', event.transform);
@@ -298,17 +372,35 @@ function applyMobilePan(svg, layer, width, height, enableInitialZoom = false) {
   svg.on('.zoom', null);
   svg.call(zoom);
 
-  // Initial Auto-Zoom for mobile
-  if (enableInitialZoom && width < 640) {
-    // Zoom 2.5x by default to fill the screen better
+  // Mobile "cover" mode for world map: fill space like a map app, even with crop.
+  if (enableInitialZoom && width < 900) {
+    const initialScale = width < 560 ? 1.54 : 1.36;
+    const northShift = height * 0.02;
     const initialTransform = d3.zoomIdentity
-      .translate(width / 2, height / 2)
-      .scale(2.5)
+      .translate(width / 2, (height / 2) - northShift)
+      .scale(initialScale)
       .translate(-width / 2, -height / 2);
     svg.call(zoom.transform, initialTransform);
   } else {
     svg.call(zoom.transform, d3.zoomIdentity);
   }
+}
+
+function isWorldMobileMode() {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+    return false;
+  }
+  return window.matchMedia('(max-width: 900px)').matches;
+}
+
+function getWorldFeaturesForMobileFit() {
+  if (!Array.isArray(worldFeatures) || !worldFeatures.length) {
+    return [];
+  }
+  return worldFeatures.filter(feature => {
+    const name = normalizeCountryName(getFeatureName(feature));
+    return name !== 'antarctica';
+  });
 }
 
 function buildFocusNameSet(availableIds = []) {
@@ -417,6 +509,11 @@ function getFeatureName(feature) {
     return feature.properties.name || feature.properties.NAME || feature.properties.admin || '';
   }
   return feature.id || '';
+}
+
+function isAntarcticaFeature(feature) {
+  const normalized = normalizeCountryName(getFeatureName(feature));
+  return normalized === 'antarctica' || normalized === 'antarctique';
 }
 
 function boundsToFeature(bounds) {

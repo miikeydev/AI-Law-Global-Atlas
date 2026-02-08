@@ -33,6 +33,10 @@
           <h2>AI X IP Global Explorer</h2>
         </div>
         <div class="header-right">
+          <a href="info.html" class="info-button header-info-btn">
+            <span class="info-dot"></span>
+            <span class="info-label">+ d'infos</span>
+          </a>
           <button id="themeToggle" class="ghost theme-toggle" aria-label="Basculer le thème">Mode sombre</button>
           <div id="languageToggle" class="language-toggle" role="group" aria-label="Switch language">
             <button type="button" data-lang="fr">FR</button>
@@ -50,6 +54,7 @@
             <svg id="worldMap" class="map-svg" role="img" aria-label="World map"></svg>
           </div>
         </div>
+        <p id="worldMobileHint" class="world-mobile-hint" aria-live="polite"></p>
         <div class="world-map-controls">
           <button id="criterionDetailsToggle" class="world-control-btn" type="button"
             aria-controls="worldCriterionPanel" aria-expanded="false"
