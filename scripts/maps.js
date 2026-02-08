@@ -5,7 +5,10 @@ import {
   continentData,
   manualCountryContinents,
   geoNameToCountryId,
-  countryNameAliases
+  countryNameAliases,
+  worldCriteriaDefinitions,
+  worldCriterionScoresByCountryId,
+  worldCriterionScoresByGeoName
 } from './data.js';
 
 let worldFeatures = [];
@@ -19,6 +22,10 @@ const fallbackRegions = [
   { id: 'asia', bounds: [[20, -10], [180, 85]] },
   { id: 'oceania', bounds: [[95, -50], [-110, 35]] }
 ];
+const unratedWorldCriterionColor = '#DADDE6';
+const worldCriterionIds = Object.keys(worldCriteriaDefinitions);
+let activeWorldCriterion = null;
+const worldCriterionScoreLookupById = buildWorldCriterionScoreLookups();
 
 export function loadWorldGeometry() {
   if (typeof d3 === 'undefined' || typeof topojson === 'undefined') {
@@ -55,6 +62,7 @@ export function drawWorldMap(onContinentSelect) {
   if (layer.empty()) {
     layer = svg.append('g').attr('class', 'map-layer');
   }
+  const hasCriterion = isWorldCriterionActive();
 
   const paths = layer.selectAll('path.land')
     .data(worldFeatures)
@@ -62,7 +70,12 @@ export function drawWorldMap(onContinentSelect) {
     .attr('class', 'land')
     .attr('d', path)
     .attr('data-continent', feature => getContinentForFeature(feature) || '')
+    .attr('data-world-criterion', hasCriterion ? activeWorldCriterion : null)
+    .attr('data-regulation-level', feature => (hasCriterion ? getWorldCriterionBucket(feature).id : null))
+    .style('fill', feature => (hasCriterion ? getWorldCriterionBucket(feature).color : null))
     .style('cursor', feature => (getContinentForFeature(feature) ? 'pointer' : 'default'));
+  paths.selectAll('title').remove();
+  paths.append('title').text(feature => (hasCriterion ? getWorldFeatureTooltip(feature) : getFeatureName(feature)));
 
   paths
     .on('mouseenter', (event, feature) => handleWorldHover(feature, true))
@@ -75,6 +88,52 @@ export function drawWorldMap(onContinentSelect) {
     });
 
   applyMobilePan(svg, layer, width, height, true);
+}
+
+export function setWorldCriterion(criterionId) {
+  if (criterionId === null) {
+    activeWorldCriterion = null;
+  } else if (worldCriteriaDefinitions[criterionId]) {
+    activeWorldCriterion = criterionId;
+  }
+  return activeWorldCriterion;
+}
+
+export function getWorldCriterion() {
+  return activeWorldCriterion;
+}
+
+export function hasWorldCriterion() {
+  return isWorldCriterionActive();
+}
+
+export function getNextWorldCriterion(criterionId = activeWorldCriterion) {
+  const currentIndex = worldCriterionIds.indexOf(criterionId);
+  if (currentIndex < 0) {
+    return worldCriterionIds[0];
+  }
+  return worldCriterionIds[(currentIndex + 1) % worldCriterionIds.length];
+}
+
+export function getWorldCriterionDetails(criterionId = activeWorldCriterion, lang = getDocumentLang()) {
+  const criterion = worldCriteriaDefinitions[criterionId] || worldCriteriaDefinitions.c1;
+  const safeLang = lang === 'en' ? 'en' : 'fr';
+  return {
+    id: criterion.id,
+    shortLabel: criterion.shortLabel[safeLang],
+    title: criterion.title[safeLang],
+    lead: criterion.lead[safeLang],
+    listTitle: criterion.listTitle[safeLang],
+    list: criterion.list[safeLang],
+    legendTitle: criterion.legendTitle[safeLang],
+    buckets: criterion.buckets.map(bucket => ({
+      id: bucket.id,
+      color: bucket.color,
+      label: bucket.label[safeLang]
+    })),
+    unratedLabel: safeLang === 'en' ? 'Not rated' : 'Non évalué',
+    unratedColor: unratedWorldCriterionColor
+  };
 }
 
 export function renderContinentMap(continentId, onCountrySelect) {
@@ -91,7 +150,7 @@ export function renderContinentMap(continentId, onCountrySelect) {
   }
   const continent = continentData[continentId] || {};
   const availableIds = Array.isArray(continent.availableCountries) ? continent.availableCountries : [];
-  const focusNames = buildFocusNameSet(continentId, availableIds);
+  const focusNames = buildFocusNameSet(availableIds);
   // Get ALL countries that belong to this continent, not just available ones
   const renderFeatures = worldFeatures.filter(feature => getContinentForFeature(feature) === continentId);
   // If no continent countries found, fall back to world features
@@ -99,25 +158,31 @@ export function renderContinentMap(continentId, onCountrySelect) {
     const focusFeatures = worldFeatures.filter(feature => focusNames.has(getFeatureName(feature)));
     renderFeatures.push(...(focusFeatures.length ? focusFeatures : worldFeatures));
   }
+  const displayFeatures = prepareContinentFeatures(continentId, renderFeatures);
   const bounds = continentBounds[continentId] || [[-180, -90], [180, 90]];
-  const fitTarget = renderFeatures.length
-    ? { type: 'FeatureCollection', features: renderFeatures }
-    : boundsToFeature(bounds);
+  const focusFeatures = displayFeatures.filter(feature => focusNames.has(getFeatureName(feature)));
+  const fitTarget = getContinentFitTarget(continentId, displayFeatures, focusFeatures, bounds);
   const { width, height } = getSvgSize(svg);
-  const padding = width < 560 ? 14 : 24;
+  const padding = getAdaptivePadding(width, height, { ratio: 0.03, min: width < 560 ? 6 : 10, max: 24 });
   svg.attr('viewBox', `0 0 ${width} ${height}`).attr('preserveAspectRatio', 'xMidYMid meet');
-  const projection = d3.geoMercator().fitExtent([[padding, padding], [width - padding, height - padding]], fitTarget);
+  const projection = createContinentProjection(continentId)
+    .fitExtent([[padding, padding], [width - padding, height - padding]], fitTarget);
   const path = d3.geoPath(projection);
-  const interactiveNames = new Set(renderFeatures.map(feature => getFeatureName(feature)).filter(name => focusNames.has(name)));
+  const interactiveNames = new Set(displayFeatures.map(feature => getFeatureName(feature)).filter(name => focusNames.has(name)));
+  const hasCriterion = isWorldCriterionActive();
   let layer = svg.select('g.map-layer');
   if (layer.empty()) {
     layer = svg.append('g').attr('class', 'map-layer');
   }
   layer.selectAll('path.land')
-    .data(renderFeatures, feature => getFeatureName(feature))
+    .data(displayFeatures, feature => getFeatureName(feature))
     .join('path')
     .attr('class', feature => (focusNames.has(getFeatureName(feature)) ? 'land active' : 'land inactive'))
     .attr('d', path)
+    .attr('data-world-criterion', hasCriterion ? activeWorldCriterion : null)
+    .attr('data-regulation-level', feature => (hasCriterion ? getWorldCriterionBucket(feature).id : null))
+    .style('fill', feature => (hasCriterion ? getWorldCriterionBucket(feature).color : null))
+    .style('opacity', feature => (focusNames.has(getFeatureName(feature)) ? 0.98 : 0.65))
     .style('pointer-events', feature => (interactiveNames.has(getFeatureName(feature)) ? 'auto' : 'none'))
     .style('cursor', feature => (interactiveNames.has(getFeatureName(feature)) ? 'pointer' : 'default'))
     .on('click', (event, feature) => {
@@ -138,6 +203,8 @@ export function renderContinentMap(continentId, onCountrySelect) {
     .on('mouseleave', () => {
       layer.selectAll('path.land').classed('group-hover', false);
     });
+  layer.selectAll('path.land').selectAll('title').remove();
+  layer.selectAll('path.land').append('title').text(feature => (hasCriterion ? getWorldFeatureTooltip(feature) : getFeatureName(feature)));
   applyMobilePan(svg, layer, width, height);
 }
 
@@ -177,7 +244,8 @@ export function renderCountryMap(countryId) {
   const { width, height } = getSvgSize(svg);
   svg.attr('viewBox', `0 0 ${width} ${height}`).attr('preserveAspectRatio', 'xMidYMid meet');
 
-  const projection = d3.geoMercator().fitExtent([[20, 20], [width - 20, height - 20]], { type: 'FeatureCollection', features: features });
+  const padding = getAdaptivePadding(width, height, { ratio: 0.04, min: 8, max: 20 });
+  const projection = d3.geoMercator().fitExtent([[padding, padding], [width - padding, height - padding]], { type: 'FeatureCollection', features: features });
   const path = d3.geoPath(projection);
 
   svg.selectAll('path.land')
@@ -198,7 +266,16 @@ export function handleMapResize(continentId, countryId, onContinentSelect, onCou
 
 function handleWorldHover(feature, entering) {
   const continentId = getContinentForFeature(feature);
-  highlightWorldContinent(continentId, entering);
+  const svg = d3.select('#worldMap');
+  if (svg.empty()) {
+    return;
+  }
+  if (!entering || !continentId) {
+    svg.selectAll('path.land').classed('continent-focus', false);
+    return;
+  }
+  svg.selectAll('path.land')
+    .classed('continent-focus', item => getContinentForFeature(item) === continentId);
 }
 
 function applyMobilePan(svg, layer, width, height, enableInitialZoom = false) {
@@ -234,22 +311,7 @@ function applyMobilePan(svg, layer, width, height, enableInitialZoom = false) {
   }
 }
 
-function highlightWorldContinent(continentId, entering) {
-  if (!continentId) {
-    return;
-  }
-  const svg = d3.select('#worldMap');
-  svg.selectAll(`path.land[data-continent="${continentId}"]`)
-    .classed('continent-focus', !!entering);
-}
-
-function getGeoNamesForContinent(continentId) {
-  return Object.values(countryData)
-    .filter(country => country.continentId === continentId)
-    .map(country => country.geoName);
-}
-
-function buildFocusNameSet(continentId, availableIds = []) {
+function buildFocusNameSet(availableIds = []) {
   if (Array.isArray(availableIds) && availableIds.length) {
     const names = new Set();
     availableIds.forEach(id => {
@@ -270,12 +332,66 @@ function buildFocusNameSet(continentId, availableIds = []) {
 
 function getSvgSize(selection) {
   if (!selection || selection.empty()) {
-    return { width: 600, height: 360 };
+    return { width: 960, height: 560 };
   }
   const node = selection.node();
-  const width = node.clientWidth || (node.parentNode ? node.parentNode.clientWidth : 600) || 600;
-  const height = node.clientHeight || (node.parentNode ? node.parentNode.clientHeight : 360) || 360;
+  const parentNode = node.parentNode || null;
+  const fallbackWidth = 960;
+  const width = node.clientWidth || (parentNode ? parentNode.clientWidth : fallbackWidth) || fallbackWidth;
+  const fallbackHeight = Math.round(width * 0.58);
+  const measuredHeight = node.clientHeight || (parentNode ? parentNode.clientHeight : fallbackHeight) || fallbackHeight;
+  const height = measuredHeight > 220 ? measuredHeight : fallbackHeight;
   return { width, height };
+}
+
+function getAdaptivePadding(width, height, options = {}) {
+  const safeWidth = Number.isFinite(width) ? width : 600;
+  const safeHeight = Number.isFinite(height) ? height : 360;
+  const minSize = Math.max(0, Math.min(safeWidth, safeHeight));
+  const ratio = Number.isFinite(options.ratio) ? options.ratio : 0.03;
+  const min = Number.isFinite(options.min) ? options.min : 8;
+  const max = Number.isFinite(options.max) ? options.max : 24;
+  const computed = Math.round(minSize * ratio);
+  return Math.max(min, Math.min(max, computed));
+}
+
+function createContinentProjection(continentId) {
+  if (continentId === 'asia') {
+    // Shift seam away from Asia to avoid Russia wrap-around at the left edge.
+    return d3.geoMercator().rotate([-100, 0]);
+  }
+  return d3.geoMercator();
+}
+
+function getContinentFitTarget(continentId, renderFeatures, focusFeatures, fallbackBounds) {
+  if (continentId === 'oceania' && Array.isArray(focusFeatures) && focusFeatures.length) {
+    return { type: 'FeatureCollection', features: focusFeatures };
+  }
+  if (continentId === 'asia' && Array.isArray(renderFeatures) && renderFeatures.length) {
+    return { type: 'FeatureCollection', features: renderFeatures };
+  }
+  const compactBounds = getCompactContinentBounds(continentId);
+  if (compactBounds) {
+    return boundsToFeature(compactBounds);
+  }
+  if (Array.isArray(renderFeatures) && renderFeatures.length) {
+    return { type: 'FeatureCollection', features: renderFeatures };
+  }
+  return boundsToFeature(fallbackBounds);
+}
+
+function getCompactContinentBounds(continentId) {
+  if (continentId === 'oceania') {
+    return [[112, -52], [180, 8]];
+  }
+  return null;
+}
+
+function prepareContinentFeatures(continentId, features = []) {
+  if (!Array.isArray(features) || !features.length) {
+    return [];
+  }
+  return features;
 }
 
 function getContinentForFeature(feature) {
@@ -411,4 +527,110 @@ function normalizeCountryName(value) {
     .toLowerCase()
     .replace(/&/g, 'and')
     .replace(/[^a-z]/g, '');
+}
+
+function getWorldCriterionBucket(feature, criterionId = activeWorldCriterion) {
+  const criterion = worldCriteriaDefinitions[criterionId] || worldCriteriaDefinitions.c1;
+  const score = getWorldCriterionScore(feature, criterionId);
+  if (!Number.isFinite(score)) {
+    return {
+      id: 'unrated',
+      color: unratedWorldCriterionColor,
+      score: null,
+      label: {
+        fr: 'Non évalué',
+        en: 'Not rated'
+      }
+    };
+  }
+  const bucket = criterion.buckets.find(item => score >= item.min) || criterion.buckets[criterion.buckets.length - 1];
+  return { ...bucket, score };
+}
+
+function getWorldCriterionScore(feature, criterionId = activeWorldCriterion) {
+  const scoreLookup = worldCriterionScoreLookupById[criterionId] || {};
+  const name = getFeatureName(feature);
+  const normalized = normalizeCountryName(name);
+  if (normalized && Number.isFinite(scoreLookup[normalized])) {
+    return scoreLookup[normalized];
+  }
+  return null;
+}
+
+function getWorldFeatureTooltip(feature) {
+  const name = getFeatureName(feature);
+  const bucket = getWorldCriterionBucket(feature);
+  const criterion = worldCriteriaDefinitions[activeWorldCriterion] || worldCriteriaDefinitions.c1;
+  const lang = getDocumentLang();
+  const label = bucket.label[lang] || bucket.label.fr;
+  if (!Number.isFinite(bucket.score)) {
+    return `${name}\n${criterion.shortLabel[lang]} — ${label}`;
+  }
+  return `${name}\n${criterion.shortLabel[lang]}: ${bucket.score}/100 — ${label}`;
+}
+
+function getDocumentLang() {
+  return document?.documentElement?.lang === 'en' ? 'en' : 'fr';
+}
+
+function isWorldCriterionActive() {
+  return !!(activeWorldCriterion && worldCriteriaDefinitions[activeWorldCriterion]);
+}
+
+function buildWorldCriterionScoreLookups() {
+  const lookups = {};
+  Object.keys(worldCriteriaDefinitions).forEach(criterionId => {
+    lookups[criterionId] = buildScoreLookupForCriterion(criterionId);
+  });
+  return lookups;
+}
+
+function buildScoreLookupForCriterion(criterionId) {
+  const lookup = {};
+  const countryScores = worldCriterionScoresByCountryId[criterionId] || {};
+  const geoNameScores = worldCriterionScoresByGeoName[criterionId] || {};
+
+  // First pass: multi-country entities (e.g. UE).
+  Object.entries(countryScores).forEach(([countryId, score]) => {
+    if (!Number.isFinite(score)) {
+      return;
+    }
+    const country = countryData[countryId];
+    if (!country || !Array.isArray(country.geoNames)) {
+      return;
+    }
+    country.geoNames.forEach(name => {
+      const normalized = normalizeCountryName(name);
+      if (normalized) {
+        lookup[normalized] = score;
+      }
+    });
+  });
+
+  // Second pass: country-specific entries override regional aggregates.
+  Object.entries(countryScores).forEach(([countryId, score]) => {
+    if (!Number.isFinite(score)) {
+      return;
+    }
+    const country = countryData[countryId];
+    if (!country || !country.geoName) {
+      return;
+    }
+    const normalized = normalizeCountryName(country.geoName);
+    if (normalized) {
+      lookup[normalized] = score;
+    }
+  });
+
+  Object.entries(geoNameScores).forEach(([name, score]) => {
+    if (!Number.isFinite(score)) {
+      return;
+    }
+    const normalized = normalizeCountryName(name);
+    if (normalized) {
+      lookup[normalized] = score;
+    }
+  });
+
+  return lookup;
 }

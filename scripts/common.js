@@ -47,6 +47,24 @@ export function consumeNavigationState() {
   }
 }
 
+export function setupResizeRedraw(redraw) {
+  if (typeof redraw !== 'function') {
+    return () => {};
+  }
+  let rafId = null;
+  const onResize = () => {
+    if (rafId !== null) {
+      return;
+    }
+    rafId = window.requestAnimationFrame(() => {
+      rafId = null;
+      redraw();
+    });
+  };
+  window.addEventListener('resize', onResize);
+  return () => window.removeEventListener('resize', onResize);
+}
+
 function storeNavigationState(path, params = {}) {
   try {
     sessionStorage.setItem(NAV_STATE_KEY, JSON.stringify({

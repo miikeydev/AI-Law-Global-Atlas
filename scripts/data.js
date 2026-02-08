@@ -2,7 +2,11 @@ export const translations = {
   fr: {
     world: {
       title: 'Un monde, mille régulations',
-      description: 'Un clic, et vous accédez aux actualités, textes de droit et initiatives législatives qui façonnent l\'encadrement de l\'IA partout sur la planète.'
+      description: 'Un clic, et vous accédez aux actualités, textes de droit et initiatives législatives qui façonnent l\'encadrement de l\'IA partout sur la planète.',
+      detailsShow: 'Voir le critère actif',
+      detailsHide: 'Masquer le critère actif',
+      switchToC1: 'Activer la légende C1',
+      switchToC2: 'Activer la légende C2'
     },
     continent: {
       subtitle: 'Cliquez sur un pays de la carte pour en savoir plus.',
@@ -45,7 +49,11 @@ export const translations = {
   en: {
     world: {
       title: 'One world, a thousand regulations',
-      description: 'With one click, access news, legal texts and legislative initiatives shaping AI regulation around the globe.'
+      description: 'With one click, access news, legal texts and legislative initiatives shaping AI regulation around the globe.',
+      detailsShow: 'Show active criterion',
+      detailsHide: 'Hide active criterion',
+      switchToC1: 'Use legend C1',
+      switchToC2: 'Use legend C2'
     },
     continent: {
       subtitle: 'Click on a country on the map to learn more.',
@@ -372,4 +380,137 @@ export const countryNameAliases = {
   bosniaandherz: 'bosniaandherzegovina',
   macedonia: 'northmacedonia',
   ssudan: 'southsudan'
+};
+
+export const worldCriteriaDefinitions = {
+  c1: {
+    id: 'c1',
+    shortLabel: { fr: 'Critère 1 (C1)', en: 'Criterion 1 (C1)' },
+    title: { fr: 'Intensité de la régulation de l’intelligence artificielle', en: 'Intensity of AI regulation' },
+    lead: {
+      fr: [
+        'Cette cartographie ne mesure ni la qualité du droit, ni son efficacité, ni son modernisme.',
+        'Elle mesure le degré de contrainte juridique ex ante pesant sur les acteurs de l’IA.'
+      ],
+      en: [
+        'This map does not assess legal quality, efficiency, or modernity.',
+        'It measures the level of ex ante legal constraints imposed on AI actors.'
+      ]
+    },
+    listTitle: { fr: 'Critères de distinction :', en: 'Distinction criteria:' },
+    list: {
+      fr: [
+        'Le volume d’obligations imposées aux concepteurs et utilisateurs d’IA.',
+        'La présence d’interdictions ou de pratiques prohibées.',
+        'L’existence de mécanismes de contrôle préalables (autorisation, certification, enregistrement).'
+      ],
+      en: [
+        'The volume of obligations imposed on AI developers and users.',
+        'The presence of prohibitions or forbidden practices.',
+        'The existence of prior control mechanisms (authorization, certification, registration).'
+      ]
+    },
+    legendTitle: { fr: 'Intensité de régulation (C1)', en: 'Regulatory Intensity (C1)' },
+    buckets: [
+      { id: 'very-high', min: 75, color: '#7B0B1F', label: { fr: 'Régulation très contraignante', en: 'Very stringent regulation' } },
+      { id: 'high', min: 60, color: '#A5152E', label: { fr: 'Régulation forte', en: 'Strong regulation' } },
+      { id: 'medium', min: 45, color: '#CE4D74', label: { fr: 'Régulation intermédiaire', en: 'Intermediate regulation' } },
+      { id: 'low', min: 25, color: '#E89AB9', label: { fr: 'Régulation souple', en: 'Flexible regulation' } },
+      { id: 'very-low', min: -Infinity, color: '#F8DCE8', label: { fr: 'Approche très libérale', en: 'Very liberal approach' } }
+    ]
+  },
+  c2: {
+    id: 'c2',
+    shortLabel: { fr: 'Critère 2 (C2)', en: 'Criterion 2 (C2)' },
+    title: { fr: 'Niveau de spécialisation normative en matière d’IA', en: 'Normative specialization level for AI' },
+    lead: {
+      fr: [
+        'Cette cartographie ne mesure pas le degré de sévérité.',
+        'Elle mesure le niveau d’abstraction du droit et la manière dont l’IA est pensée par le législateur.'
+      ],
+      en: [
+        'This map does not measure strictness.',
+        'It measures the level of legal abstraction and how AI is framed by lawmakers.'
+      ]
+    },
+    listTitle: { fr: 'Indicateurs concrets d’évaluation :', en: 'Concrete assessment indicators:' },
+    list: {
+      fr: [
+        'Existence d’une définition juridique de l’IA.',
+        'Présence de textes explicitement dédiés à l’IA.',
+        'Création d’autorités ou mécanismes spécifiques.',
+        'Reconnaissance de risques propres à l’IA (biais, opacité, autonomie).'
+      ],
+      en: [
+        'Existence of a legal definition of AI.',
+        'Presence of texts explicitly dedicated to AI.',
+        'Creation of dedicated authorities or mechanisms.',
+        'Recognition of AI-specific risks (bias, opacity, autonomy).'
+      ]
+    },
+    legendTitle: { fr: 'Spécialisation normative (C2)', en: 'Normative Specialization (C2)' },
+    buckets: [
+      { id: 'very-high', min: 80, color: '#2F0A54', label: { fr: 'Cadre global et structurant', en: 'Global and structuring framework' } },
+      { id: 'high', min: 60, color: '#53238E', label: { fr: 'Lois spécifiques à l’IA', en: 'AI-specific laws' } },
+      { id: 'medium', min: 40, color: '#8551C3', label: { fr: 'Adaptations sectorielles', en: 'Sector-based adaptations' } },
+      { id: 'low', min: 20, color: '#C2A5EA', label: { fr: 'Soft law / stratégies / chartes', en: 'Soft law / strategies / charters' } },
+      { id: 'very-low', min: -Infinity, color: '#ECE9F3', label: { fr: 'Aucune spécialisation normative', en: 'No normative specialization' } }
+    ]
+  }
+};
+
+export const worldCriterionScoresByCountryId = {
+  c1: {
+    ue: 90,
+    southKorea: 85,
+    brazil: 82,
+    chile: 78,
+    china: 75,
+    turkey: 68,
+    usa: 55,
+    canada: 48,
+    uk: 42,
+    japan: 12,
+    singapore: 15,
+    australia: 18,
+    saudiArabia: 38,
+    uae: 20,
+    india: 32,
+    estonia: 22,
+    russia: 45,
+    nigeria: 28,
+    southAfrica: 25,
+    kenya: 25
+  },
+  c2: {
+    ue: 95,
+    southKorea: 92,
+    brazil: 88,
+    chile: 85,
+    china: 72,
+    turkey: 65,
+    usa: 45,
+    canada: 38,
+    uk: 52,
+    japan: 68,
+    singapore: 58,
+    australia: 48,
+    saudiArabia: 30,
+    uae: 28,
+    india: 25,
+    estonia: 22,
+    russia: 40,
+    nigeria: 18,
+    southAfrica: 20,
+    kenya: 15
+  }
+};
+
+export const worldCriterionScoresByGeoName = {
+  c1: {
+    Egypt: 35
+  },
+  c2: {
+    Egypt: 32
+  }
 };
