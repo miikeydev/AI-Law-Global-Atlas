@@ -12,6 +12,8 @@ export const translations = {
       subtitle: 'Cliquez sur un pays de la carte pour en savoir plus.',
       available: 'Sont déjà disponibles :',
       progress: 'Il nous reste du <span class="accent-word">travail</span>.',
+      progressLow: 'Il nous reste du <span class="accent-word">travail</span>.',
+      progressHigh: 'La couverture est déjà <span class="accent-word">bien avancée</span>.',
       info: 'Voir les actualités du continent'
     },
     country: {
@@ -59,6 +61,8 @@ export const translations = {
       subtitle: 'Click on a country on the map to learn more.',
       available: 'Available so far:',
       progress: 'There is still <span class="accent-word">work</span> to do.',
+      progressLow: 'There is still <span class="accent-word">work</span> to do.',
+      progressHigh: 'Coverage is already <span class="accent-word">well advanced</span>.',
       info: 'See continent updates'
     },
     country: {

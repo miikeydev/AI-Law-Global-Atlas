@@ -86,7 +86,7 @@ function renderContinentInfo() {
     progressValue.textContent = `${formatPercent(continent.progress)}%`;
   }
   if (progressNote) {
-    progressNote.innerHTML = t.continent.progress;
+    progressNote.innerHTML = getProgressMessage(t.continent, continent.progress);
   }
 }
 
@@ -100,6 +100,17 @@ function handleCountrySelect(countryId) {
 function formatPercent(value) {
   const locale = lang === 'fr' ? 'fr-FR' : 'en-US';
   return new Intl.NumberFormat(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(value);
+}
+
+function getProgressMessage(continentCopy, progress) {
+  if (!continentCopy) {
+    return '';
+  }
+  const safeProgress = Number.isFinite(progress) ? progress : 0;
+  if (safeProgress >= 40) {
+    return continentCopy.progressHigh || continentCopy.progress || '';
+  }
+  return continentCopy.progressLow || continentCopy.progress || '';
 }
 
 function getContinentNavState() {
