@@ -296,15 +296,6 @@ export function renderCountryMap(countryId) {
     .attr('d', path);
 }
 
-export function handleMapResize(continentId, countryId, onContinentSelect, onCountrySelect) {
-  if (!worldReady) {
-    return;
-  }
-  drawWorldMap(onContinentSelect);
-  renderContinentMap(continentId, onCountrySelect);
-  renderCountryMap(countryId);
-}
-
 function handleWorldHover(feature, entering) {
   const continentId = getContinentForFeature(feature);
   const svg = d3.select('#worldMap');

@@ -1,6 +1,6 @@
 import { initCommon, consumeNavigationState } from './common.js';
 import { translations, countryData, continentData } from './data.js';
-import { loadWorldGeometry, renderCountryMap, renderContinentMap } from './maps.js';
+import { loadWorldGeometry, renderCountryMap } from './maps.js';
 
 const navState = getCountryNavState();
 applyFallbackParams(navState);
@@ -84,7 +84,7 @@ async function loadCountryContent(currentLang, id) {
       html = contentCache[cacheKey];
     } else {
       const url = new URL(`${CONTENT_ROOT[langToUse]}${id}.html`, import.meta.url);
-      const response = await fetch(url, { cache: 'no-store' });
+      const response = await fetch(url);
       if (!response.ok) {
         throw new Error('HTTP ' + response.status);
       }

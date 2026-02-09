@@ -995,10 +995,6 @@ body[data-theme="dark"] .progress-panel {
     overflow: hidden;
 }
 
-.country-heading .pill {
-    display: none;
-}
-
 .country-details,
 .country-legal-panel,
 #countryMapPanel {
