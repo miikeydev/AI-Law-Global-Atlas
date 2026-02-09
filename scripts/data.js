@@ -18,19 +18,7 @@ export const translations = {
     },
     country: {
       subtitle: '',
-      newsToggle: 'Actualité juridique',
-      newsToggleClose: 'Fermer les actualités',
-      newsTitle: 'Dernières actualités juridiques',
-      newsLabel: 'Actualité juridique',
-      newsEmpty: 'Les actualités arrivent bientôt.',
       textFallback: 'Contenu à venir pour ce pays.'
-    },
-    modal: {
-      world: {
-        title: 'Une cartographie en construction',
-        body: 'Pays après pays, cette plateforme rassemble textes, annonces gouvernementales et initiatives privées pour suivre l\'encadrement mondial de l\'intelligence artificielle et de la propriété intellectuelle.'
-      },
-      continent: 'Cette zone s\'enrichit progressivement grâce à notre réseau d\'experts et d\'universités partenaires.'
     },
     common: {
       info: '+ d\'infos',
@@ -67,19 +55,7 @@ export const translations = {
     },
     country: {
       subtitle: '',
-      newsToggle: 'Legal news',
-      newsToggleClose: 'Hide legal news',
-      newsTitle: 'Latest legal updates',
-      newsLabel: 'Legal news',
-      newsEmpty: 'Legal updates are coming soon.',
       textFallback: 'Content coming soon for this country.'
-    },
-    modal: {
-      world: {
-        title: 'A map in constant evolution',
-        body: 'Country by country, this explorer curates statutes, policy papers and trusted reporting to follow the fast-moving field of AI and intellectual property law.'
-      },
-      continent: 'This region grows week after week thanks to our network of experts and academic fellows.'
     },
     common: {
       info: '+ infos',
@@ -105,12 +81,6 @@ export const continentData = {
     names: { fr: 'Amérique', en: 'Americas' },
     progress: 46.3,
     availableCountries: ['usa', 'canada', 'brazil', 'chile'],
-    markers: [
-      { countryId: 'canada', x: 32, y: 32 },
-      { countryId: 'usa', x: 38, y: 42 },
-      { countryId: 'brazil', x: 52, y: 68 },
-      { countryId: 'chile', x: 56, y: 82 }
-    ],
     info: {
       fr: 'Les Amériques combinent initiatives fédérales et régionales pour encadrer l\'IA, du Canada au Chili.',
       en: 'Across the Americas, federal and regional initiatives are shaping AI governance from Canada to Chile.'
@@ -121,9 +91,6 @@ export const continentData = {
     names: { fr: 'Europe', en: 'Europe' },
     progress: 75.0,
     availableCountries: ['ue', 'estonia', 'uk', 'turkey'],
-    markers: [
-      { countryId: 'ue', x: 48, y: 58 }
-    ],
     info: {
       fr: 'L\'Europe articule règlements européens et adaptations nationales pour encadrer l\'IA.',
       en: 'Europe combines EU-wide regulations with national adaptations to govern AI.'
@@ -134,9 +101,6 @@ export const continentData = {
     names: { fr: 'Afrique', en: 'Africa' },
     progress: 3.7,
     availableCountries: ['southAfrica', 'nigeria', 'kenya'],
-    markers: [
-      { countryId: 'southAfrica', x: 58, y: 78 }
-    ],
     info: {
       fr: 'En Afrique, les feuilles de route nationales de l\'IA se multiplient pour accompagner les plans numériques.',
       en: 'Across Africa, national AI roadmaps are emerging to support broader digital strategies.'
@@ -147,7 +111,6 @@ export const continentData = {
     names: { fr: 'Asie', en: 'Asia' },
     progress: 8.2,
     availableCountries: ['china', 'india', 'japan', 'singapore', 'uae', 'southKorea', 'saudiArabia', 'russia'],
-    markers: [],
     info: {
       fr: 'L\'Asie combine stratégies nationales ambitieuses, zones franches numériques et coalitions régionales.',
       en: 'Asia mixes ambitious national strategies, digital free zones and regional coalitions.'
@@ -158,7 +121,6 @@ export const continentData = {
     names: { fr: 'Océanie', en: 'Oceania' },
     progress: 12.4,
     availableCountries: ['australia'],
-    markers: [],
     info: {
       fr: 'En Océanie, la réglementation IA accompagne les politiques de confiance numérique et de données.',
       en: 'In Oceania, AI regulation aligns with digital trust and data policies.'
@@ -306,22 +268,6 @@ export const continentBounds = {
   africa: [[-25, -40], [55, 38]],
   asia: [[20, -10], [150, 80]],
   oceania: [[95, -50], [180, 10]]
-};
-
-export const continentColorMap = {
-  americas: 'rgba(131,133,255,0.4)',
-  europe: 'rgba(156,214,255,0.42)',
-  africa: 'rgba(255,111,125,0.45)',
-  asia: 'rgba(255,205,140,0.42)',
-  oceania: 'rgba(126,236,205,0.45)'
-};
-
-export const continentHoverColorMap = {
-  americas: 'rgba(139,141,255,0.65)',
-  europe: 'rgba(176,233,255,0.65)',
-  africa: 'rgba(255,143,156,0.65)',
-  asia: 'rgba(255,220,172,0.65)',
-  oceania: 'rgba(162,251,226,0.65)'
 };
 
 export const continentIdByLabel = {

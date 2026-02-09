@@ -1,11 +1,9 @@
 import { initCommon, navigateTo, setupResizeRedraw } from './common.js';
 import { translations } from './data.js';
-import { initGlobe, updateGlobeTheme } from './globe.js';
 import { loadWorldGeometry, drawWorldMap } from './maps.js';
 import { initCriterionPanel } from './criterion-panel.js';
 
-const { lang, theme } = initCommon({ onThemeChange: updateGlobeTheme });
-initGlobe(theme);
+const { lang } = initCommon();
 
 updateWorldText();
 const criterionPanel = initCriterionPanel({

@@ -17,17 +17,13 @@ export function initCommon(options = {}) {
   return { lang, theme: currentTheme };
 }
 
-export function getLangParam() {
-  return currentLang;
-}
-
 export function navigateTo(path, params = {}) {
   storeNavigationState(path, params);
   const url = buildPageUrl(path, params);
   window.location.href = url;
 }
 
-export function buildPageUrl(path, params = {}) {
+function buildPageUrl(path, params = {}) {
   const url = new URL(path, window.location.href);
   Object.entries(params).forEach(([key, value]) => {
     if (value !== undefined && value !== null) {
@@ -103,7 +99,7 @@ function updateThemeButtons(buttons) {
 }
 
 function getThemeLabel() {
-  const lang = getLangParam();
+  const lang = currentLang;
   const isDark = currentTheme === 'dark';
   if (lang === 'en') {
     return isDark ? 'Light mode' : 'Dark mode';
@@ -112,7 +108,7 @@ function getThemeLabel() {
 }
 
 function getThemeAria() {
-  const lang = getLangParam();
+  const lang = currentLang;
   const isDark = currentTheme === 'dark';
   if (lang === 'en') {
     return isDark ? 'Switch to light mode' : 'Switch to dark mode';
