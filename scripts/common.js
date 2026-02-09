@@ -185,29 +185,35 @@ function getStoredTheme() {
 }
 
 function updateFooterCopy() {
+  const commonCopy = translations[currentLang]?.common;
+  if (!commonCopy) {
+    return;
+  }
+
   const footer = document.querySelector('footer');
-  if (!footer) {
-    return;
+  const footerCopy = commonCopy.footer;
+  if (footer && footerCopy) {
+    const tagline = footer.querySelector('[data-i18n="footer.tagline"]');
+    if (tagline) {
+      tagline.textContent = footerCopy.tagline;
+    }
+    const subline = footer.querySelector('[data-i18n="footer.subline"]');
+    if (subline) {
+      subline.textContent = footerCopy.subline;
+    }
+    const contact = footer.querySelector('[data-i18n="footer.contact"]');
+    if (contact) {
+      contact.textContent = footerCopy.contact;
+      contact.href = 'https://www.linkedin.com/in/emilie-letouz%C3%A9-57928a27b/';
+      contact.target = '_blank';
+      contact.rel = 'noopener noreferrer';
+    }
   }
-  const footerCopy = translations[currentLang]?.common?.footer;
-  if (!footerCopy) {
-    return;
-  }
-  const tagline = footer.querySelector('[data-i18n="footer.tagline"]');
-  if (tagline) {
-    tagline.textContent = footerCopy.tagline;
-  }
-  const subline = footer.querySelector('[data-i18n="footer.subline"]');
-  if (subline) {
-    subline.textContent = footerCopy.subline;
-  }
-  const contact = footer.querySelector('[data-i18n="footer.contact"]');
-  if (contact) {
-    contact.textContent = footerCopy.contact;
-    contact.href = 'https://www.linkedin.com/in/emilie-letouz%C3%A9-57928a27b/';
-    contact.target = '_blank';
-    contact.rel = 'noopener noreferrer';
-  }
+
+  const infoLabels = document.querySelectorAll('[data-i18n="common.info"]');
+  infoLabels.forEach(label => {
+    label.textContent = commonCopy.info || '+ infos';
+  });
 }
 
 function determineInitialLang() {

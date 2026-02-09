@@ -30,15 +30,15 @@
 
 @keyframes ctaFloat {
     0% {
-        transform: translateY(0);
+        translate: 0 0;
     }
 
     50% {
-        transform: translateY(-6px);
+        translate: 0 -6px;
     }
 
     100% {
-        transform: translateY(0);
+        translate: 0 0;
     }
 }
 
@@ -122,12 +122,77 @@
     font-size: clamp(.85rem, 2.6vw, 1.05rem);
     white-space: nowrap;
     animation: ctaFloat 6s ease-in-out infinite;
-    will-change: transform;
+    will-change: transform, translate;
     scroll-snap-align: center;
 }
 
 .cta-row .primary:nth-child(2) {
     animation-delay: 1.2s;
+}
+
+.landing-copy .cta-row .primary {
+    position: relative;
+    overflow: visible;
+    isolation: isolate;
+    animation: ctaFloat 6s ease-in-out infinite;
+    box-shadow: none;
+    filter: none;
+    border: 1px solid rgba(108, 109, 255, .42);
+    background-size: 160% 160%;
+    background-position: 0% 50%;
+    transition: transform .28s cubic-bezier(.22, .68, .22, 1), translate .28s cubic-bezier(.22, .68, .22, 1), filter .26s ease, background-position .32s ease, letter-spacing .28s ease, border-color .24s ease;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    will-change: transform, translate, filter, background-position;
+}
+
+.landing-copy .cta-row .primary::after {
+    content: '';
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    bottom: -13px;
+    height: 16px;
+    border-radius: 999px;
+    background: radial-gradient(ellipse at center, rgba(108, 109, 255, .56) 0%, rgba(108, 109, 255, 0) 75%);
+    filter: blur(9px);
+    opacity: .62;
+    z-index: -1;
+    pointer-events: none;
+    transition: opacity .24s ease, transform .24s ease;
+}
+
+.landing-copy .cta-row .primary:hover {
+    transform: translateY(-3px) scale(1.1);
+    box-shadow: none;
+    filter: none;
+    border-color: rgba(108, 109, 255, .78);
+    background-position: 100% 50%;
+    letter-spacing: .085rem;
+}
+
+.landing-copy .cta-row .primary:hover::after {
+    opacity: .95;
+    transform: translateY(4px) scale(1.15, 1.28);
+}
+
+.landing-copy .cta-row .primary:active {
+    transform: translateY(-1px) scale(1.04);
+    filter: none;
+    border-color: rgba(108, 109, 255, .62);
+}
+
+.landing-copy .cta-row .primary:active::after {
+    opacity: .52;
+    transform: translateY(0);
+}
+
+body[data-theme="dark"] .landing-copy .cta-row .primary {
+    border-color: rgba(171, 174, 255, .34);
+}
+
+body[data-theme="dark"] .landing-copy .cta-row .primary:hover {
+    border-color: rgba(188, 190, 255, .58);
 }
 
 .landing-visual {
@@ -336,7 +401,7 @@
     order: 4;
     width: 100%;
     max-width: 980px;
-    margin: 0 auto 26px;
+    margin: 0 auto 40px;
     border: 1px solid rgba(15, 20, 40, .08);
     border-radius: 20px;
     background: rgba(255, 255, 255, .62);
@@ -449,6 +514,11 @@
 .map-svg.draggable {
     touch-action: none;
     cursor: grab;
+}
+
+.map-svg.map-interaction-locked {
+    touch-action: pan-y;
+    cursor: pointer;
 }
 
 .map-svg path {
@@ -1309,8 +1379,9 @@ body[data-theme="dark"] .country-text-block {
         font-weight: 600;
         letter-spacing: .04rem;
         animation: none;
-        box-shadow: 0 10px 20px rgba(123, 124, 255, .24);
-        transition: transform .18s ease, box-shadow .22s ease, filter .22s ease;
+        box-shadow: none;
+        filter: none;
+        transition: transform .24s cubic-bezier(.22, .68, .22, 1), filter .24s ease;
     }
 
     .landing-copy .cta-row .primary+.primary {
@@ -1318,14 +1389,15 @@ body[data-theme="dark"] .country-text-block {
     }
 
     .landing-copy .cta-row .primary:hover {
-        transform: translateY(-1px) scale(1.01);
-        box-shadow: 0 14px 28px rgba(123, 124, 255, .32);
-        filter: saturate(1.03);
+        transform: translateY(-1px) scale(1.02);
+        box-shadow: none;
+        filter: none;
     }
 
     .landing-copy .cta-row .primary:active {
-        transform: translateY(0) scale(.99);
-        box-shadow: 0 6px 12px rgba(123, 124, 255, .24);
+        transform: translateY(0) scale(.985);
+        box-shadow: none;
+        filter: none;
     }
 
     .landing-copy .cta-row .primary:focus-visible {

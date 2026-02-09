@@ -33,7 +33,7 @@ export const translations = {
       continent: 'Cette zone s\'enrichit progressivement grâce à notre réseau d\'experts et d\'universités partenaires.'
     },
     common: {
-      info: '+ info',
+      info: '+ d\'infos',
       comingSoon: 'Bientôt disponible',
       theme: {
         lightLabel: 'Mode clair',
@@ -43,7 +43,7 @@ export const translations = {
       },
       footer: {
         tagline: 'AI X IP Global Explorer — 2025 - 2026',
-        subline: 'Projet universitaire – Student of Panthéon-Assas Université',
+        subline: 'University project – Student of Panthéon-Assas University',
         contact: 'Contact'
       }
     }
@@ -82,7 +82,7 @@ export const translations = {
       continent: 'This region grows week after week thanks to our network of experts and academic fellows.'
     },
     common: {
-      info: '+ info',
+      info: '+ infos',
       comingSoon: 'Coming soon',
       theme: {
         lightLabel: 'Light mode',
@@ -92,7 +92,7 @@ export const translations = {
       },
       footer: {
         tagline: 'AI X IP Global Explorer — 2025 - 2026',
-        subline: 'University project – Student of Panthéon-Assas Université',
+        subline: 'University project – Student of Panthéon-Assas University',
         contact: 'Contact'
       }
     }

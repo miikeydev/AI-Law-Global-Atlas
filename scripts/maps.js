@@ -26,6 +26,7 @@ const unratedWorldCriterionColor = '#DADDE6';
 const worldCriterionIds = Object.keys(worldCriteriaDefinitions);
 let activeWorldCriterion = null;
 let worldMobileFocusedContinentId = null;
+const mobileMapInteractionState = new Map();
 const worldCriterionScoreLookupById = buildWorldCriterionScoreLookups();
 
 export function loadWorldGeometry() {
@@ -351,17 +352,116 @@ function updateWorldMobileHint(continentId, enabled) {
   hint.classList.add('active');
 }
 
+function isPhoneTouchMode() {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+    return false;
+  }
+  const isPhoneViewport = window.matchMedia('(max-width: 900px)').matches;
+  if (!isPhoneViewport) {
+    return false;
+  }
+  if (typeof navigator === 'undefined') {
+    return 'ontouchstart' in window;
+  }
+  return ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+}
+
+function getMapInteractionKey(svg) {
+  if (!svg || svg.empty()) {
+    return null;
+  }
+  const node = svg.node();
+  if (!node) {
+    return null;
+  }
+  return node.id || null;
+}
+
+function clearMapUnlockHandler(svg) {
+  if (!svg || svg.empty()) {
+    return;
+  }
+  const node = svg.node();
+  const handlers = node?.__mapUnlockHandlers;
+  if (!node || !handlers) {
+    return;
+  }
+  node.removeEventListener('pointerdown', handlers.unlock, true);
+  node.removeEventListener('touchstart', handlers.unlock, true);
+  node.removeEventListener('click', handlers.unlock, true);
+  delete node.__mapUnlockHandlers;
+}
+
+function attachMapUnlockHandler(svg, interactionKey, onUnlock) {
+  if (!svg || svg.empty() || !interactionKey) {
+    return;
+  }
+  const node = svg.node();
+  if (!node || node.__mapUnlockHandlers) {
+    return;
+  }
+  const unlock = event => {
+    if (event.type === 'pointerdown' && event.pointerType === 'mouse') {
+      return;
+    }
+    if (mobileMapInteractionState.get(interactionKey)) {
+      return;
+    }
+    mobileMapInteractionState.set(interactionKey, true);
+    if (event.cancelable) {
+      event.preventDefault();
+    }
+    if (typeof event.stopPropagation === 'function') {
+      event.stopPropagation();
+    }
+    if (typeof event.stopImmediatePropagation === 'function') {
+      event.stopImmediatePropagation();
+    }
+    clearMapUnlockHandler(svg);
+    if (typeof onUnlock === 'function') {
+      onUnlock();
+    }
+  };
+  node.__mapUnlockHandlers = { unlock };
+  node.addEventListener('pointerdown', unlock, true);
+  node.addEventListener('touchstart', unlock, { capture: true, passive: false });
+  node.addEventListener('click', unlock, true);
+}
+
 function applyMobilePan(svg, layer, width, height, enableInitialZoom = false) {
   if (typeof d3 === 'undefined' || typeof d3.zoom === 'undefined') {
     return;
   }
   const enablePan = window.matchMedia ? window.matchMedia('(max-width: 1100px)').matches : false;
+  const interactionKey = getMapInteractionKey(svg);
+  const requireTapToEnable = isPhoneTouchMode() && !!interactionKey;
   svg.classed('draggable', !!enablePan);
   if (!enablePan) {
     svg.on('.zoom', null);
+    clearMapUnlockHandler(svg);
+    if (interactionKey) {
+      mobileMapInteractionState.delete(interactionKey);
+    }
+    svg.classed('map-interaction-locked', false);
+    svg.style('touch-action', null);
     layer.attr('transform', null);
     return;
   }
+
+  if (requireTapToEnable && !mobileMapInteractionState.get(interactionKey)) {
+    svg.on('.zoom', null);
+    svg.classed('draggable', false).classed('map-interaction-locked', true);
+    svg.style('touch-action', 'pan-y');
+    attachMapUnlockHandler(svg, interactionKey, () => {
+      applyMobilePan(svg, layer, width, height, enableInitialZoom);
+    });
+    return;
+  }
+
+  clearMapUnlockHandler(svg);
+  svg.classed('map-interaction-locked', false);
+  svg.style('touch-action', null);
+
   const maxScale = enableInitialZoom ? 2.6 : 3;
   const zoom = d3.zoom()
     .scaleExtent([1, maxScale])
