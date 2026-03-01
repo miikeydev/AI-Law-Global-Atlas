@@ -2,11 +2,10 @@ export const translations = {
   fr: {
     world: {
       title: 'Un monde, mille régulations',
-      description: 'Un clic, et vous accédez aux actualités, textes de droit et initiatives législatives qui façonnent l\'encadrement de l\'IA partout sur la planète.',
-      detailsShow: 'Voir le critère actif',
-      detailsHide: 'Masquer le critère actif',
-      switchToC1: 'Activer la légende C1',
-      switchToC2: 'Activer la légende C2'
+      description: 'Comment le droit appréhende-t-il l\'IA à l\'échelle mondiale ? Décryptez la morphologie des normes et l\'interventionnisme de 21 juridictions via cette cartographie interactive.',
+      detailsShow: 'Voir plus',
+      detailsHide: 'Masquer la légende active',
+      legendOverviewTitle: 'Légendes disponibles'
     },
     continent: {
       subtitle: 'Cliquez sur un pays de la carte pour en savoir plus.',
@@ -32,18 +31,17 @@ export const translations = {
       footer: {
         tagline: 'AI X IP Global Explorer — 2025 - 2026',
         subline: 'University project – Student of Panthéon-Assas University',
-        contact: 'Contact'
+        contact: 'Contact Emilie Letouzé'
       }
     }
   },
   en: {
     world: {
       title: 'One world, a thousand regulations',
-      description: 'With one click, access news, legal texts and legislative initiatives shaping AI regulation around the globe.',
-      detailsShow: 'Show active criterion',
-      detailsHide: 'Hide active criterion',
-      switchToC1: 'Use legend C1',
-      switchToC2: 'Use legend C2'
+      description: 'How does global law apprehend the challenges of AI? Deconstruct the normative morphology and interventionism of 21 jurisdictions through this interactive map.',
+      detailsShow: 'Show more',
+      detailsHide: 'Hide active legend',
+      legendOverviewTitle: 'Available legends'
     },
     continent: {
       subtitle: 'Click on a country on the map to learn more.',
@@ -58,7 +56,7 @@ export const translations = {
       textFallback: 'Content coming soon for this country.'
     },
     common: {
-      info: '+ infos',
+      info: '+ info',
       comingSoon: 'Coming soon',
       theme: {
         lightLabel: 'Light mode',
@@ -69,7 +67,7 @@ export const translations = {
       footer: {
         tagline: 'AI X IP Global Explorer — 2025 - 2026',
         subline: 'University project – Student of Panthéon-Assas University',
-        contact: 'Contact'
+        contact: 'Contact Emilie Letouzé'
       }
     }
   }
@@ -335,7 +333,7 @@ export const countryNameAliases = {
 export const worldCriteriaDefinitions = {
   c1: {
     id: 'c1',
-    shortLabel: { fr: 'Critère 1 (C1)', en: 'Criterion 1 (C1)' },
+    shortLabel: { fr: 'Intensité de régulation IA (C1)', en: 'AI regulatory intensity (C1)' },
     title: { fr: 'Intensité de la régulation de l’intelligence artificielle', en: 'Intensity of AI regulation' },
     lead: {
       fr: [
@@ -371,7 +369,7 @@ export const worldCriteriaDefinitions = {
   },
   c2: {
     id: 'c2',
-    shortLabel: { fr: 'Critère 2 (C2)', en: 'Criterion 2 (C2)' },
+    shortLabel: { fr: 'Spécialisation normative IA (C2)', en: 'AI normative specialization (C2)' },
     title: { fr: 'Niveau de spécialisation normative en matière d’IA', en: 'Normative specialization level for AI' },
     lead: {
       fr: [
