@@ -5,10 +5,10 @@ import { loadWorldGeometry, renderCountryMap } from './maps.js';
 const navState = getCountryNavState();
 applyFallbackParams(navState);
 
-const { lang: initialLang } = initCommon();
+let currentLang = 'fr';
+const { lang } = initCommon({ onLangChange: handleLangChange });
+currentLang = lang;
 const params = new URLSearchParams(window.location.search);
-const urlLang = params.get('lang');
-const lang = urlLang === 'en' || urlLang === 'fr' ? urlLang : initialLang || 'fr';
 
 let countryId = params.get('country');
 if (!countryId && navState?.params?.country) {
@@ -22,12 +22,13 @@ const CONTENT_ROOT = {
 };
 
 const contentCache = {};
+let contentRequestToken = 0;
 
 if (!country) {
   renderFallback();
 } else {
   renderCountryHeader(country);
-  loadCountryContent(lang, countryId);
+  loadCountryContent(currentLang, countryId);
   loadWorldGeometry().then(() => {
     renderCountryMap(countryId);
   });
@@ -45,27 +46,27 @@ function getFallbackText(currentLang) {
 function renderFallback() {
   const nameEl = document.getElementById('countryName');
   if (nameEl) {
-    nameEl.textContent = lang === 'fr' ? 'Pays introuvable' : 'Country not found';
+    nameEl.textContent = currentLang === 'fr' ? 'Pays introuvable' : 'Country not found';
   }
   const textEl = document.getElementById('countryText');
   if (textEl) {
-    textEl.innerHTML = `<p>${getFallbackText(lang)}</p>`;
+    textEl.innerHTML = `<p>${getFallbackText(currentLang)}</p>`;
   }
 }
 
 function renderCountryHeader(country) {
   const continent = continentData[country.continentId];
   const heading = continent
-    ? `${continent.names[lang]} : ${country.name[lang]}`
-    : country.name[lang];
+    ? `${continent.names[currentLang]} : ${country.name[currentLang]}`
+    : country.name[currentLang];
 
   const nameEl = document.getElementById('countryName');
   if (nameEl) {
     nameEl.textContent = heading;
   }
   const subtitle = document.querySelector('[data-i18n="country.subtitle"]');
-  if (subtitle && translations[lang]?.country) {
-    subtitle.textContent = translations[lang].country.subtitle;
+  if (subtitle && translations[currentLang]?.country) {
+    subtitle.textContent = translations[currentLang].country.subtitle;
   }
 }
 
@@ -74,6 +75,7 @@ async function loadCountryContent(currentLang, id) {
   if (!container) {
     return;
   }
+  const requestToken = ++contentRequestToken;
 
   const langToUse = CONTENT_ROOT[currentLang] ? currentLang : 'fr';
   const cacheKey = `${langToUse}:${id}`;
@@ -99,7 +101,21 @@ async function loadCountryContent(currentLang, id) {
     html = `<p>${getFallbackText(langToUse)}</p>`;
   }
 
+  if (requestToken !== contentRequestToken) {
+    return;
+  }
   container.innerHTML = html;
+}
+
+function handleLangChange(langCode) {
+  currentLang = langCode === 'en' ? 'en' : 'fr';
+  if (!country) {
+    renderFallback();
+    return;
+  }
+  renderCountryHeader(country);
+  loadCountryContent(currentLang, countryId);
+  renderCountryMap(countryId);
 }
 
 function getCountryNavState() {

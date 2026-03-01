@@ -11,7 +11,7 @@ export function initCommon(options = {}) {
   document.documentElement.lang = lang === 'fr' ? 'fr' : 'en';
   applyTheme(currentTheme);
   setupThemeButtons(options.onThemeChange);
-  setupLanguageToggle();
+  setupLanguageToggle(options.onLangChange);
   setupBrandHome();
   updateFooterCopy();
   return { lang, theme: currentTheme };
@@ -116,7 +116,7 @@ function getThemeAria() {
   return isDark ? 'Activer le mode clair' : 'Activer le mode sombre';
 }
 
-function setupLanguageToggle() {
+function setupLanguageToggle(onLangChange) {
   const toggle = document.getElementById('languageToggle');
   if (!toggle) {
     return;
@@ -127,21 +127,34 @@ function setupLanguageToggle() {
     const button = event.target.closest('[data-lang]');
     const requested = button?.dataset.lang;
     if (requested && requested !== currentLang) {
-      updateLang(requested);
+      updateLang(requested, onLangChange, toggle);
       return;
     }
     const fallbackLang = currentLang === 'fr' ? 'en' : 'fr';
-    updateLang(fallbackLang);
+    updateLang(fallbackLang, onLangChange, toggle);
   });
 }
 
-function updateLang(lang) {
+function updateLang(lang, onLangChange, toggle) {
   const normalized = lang === 'en' ? 'en' : 'fr';
+  if (normalized === currentLang) {
+    if (toggle) {
+      updateLanguageToggleButtons(toggle);
+    }
+    return;
+  }
   currentLang = normalized;
+  document.documentElement.lang = normalized;
   storeLangPreference(normalized);
-  const url = new URL(window.location.href);
-  url.searchParams.set('lang', normalized);
-  window.location.replace(url.toString());
+  applyLangToUrl(normalized);
+  if (toggle) {
+    updateLanguageToggleButtons(toggle);
+  }
+  updateThemeButtons(document.querySelectorAll('.theme-toggle'));
+  updateFooterCopy();
+  if (typeof onLangChange === 'function') {
+    onLangChange(normalized);
+  }
 }
 
 function updateLanguageToggleButtons(toggle) {
@@ -208,7 +221,7 @@ function updateFooterCopy() {
 
   const infoLabels = document.querySelectorAll('[data-i18n="common.info"]');
   infoLabels.forEach(label => {
-    label.textContent = commonCopy.info || '+ infos';
+    label.textContent = commonCopy.info || (currentLang === 'en' ? '+ info' : '+ d\'infos');
   });
 }
 

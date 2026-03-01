@@ -3,53 +3,57 @@ import {
   setWorldCriterion,
   getWorldCriterion,
   hasWorldCriterion,
-  getNextWorldCriterion,
   getWorldCriterionDetails
 } from './maps.js';
 
 const FALLBACK_COPY = {
-  detailsShow: 'Voir le critère actif',
-  detailsHide: 'Masquer le critère actif',
-  switchToC1: 'Activer la légende C1',
-  switchToC2: 'Activer la légende C2'
+  legendOverviewTitle: 'Légendes disponibles'
 };
 
 export function initCriterionPanel({ lang, redraw }) {
+  let currentLang = lang === 'en' ? 'en' : 'fr';
   const panel = document.getElementById('worldCriterionPanel');
-  const detailsToggle = document.getElementById('criterionDetailsToggle');
-  const legendSwitch = document.getElementById('legendSwitchBtn');
   const leadContainer = document.getElementById('worldCriterionLead');
   const listContainer = document.getElementById('worldCriterionList');
   const legendGrid = document.getElementById('worldLegendGrid');
   const title = document.getElementById('worldCriterionTitle');
   const listTitle = document.getElementById('worldCriterionListTitle');
   const legendTitle = document.getElementById('worldLegendTitle');
+  const overviewTitle = document.getElementById('worldLegendOverviewTitle');
+  const legendPills = Array.from(document.querySelectorAll('[data-world-criterion-target]'));
 
-  const hasPanel = !!(panel && detailsToggle && legendSwitch && leadContainer && listContainer && legendGrid);
+  const hasPanel = !!(panel && leadContainer && listContainer && legendGrid);
   if (!hasPanel) {
     return {
       render: () => {},
-      update: () => {}
+      update: () => {},
+      setLang: () => {}
     };
   }
 
-  detailsToggle.addEventListener('click', () => {
-    panel.hidden = !panel.hidden;
-    updateControlButtons();
-  });
-
-  legendSwitch.addEventListener('click', () => {
-    const nextCriterion = getNextWorldCriterion();
-    setWorldCriterion(nextCriterion);
-    if (typeof redraw === 'function') {
-      redraw();
-    }
-    render();
+  legendPills.forEach(button => {
+    button.addEventListener('click', () => {
+      const criterionId = button.dataset.worldCriterionTarget;
+      if (!criterionId) {
+        return;
+      }
+      setWorldCriterion(criterionId);
+      panel.hidden = false;
+      if (typeof redraw === 'function') {
+        redraw();
+      }
+      render();
+    });
   });
 
   updateControlButtons();
 
-  return { render, update: updateControlButtons };
+  return { render, update: updateControlButtons, setLang };
+
+  function setLang(langCode) {
+    currentLang = langCode === 'en' ? 'en' : 'fr';
+    updateControlButtons();
+  }
 
   function render() {
     if (!hasWorldCriterion()) {
@@ -70,7 +74,7 @@ export function initCriterionPanel({ lang, redraw }) {
       return;
     }
 
-    const criterion = getWorldCriterionDetails(getWorldCriterion(), lang);
+    const criterion = getWorldCriterionDetails(getWorldCriterion(), currentLang);
     if (title) {
       title.textContent = criterion.title;
     }
@@ -105,23 +109,26 @@ export function initCriterionPanel({ lang, redraw }) {
   }
 
   function updateControlButtons() {
-    const copy = translations[lang]?.world || FALLBACK_COPY;
+    const copy = translations[currentLang]?.world || FALLBACK_COPY;
     const currentCriterion = getWorldCriterion();
-    const nextCriterion = getNextWorldCriterion(currentCriterion);
     const isActive = hasWorldCriterion();
-    const isExpanded = isActive && !panel.hidden;
+    panel.hidden = !isActive;
 
-    detailsToggle.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
-    detailsToggle.dataset.state = isExpanded ? 'open' : 'closed';
-    detailsToggle.disabled = !isActive;
-    detailsToggle.textContent = isExpanded
-      ? (copy.detailsHide || FALLBACK_COPY.detailsHide)
-      : (copy.detailsShow || FALLBACK_COPY.detailsShow);
+    if (overviewTitle) {
+      overviewTitle.textContent = copy.legendOverviewTitle || FALLBACK_COPY.legendOverviewTitle;
+    }
 
-    legendSwitch.dataset.nextCriterion = nextCriterion;
-    legendSwitch.textContent = nextCriterion === 'c2'
-      ? (copy.switchToC2 || FALLBACK_COPY.switchToC2)
-      : (copy.switchToC1 || FALLBACK_COPY.switchToC1);
+    legendPills.forEach(button => {
+      const criterionId = button.dataset.worldCriterionTarget;
+      if (!criterionId) {
+        return;
+      }
+      const criterionDetails = getWorldCriterionDetails(criterionId, currentLang);
+      button.textContent = criterionDetails.title;
+      const isSelected = criterionId === currentCriterion;
+      button.dataset.active = isSelected ? 'true' : 'false';
+      button.setAttribute('aria-pressed', isSelected ? 'true' : 'false');
+    });
   }
 }
 

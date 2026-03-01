@@ -5,14 +5,16 @@ import { loadWorldGeometry, renderContinentMap } from './maps.js';
 const navState = getContinentNavState();
 applyFallbackParams(navState);
 
-const { lang } = initCommon();
+let currentLang = 'fr';
+const { lang } = initCommon({ onLangChange: handleLangChange });
+currentLang = lang;
 const params = new URLSearchParams(window.location.search);
 let continentId = params.get('continent');
 if (!continentId && navState?.params?.continent) {
   continentId = navState.params.continent;
 }
 if (!continentId) {
-  navigateTo('world.html', { lang });
+  navigateTo('world.html', { lang: currentLang });
 }
 const continent = continentData[continentId];
 
@@ -29,17 +31,17 @@ if (!continent) {
 function renderFallback() {
   const nameEl = document.getElementById('continentName');
   if (nameEl) {
-    nameEl.textContent = lang === 'fr' ? 'Continent introuvable' : 'Continent not found';
+    nameEl.textContent = currentLang === 'fr' ? 'Continent introuvable' : 'Continent not found';
   }
   document.querySelector('.continent-map')?.classList.add('hidden');
   document.querySelector('.continent-info')?.classList.add('empty');
 }
 
 function renderContinentInfo() {
-  const t = translations[lang];
+  const t = translations[currentLang];
   const nameEl = document.getElementById('continentName');
   if (nameEl) {
-    nameEl.textContent = continent.names[lang];
+    nameEl.textContent = continent.names[currentLang];
   }
   const subtitle = document.querySelector('[data-i18n="continent.subtitle"]');
   if (subtitle) {
@@ -47,7 +49,7 @@ function renderContinentInfo() {
   }
   const descEl = document.getElementById('continentDescription');
   if (descEl && continent.info) {
-    descEl.textContent = continent.info[lang];
+    descEl.textContent = continent.info[currentLang];
   }
   const availableLabel = document.querySelector('[data-i18n="continent.available"]');
   if (availableLabel) {
@@ -68,8 +70,8 @@ function renderContinentInfo() {
         }
         const button = document.createElement('button');
         button.type = 'button';
-        button.textContent = country.name[lang];
-        button.addEventListener('click', () => navigateTo('country.html', { continent: continentId, country: country.id, lang }));
+        button.textContent = country.name[currentLang];
+        button.addEventListener('click', () => navigateTo('country.html', { continent: continentId, country: country.id, lang: currentLang }));
         const li = document.createElement('li');
         li.appendChild(button);
         list.appendChild(li);
@@ -94,11 +96,11 @@ function handleCountrySelect(countryId) {
   if (!countryData[countryId]) {
     return;
   }
-  navigateTo('country.html', { continent: continentId, country: countryId, lang });
+  navigateTo('country.html', { continent: continentId, country: countryId, lang: currentLang });
 }
 
 function formatPercent(value) {
-  const locale = lang === 'fr' ? 'fr-FR' : 'en-US';
+  const locale = currentLang === 'fr' ? 'fr-FR' : 'en-US';
   return new Intl.NumberFormat(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(value);
 }
 
@@ -111,6 +113,16 @@ function getProgressMessage(continentCopy, progress) {
     return continentCopy.progressHigh || continentCopy.progress || '';
   }
   return continentCopy.progressLow || continentCopy.progress || '';
+}
+
+function handleLangChange(langCode) {
+  currentLang = langCode === 'en' ? 'en' : 'fr';
+  if (!continent) {
+    renderFallback();
+    return;
+  }
+  renderContinentInfo();
+  renderContinentMap(continentId, handleCountrySelect);
 }
 
 function getContinentNavState() {
