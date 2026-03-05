@@ -7,12 +7,16 @@ import {
 } from './maps.js';
 
 const FALLBACK_COPY = {
+  detailsShow: 'Details',
+  detailsHide: 'Details',
   legendOverviewTitle: 'Légendes disponibles'
 };
 
 export function initCriterionPanel({ lang, redraw }) {
   let currentLang = lang === 'en' ? 'en' : 'fr';
   const panel = document.getElementById('worldCriterionPanel');
+  const detailsToggle = document.getElementById('worldLegendDetailsToggle');
+  const detailsPanel = document.getElementById('worldCriterionDetails');
   const leadContainer = document.getElementById('worldCriterionLead');
   const listContainer = document.getElementById('worldCriterionList');
   const legendGrid = document.getElementById('worldLegendGrid');
@@ -21,6 +25,7 @@ export function initCriterionPanel({ lang, redraw }) {
   const legendTitle = document.getElementById('worldLegendTitle');
   const overviewTitle = document.getElementById('worldLegendOverviewTitle');
   const legendPills = Array.from(document.querySelectorAll('[data-world-criterion-target]'));
+  let detailsOpen = false;
 
   const hasPanel = !!(panel && leadContainer && listContainer && legendGrid);
   if (!hasPanel) {
@@ -29,6 +34,16 @@ export function initCriterionPanel({ lang, redraw }) {
       update: () => {},
       setLang: () => {}
     };
+  }
+
+  if (detailsToggle) {
+    detailsToggle.addEventListener('click', () => {
+      if (!hasWorldCriterion()) {
+        return;
+      }
+      detailsOpen = !detailsOpen;
+      updateControlButtons();
+    });
   }
 
   legendPills.forEach(button => {
@@ -58,6 +73,7 @@ export function initCriterionPanel({ lang, redraw }) {
   function render() {
     if (!hasWorldCriterion()) {
       panel.hidden = true;
+      detailsOpen = false;
       leadContainer.innerHTML = '';
       listContainer.innerHTML = '';
       legendGrid.innerHTML = '';
@@ -112,7 +128,23 @@ export function initCriterionPanel({ lang, redraw }) {
     const copy = translations[currentLang]?.world || FALLBACK_COPY;
     const currentCriterion = getWorldCriterion();
     const isActive = hasWorldCriterion();
+    if (!isActive) {
+      detailsOpen = false;
+    }
     panel.hidden = !isActive;
+    panel.dataset.detailsOpen = isActive && detailsOpen ? 'true' : 'false';
+    if (detailsPanel) {
+      detailsPanel.hidden = !(isActive && detailsOpen);
+    }
+    if (detailsToggle) {
+      detailsToggle.hidden = !isActive;
+      detailsToggle.disabled = !isActive;
+      detailsToggle.setAttribute('aria-expanded', isActive && detailsOpen ? 'true' : 'false');
+      detailsToggle.dataset.state = isActive && detailsOpen ? 'open' : 'closed';
+      detailsToggle.textContent = isActive && detailsOpen
+        ? (copy.detailsHide || FALLBACK_COPY.detailsHide)
+        : (copy.detailsShow || FALLBACK_COPY.detailsShow);
+    }
 
     if (overviewTitle) {
       overviewTitle.textContent = copy.legendOverviewTitle || FALLBACK_COPY.legendOverviewTitle;
