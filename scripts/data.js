@@ -2,9 +2,9 @@ export const translations = {
   fr: {
     world: {
       title: 'Un monde, mille régulations',
-      description: 'Comment le droit appréhende-t-il l\'IA à l\'échelle mondiale ? Décryptez la morphologie des normes et l\'interventionnisme de 21 juridictions via cette cartographie interactive.',
-      detailsShow: 'Voir plus',
-      detailsHide: 'Masquer la légende active',
+      description: 'Droit d\'auteur, brevets ou régulation : quelle est la stratégie des États ? Parcourez les continents et cliquez sur l\'une des 21 juridictions disponibles pour en révéler l\'encadrement.',
+      detailsShow: 'Details',
+      detailsHide: 'Details',
       legendOverviewTitle: 'Légendes disponibles'
     },
     continent: {
@@ -38,9 +38,9 @@ export const translations = {
   en: {
     world: {
       title: 'One world, a thousand regulations',
-      description: 'How does global law apprehend the challenges of AI? Deconstruct the normative morphology and interventionism of 21 jurisdictions through this interactive map.',
-      detailsShow: 'Show more',
-      detailsHide: 'Hide active legend',
+      description: 'Copyright, patents or regulation: what is the states\' strategy? Browse continents and click on one of the 21 available jurisdictions to reveal their legal framework.',
+      detailsShow: 'Details',
+      detailsHide: 'Details',
       legendOverviewTitle: 'Available legends'
     },
     continent: {

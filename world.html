@@ -63,14 +63,18 @@
               </div>
             </section>
             <section id="worldCriterionPanel" class="world-criterion-panel" aria-label="Légende de cartographie" hidden>
-              <h4 id="worldCriterionTitle"></h4>
-              <div id="worldCriterionLead"></div>
-              <p class="world-criterion-label" id="worldCriterionListTitle"></p>
-              <ul class="world-criterion-list" id="worldCriterionList"></ul>
               <div class="world-criterion-legend" aria-label="Légende active">
                 <p class="world-criterion-label" id="worldLegendTitle"></p>
                 <div class="legend-grid" id="worldLegendGrid"></div>
               </div>
+              <button id="worldLegendDetailsToggle" class="world-details-btn" type="button"
+                aria-controls="worldCriterionDetails" aria-expanded="false"></button>
+              <section id="worldCriterionDetails" class="world-criterion-details" hidden>
+                <h4 id="worldCriterionTitle"></h4>
+                <div id="worldCriterionLead"></div>
+                <p class="world-criterion-label" id="worldCriterionListTitle"></p>
+                <ul class="world-criterion-list" id="worldCriterionList"></ul>
+              </section>
             </section>
           </aside>
           <div class="world-map" role="region" aria-label="Carte du monde">
