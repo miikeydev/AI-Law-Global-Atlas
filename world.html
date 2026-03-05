@@ -56,7 +56,10 @@
         <div class="world-main-shell">
           <aside class="world-side-panel" aria-label="Contrôles de légende">
             <section class="world-legend-overview" aria-label="Légendes disponibles">
-              <p id="worldLegendOverviewTitle" class="world-legend-overview-title"></p>
+              <div class="world-legend-overview-header">
+                <p id="worldLegendOverviewTitle" class="world-legend-overview-title"></p>
+                <span id="worldMappedCounter" class="world-mapped-counter" aria-live="polite"></span>
+              </div>
               <div class="world-legend-overview-grid">
                 <button class="world-legend-pill" type="button" data-world-criterion-target="c1"></button>
                 <button class="world-legend-pill" type="button" data-world-criterion-target="c2"></button>

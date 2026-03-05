@@ -38,7 +38,7 @@ export const translations = {
   en: {
     world: {
       title: 'One world, a thousand regulations',
-      description: 'Copyright, patents or regulation: what is the states\' strategy? Browse continents and click on one of the 21 available jurisdictions to reveal their legal framework.',
+      description: 'Copyright, patents or regulation: what is each state\'s strategy? Browse the continents and click on one of the 21 available jurisdictions to reveal their legal framework.',
       detailsShow: 'Details',
       detailsHide: 'Details',
       legendOverviewTitle: 'Available legends'

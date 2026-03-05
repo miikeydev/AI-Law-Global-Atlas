@@ -66,7 +66,8 @@ export function drawWorldMap(onContinentSelect) {
   const fitTarget = fitFeatures.length
     ? { type: 'FeatureCollection', features: fitFeatures }
     : { type: 'Sphere' };
-  const projection = d3.geoNaturalEarth1().fitExtent([[26, 26], [width - 26, height - 26]], fitTarget);
+  const fitPad = isMobileWorld ? 6 : 26;
+  const projection = d3.geoNaturalEarth1().fitExtent([[fitPad, fitPad], [width - fitPad, height - fitPad]], fitTarget);
   const path = d3.geoPath(projection);
 
   let layer = svg.select('g.map-layer');
@@ -146,6 +147,15 @@ export function getWorldCriterion() {
 
 export function hasWorldCriterion() {
   return isWorldCriterionActive();
+}
+
+export function getWorldMappedCount(criterionId = activeWorldCriterion) {
+  if (!criterionId || !worldCriteriaDefinitions[criterionId]) return 0;
+  const countryScores = worldCriterionScoresByCountryId[criterionId] || {};
+  const geoScores = worldCriterionScoresByGeoName[criterionId] || {};
+  const fromCountries = Object.values(countryScores).filter(s => Number.isFinite(s)).length;
+  const fromGeo = Object.values(geoScores).filter(s => Number.isFinite(s)).length;
+  return fromCountries + fromGeo;
 }
 
 export function getNextWorldCriterion(criterionId = activeWorldCriterion) {
@@ -383,41 +393,6 @@ function clearMapUnlockHandler(svg) {
   delete node.__mapUnlockHandlers;
 }
 
-function attachMapUnlockHandler(svg, interactionKey, onUnlock) {
-  if (!svg || svg.empty() || !interactionKey) {
-    return;
-  }
-  const node = svg.node();
-  if (!node || node.__mapUnlockHandlers) {
-    return;
-  }
-  const unlock = event => {
-    if (event.type === 'pointerdown' && event.pointerType === 'mouse') {
-      return;
-    }
-    if (mobileMapInteractionState.get(interactionKey)) {
-      return;
-    }
-    mobileMapInteractionState.set(interactionKey, true);
-    if (event.cancelable) {
-      event.preventDefault();
-    }
-    if (typeof event.stopPropagation === 'function') {
-      event.stopPropagation();
-    }
-    if (typeof event.stopImmediatePropagation === 'function') {
-      event.stopImmediatePropagation();
-    }
-    clearMapUnlockHandler(svg);
-    if (typeof onUnlock === 'function') {
-      onUnlock();
-    }
-  };
-  node.__mapUnlockHandlers = { unlock };
-  node.addEventListener('pointerdown', unlock, true);
-  node.addEventListener('touchstart', unlock, { capture: true, passive: false });
-  node.addEventListener('click', unlock, true);
-}
 
 function applyMobilePan(svg, layer, width, height, enableInitialZoom = false) {
   if (typeof d3 === 'undefined' || typeof d3.zoom === 'undefined') {
@@ -425,7 +400,7 @@ function applyMobilePan(svg, layer, width, height, enableInitialZoom = false) {
   }
   const enablePan = window.matchMedia ? window.matchMedia('(max-width: 1100px)').matches : false;
   const interactionKey = getMapInteractionKey(svg);
-  const requireTapToEnable = isPhoneTouchMode() && !!interactionKey;
+  const isPhone = isPhoneTouchMode();
   svg.classed('draggable', !!enablePan);
   if (!enablePan) {
     svg.on('.zoom', null);
@@ -439,17 +414,11 @@ function applyMobilePan(svg, layer, width, height, enableInitialZoom = false) {
     return;
   }
 
-  if (requireTapToEnable && !mobileMapInteractionState.get(interactionKey)) {
-    svg.on('.zoom', null);
-    svg.classed('draggable', false).classed('map-interaction-locked', true);
-    svg.style('touch-action', 'pan-y');
-    attachMapUnlockHandler(svg, interactionKey, () => {
-      applyMobilePan(svg, layer, width, height, enableInitialZoom);
-    });
-    return;
-  }
-
+  // On phone: skip tap-to-unlock. CSS forces touch-action:pan-y on the SVG so
+  // single-finger always scrolls the page. D3 zoom is restricted to 2-finger
+  // pinch-zoom via the filter below.
   clearMapUnlockHandler(svg);
+  if (interactionKey) mobileMapInteractionState.delete(interactionKey);
   svg.classed('map-interaction-locked', false);
   svg.style('touch-action', null);
 
@@ -457,14 +426,19 @@ function applyMobilePan(svg, layer, width, height, enableInitialZoom = false) {
   const zoom = d3.zoom()
     .scaleExtent([1, maxScale])
     .translateExtent([[0, 0], [width, height]])
+    .filter(event => {
+      // On phone: only pinch-zoom (2+ fingers). Single touch scrolls the page.
+      if (isPhone && event.touches) return event.touches.length >= 2;
+      return !event.button;
+    })
     .on('zoom', event => {
       layer.attr('transform', event.transform);
     });
   svg.on('.zoom', null);
   svg.call(zoom);
 
-  // Mobile "cover" mode for world map: fill space like a map app, even with crop.
   if (enableInitialZoom && width < 900) {
+    // Zoom in slightly so the world fills the container on small screens.
     const initialScale = width < 560 ? 1.54 : 1.36;
     const northShift = height * 0.02;
     const initialTransform = d3.zoomIdentity
