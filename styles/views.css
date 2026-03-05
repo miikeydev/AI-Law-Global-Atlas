@@ -405,13 +405,30 @@ body[data-theme="dark"] .landing-copy .cta-row .primary:hover {
     backdrop-filter: none;
 }
 
+.world-legend-overview-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
 .world-legend-overview-title {
     font-size: clamp(.66rem, .16vw + .58rem, .74rem);
     font-weight: 700;
     letter-spacing: .04em;
-    color: var(--muted);
-    margin-bottom: 8px;
+    color: var(--text);
+    opacity: .5;
+    margin-bottom: 0;
     text-transform: uppercase;
+}
+
+.world-mapped-counter {
+    font-size: clamp(.6rem, .12vw + .54rem, .68rem);
+    font-weight: 500;
+    color: var(--muted);
+    white-space: nowrap;
+    opacity: .75;
 }
 
 .world-legend-overview-grid {
@@ -1641,6 +1658,12 @@ body[data-theme="dark"] .country-text-block {
         order: 1;
         height: clamp(260px, 52vh, 420px);
         min-height: 0;
+    }
+
+    /* 1 finger = page scrolls, 2 fingers = pinch-zoom map.
+       !important overrides D3's inline touch-action:none */
+    .page-world #worldMap {
+        touch-action: pan-y !important;
     }
 
     .page-world .world-side-panel {

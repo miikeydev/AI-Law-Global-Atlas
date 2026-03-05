@@ -1,6 +1,6 @@
 import { initCommon, navigateTo, setupResizeRedraw } from './common.js';
 import { translations } from './data.js';
-import { loadWorldGeometry, drawWorldMap, hasWorldCriterion, setWorldCriterion } from './maps.js';
+import { loadWorldGeometry, drawWorldMap, hasWorldCriterion, setWorldCriterion, getWorldMappedCount } from './maps.js';
 import { initCriterionPanel } from './criterion-panel.js';
 
 let currentLang = 'fr';
@@ -32,8 +32,17 @@ function updateWorldText() {
 loadWorldGeometry().then(() => {
   drawWorldMap(handleContinentSelect);
   criterionPanel.render();
+  updateMappedCounter();
   setupResizeRedraw(() => drawWorldMap(handleContinentSelect));
 });
+
+function updateMappedCounter() {
+  const el = document.getElementById('worldMappedCounter');
+  if (!el) return;
+  const count = getWorldMappedCount();
+  const lang = currentLang === 'en' ? 'en' : 'fr';
+  el.textContent = lang === 'en' ? `${count} jurisdictions` : `${count} juridictions`;
+}
 
 function handleLangChange(langCode) {
   currentLang = langCode === 'en' ? 'en' : 'fr';
@@ -41,6 +50,7 @@ function handleLangChange(langCode) {
   criterionPanel.setLang(currentLang);
   criterionPanel.render();
   drawWorldMap(handleContinentSelect);
+  updateMappedCounter();
 }
 
 function handleContinentSelect(continentId) {
