@@ -152,6 +152,7 @@ function updateLang(lang, onLangChange, toggle) {
   }
   updateThemeButtons(document.querySelectorAll('.theme-toggle'));
   updateFooterCopy();
+  updateContactModalLang(normalized);
   if (typeof onLangChange === 'function') {
     onLangChange(normalized);
   }
@@ -213,11 +214,15 @@ function updateFooterCopy() {
     const contact = footer.querySelector('[data-i18n="footer.contact"]');
     if (contact) {
       contact.textContent = footerCopy.contact;
-      contact.href = 'https://www.linkedin.com/in/emilie-letouz%C3%A9-57928a27b/';
-      contact.target = '_blank';
-      contact.rel = 'noopener noreferrer';
+      contact.removeAttribute('href');
+      contact.style.cursor = 'pointer';
+      contact.addEventListener('click', e => {
+        e.preventDefault();
+        openContactModal();
+      });
     }
   }
+  initContactModal();
 
   const infoLabels = document.querySelectorAll('[data-i18n="common.info"]');
   infoLabels.forEach(label => {
@@ -279,4 +284,91 @@ function getStoredLangPreference() {
     return null;
   }
   return null;
+}
+
+// ─── Contact modal ────────────────────────────────────────────────────────────
+
+function initContactModal() {
+  if (document.getElementById('contactModal')) return;
+  const lang = document.documentElement.lang === 'en' ? 'en' : 'fr';
+  const t = {
+    title:    lang === 'en' ? 'About the project'            : 'À propos du projet',
+    subtitle: lang === 'en' ? 'A collaboration between two.' : 'Un travail à deux mains.',
+    roleE:    lang === 'en' ? 'Research, writing & sources'  : 'Recherche, rédaction & sources',
+    roleM:    lang === 'en' ? 'Development & code'           : 'Développement & code',
+    linkedin: `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="flex-shrink:0"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn`,
+    close:    lang === 'en' ? 'Close'                        : 'Fermer',
+  };
+
+  const modal = document.createElement('div');
+  modal.id = 'contactModal';
+  modal.className = 'contact-modal';
+  modal.setAttribute('role', 'dialog');
+  modal.setAttribute('aria-modal', 'true');
+  modal.setAttribute('aria-label', t.title);
+  modal.innerHTML = `
+    <div class="contact-modal-backdrop"></div>
+    <div class="contact-modal-card">
+      <button class="contact-modal-close" aria-label="${t.close}" data-modal-i18n="close">✕</button>
+      <p class="contact-modal-title" data-modal-i18n="title">${t.title}</p>
+      <p class="contact-modal-subtitle" data-modal-i18n="subtitle">${t.subtitle}</p>
+      <div class="contact-modal-profiles">
+        <div class="contact-profile">
+          <div class="contact-profile-avatar">
+            <img src="res/EmilieLetouzePP.jpeg" alt="Émilie Letouzé" loading="lazy">
+          </div>
+          <p class="contact-profile-name">Émilie Letouzé</p>
+          <p class="contact-profile-role" data-modal-i18n="roleE">${t.roleE}</p>
+          <a class="contact-profile-link"
+             href="https://www.linkedin.com/in/emilie-letouz%C3%A9-57928a27b/"
+             target="_blank" rel="noopener noreferrer">${t.linkedin}</a>
+        </div>
+        <div class="contact-profile">
+          <div class="contact-profile-avatar">
+            <img src="res/MahounaVayssieresPP.jpeg" alt="Mahouna Vayssieres" loading="lazy">
+          </div>
+          <p class="contact-profile-name">Mahouna Vayssieres</p>
+          <p class="contact-profile-role" data-modal-i18n="roleM">${t.roleM}</p>
+          <a class="contact-profile-link"
+             href="https://www.linkedin.com/in/mahouna-vayssieres-6b627a223/"
+             target="_blank" rel="noopener noreferrer">${t.linkedin}</a>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  modal.querySelector('.contact-modal-backdrop').addEventListener('click', closeContactModal);
+  modal.querySelector('.contact-modal-close').addEventListener('click', closeContactModal);
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeContactModal();
+  });
+}
+
+function updateContactModalLang(lang) {
+  const modal = document.getElementById('contactModal');
+  if (!modal) return;
+  const t = {
+    title:    lang === 'en' ? 'About the project'            : 'À propos du projet',
+    subtitle: lang === 'en' ? 'A collaboration between two.' : 'Un travail à deux mains.',
+    roleE:    lang === 'en' ? 'Research, writing & sources'  : 'Recherche, rédaction & sources',
+    roleM:    lang === 'en' ? 'Development & code'           : 'Développement & code',
+    close:    lang === 'en' ? 'Close'                        : 'Fermer',
+  };
+  modal.querySelectorAll('[data-modal-i18n]').forEach(el => {
+    const key = el.getAttribute('data-modal-i18n');
+    if (key === 'close') el.setAttribute('aria-label', t.close);
+    else if (t[key] !== undefined) el.textContent = t[key];
+  });
+}
+
+function openContactModal() {
+  const modal = document.getElementById('contactModal');
+  if (modal) modal.classList.add('is-open');
+}
+
+function closeContactModal() {
+  const modal = document.getElementById('contactModal');
+  if (modal) modal.classList.remove('is-open');
 }

@@ -577,3 +577,207 @@ body[data-theme="dark"] .source-card a:hover {
         grid-template-columns: 1fr;
     }
 }
+
+/* ─── Contact modal ─────────────────────────────────────────────────────── */
+
+.contact-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.contact-modal.is-open {
+    display: flex;
+}
+
+.contact-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 14, 34, .46);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    cursor: pointer;
+}
+
+.contact-modal-card {
+    position: relative;
+    z-index: 1;
+    background: var(--surface);
+    border: 1px solid rgba(15, 20, 40, .1);
+    border-radius: 18px;
+    box-shadow: 0 32px 64px rgba(10, 14, 34, .18);
+    padding: 32px 28px 28px;
+    width: 100%;
+    max-width: 460px;
+    animation: contactModalIn .22s cubic-bezier(.22, .68, .22, 1);
+}
+
+@keyframes contactModalIn {
+    from { opacity: 0; transform: scale(.96) translateY(8px); }
+    to   { opacity: 1; transform: scale(1)  translateY(0); }
+}
+
+.contact-modal-close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: none;
+    color: var(--muted);
+    font-size: 1.1rem;
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .16s ease, color .16s ease;
+}
+
+.contact-modal-close:hover {
+    background: rgba(15, 20, 40, .07);
+    color: var(--text);
+}
+
+.contact-modal-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.18rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+}
+
+.contact-modal-subtitle {
+    font-size: .82rem;
+    color: var(--muted);
+    margin-bottom: 24px;
+    line-height: 1.4;
+}
+
+.contact-modal-profiles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.contact-profile {
+    background: rgba(15, 20, 40, .03);
+    border: 1px solid rgba(15, 20, 40, .08);
+    border-radius: 12px;
+    padding: 18px 14px 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+}
+
+.contact-profile-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 4px;
+    flex-shrink: 0;
+    border: 2px solid rgba(15, 20, 40, .08);
+}
+
+.contact-profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+}
+
+.contact-profile-name {
+    font-size: .82rem;
+    font-weight: 650;
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.contact-profile-role {
+    font-size: .72rem;
+    color: var(--muted);
+    line-height: 1.35;
+    flex: 1;
+}
+
+.contact-profile-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: .7rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 5px 12px 5px 10px;
+    border: 1px solid rgba(15, 20, 40, .14);
+    border-radius: 999px;
+    margin-top: 4px;
+    transition: background .16s ease, border-color .16s ease, color .16s ease;
+    letter-spacing: .02em;
+    line-height: 1;
+}
+
+.contact-profile-link svg {
+    opacity: .7;
+}
+
+.contact-profile-link:hover {
+    background: rgba(15, 20, 40, .06);
+    border-color: rgba(15, 20, 40, .26);
+    color: var(--text);
+}
+
+.contact-profile-link:hover svg {
+    opacity: 1;
+}
+
+/* Dark mode */
+body[data-theme="dark"] .contact-modal-card {
+    background: #1a1d2e;
+    border-color: rgba(255, 255, 255, .1);
+    box-shadow: 0 32px 64px rgba(0, 0, 0, .5);
+}
+
+body[data-theme="dark"] .contact-modal-close:hover {
+    background: rgba(255, 255, 255, .08);
+    color: #fff;
+}
+
+body[data-theme="dark"] .contact-profile {
+    background: rgba(255, 255, 255, .04);
+    border-color: rgba(255, 255, 255, .09);
+}
+
+body[data-theme="dark"] .contact-profile-avatar {
+    border-color: rgba(255, 255, 255, .12);
+}
+
+body[data-theme="dark"] .contact-profile-link {
+    border-color: rgba(255, 255, 255, .14);
+}
+
+body[data-theme="dark"] .contact-profile-link:hover {
+    background: rgba(255, 255, 255, .07);
+    border-color: rgba(255, 255, 255, .28);
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .contact-modal-profiles {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-modal-card {
+        padding: 28px 20px 22px;
+        border-radius: 16px;
+    }
+}

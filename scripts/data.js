@@ -31,7 +31,7 @@ export const translations = {
       footer: {
         tagline: 'AI X IP Global Explorer — 2025 - 2026',
         subline: 'University project – Student of Panthéon-Assas University',
-        contact: 'Contact Emilie Letouzé'
+        contact: 'Contact'
       }
     }
   },
@@ -67,7 +67,7 @@ export const translations = {
       footer: {
         tagline: 'AI X IP Global Explorer — 2025 - 2026',
         subline: 'University project – Student of Panthéon-Assas University',
-        contact: 'Contact Emilie Letouzé'
+        contact: 'Contact'
       }
     }
   }
