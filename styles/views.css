@@ -1662,7 +1662,8 @@ body[data-theme="dark"] .country-text-block {
 
     /* 1 finger = page scrolls, 2 fingers = pinch-zoom map.
        !important overrides D3's inline touch-action:none */
-    .page-world #worldMap {
+    .page-world #worldMap,
+    #continentMap {
         touch-action: pan-y !important;
     }
 
