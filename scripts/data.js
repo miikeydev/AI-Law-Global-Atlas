@@ -31,7 +31,8 @@ export const translations = {
       footer: {
         tagline: 'AI X IP Global Explorer — 2025 - 2026',
         subline: 'University project – Student of Panthéon-Assas University',
-        contact: 'Contact'
+        contact: 'Contact',
+        legal: 'Mentions légales'
       }
     }
   },
@@ -67,7 +68,8 @@ export const translations = {
       footer: {
         tagline: 'AI X IP Global Explorer — 2025 - 2026',
         subline: 'University project – Student of Panthéon-Assas University',
-        contact: 'Contact'
+        contact: 'Contact',
+        legal: 'Legal notices'
       }
     }
   }
